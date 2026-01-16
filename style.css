@@ -166,3 +166,65 @@ h1 {
     border: 2px solid var(--dark-brown);
     font-size: 0.9rem;
 }
+/* --- BANNIÈRE COOKIE --- */
+.cookie-banner {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    right: 20px;
+    background-color: white; /* Fond blanc pour la lisibilité */
+    border: 3px solid var(--dark-brown);
+    border-radius: 20px;
+    padding: 1.5rem;
+    box-shadow: 8px 8px 0px var(--hot-pink);
+    z-index: 9999; /* Pour être sûr qu'elle soit au-dessus de tout */
+    display: flex; /* Pour aligner texte et bouton */
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    
+    /* Animation d'arrivée */
+    animation: slideUp 0.5s ease-out;
+}
+
+@keyframes slideUp {
+    from { transform: translateY(150%); }
+    to { transform: translateY(0); }
+}
+
+.cookie-banner p {
+    margin: 0;
+    font-family: 'Space Grotesk', sans-serif;
+    color: var(--dark-brown);
+    font-size: 1rem;
+}
+
+.cookie-btn {
+    background-color: var(--teal);
+    color: var(--dark-brown);
+    border: 2px solid var(--dark-brown);
+    padding: 0.5rem 1.5rem;
+    border-radius: 50px;
+    font-family: 'Shrikhand', cursive;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap; /* Empêche le texte du bouton de passer à la ligne */
+}
+
+.cookie-btn:hover {
+    transform: scale(1.1) rotate(-2deg);
+    box-shadow: 4px 4px 0px var(--orange);
+}
+
+/* Version mobile : on empile le texte et le bouton */
+@media (max-width: 600px) {
+    .cookie-banner {
+        flex-direction: column;
+        text-align: center;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        border-radius: 20px 20px 0 0;
+    }
+}
