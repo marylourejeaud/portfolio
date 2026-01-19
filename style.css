@@ -343,51 +343,71 @@ a, button, .card, .list-item, .cookie-btn, nav a {
     cursor: url('https://static.tildacdn.com/tild3863-3739-4533-b134-653536343439/Frame_1171275326.png') 16 0, pointer !important;
 }
 
-/* --- EFFET GOOEY / LAMPE À LAVE --- */
+/* --- FOOTER LAVA LAMP (CORRIGÉ POUR TEXTE NET) --- */
+
 .lamp-container {
-    width: 100%;
-    height: 300px; /* Hauteur de la zone */
-    background: transparent;
     position: relative;
-    overflow: hidden;
-    /* C'est ici que la magie opère : Flou + Contraste extrême */
-    filter: blur(10px) contrast(20);
-    background-color: var(--theme-light); /* Fond nécessaire pour le contraste */
+    width: 100%;
+    min-height: 250px; 
+    /* On enlève le background et le filtre ici pour protéger le texte */
+    overflow: hidden; 
+    border-top: 4px solid var(--theme-dark);
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .lava-lamp {
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
-    position: relative;
+    z-index: 1; 
+    
+    /* C'est ICI qu'on met la magie pour que seul le fond soit liquide */
+    background-color: var(--theme-light); 
+    filter: blur(8px) contrast(15);
 }
 
+/* Les bulles */
 .bubble {
-    background-color: var(--theme-pink); /* Couleur des bulles */
+    background-color: var(--theme-pink);
     border-radius: 50%;
     position: absolute;
-    bottom: -50px; /* Elles partent d'en bas */
+    bottom: -50px;
+    opacity: 0.8;
 }
 
-/* Animation des bulles qui montent */
-.b1 {
-    width: 80px; height: 80px;
-    left: 20%;
-    animation: floatUp 6s ease-in-out infinite;
-}
-.b2 {
-    width: 120px; height: 120px;
-    left: 50%;
-    animation: floatUp 8s ease-in-out infinite 1s; /* Délai de 1s */
-}
-.b3 {
-    width: 60px; height: 60px;
-    left: 70%;
-    animation: floatUp 5s ease-in-out infinite 2s; /* Délai de 2s */
-}
+/* Animation des bulles (Inchangée) */
+.b1 { width: 90px; height: 90px; left: 15%; animation: floatUp 7s ease-in-out infinite; }
+.b2 { width: 120px; height: 120px; left: 45%; animation: floatUp 9s ease-in-out infinite 1s; }
+.b3 { width: 70px; height: 70px; left: 75%; animation: floatUp 6s ease-in-out infinite 2s; }
+.b4 { width: 100px; height: 100px; left: 30%; animation: floatUp 11s ease-in-out infinite 0.5s; background-color: var(--theme-orange); }
 
 @keyframes floatUp {
     0%   { bottom: -100px; transform: translateX(0); }
-    50%  { transform: translateX(20px); } /* Petit mouvement latéral */
-    100% { bottom: 120%; transform: translateX(-20px); }
+    50%  { transform: translateX(30px) scale(1.1); }
+    100% { bottom: 120%; transform: translateX(-30px) scale(0.9); }
 }
 
+/* Le contenu texte */
+.footer-content {
+    position: relative;
+    z-index: 10; /* Le texte flotte BIEN AU-DESSUS de la lave */
+    text-align: center;
+    /* Pas de filtre ici, donc le texte reste net ! */
+}
+
+.footer-content p {
+    font-weight: bold;
+    font-size: 1.2rem;
+    color: var(--theme-dark);
+}
+
+.social-links a {
+    color: var(--theme-orange);
+    font-family: 'Shrikhand', cursive;
+    font-size: 1.5rem;
+    text-decoration: none;
+}
