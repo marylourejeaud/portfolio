@@ -157,6 +157,8 @@ a, button, .card, .list-item, .cookie-btn, nav a {
 
 /* ... (Le reste du CSS au-dessus reste identique) ... */
 
+/* ... (Le reste du CSS au-dessus reste identique) ... */
+
 /* --- LAVA LAMP FOOTER --- */
 .lamp-container {
     position: relative;
@@ -200,4 +202,3 @@ canvas#blob-canvas {
     
     opacity: 0.8;
 }
-
