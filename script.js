@@ -1,7 +1,15 @@
-/* --- CODE PRINCIPAL --- */
+/* --- 1. CHARGEMENT AUTOMATIQUE DE PEP.JS --- */
+(function() {
+    var script = document.createElement('script');
+    script.src = "https://code.jquery.com/pep/0.4.3/pep.js";
+    script.async = true;
+    document.head.appendChild(script);
+})();
+
+/* --- 2. CODE PRINCIPAL --- */
 document.addEventListener("DOMContentLoaded", function() {
     
-    // A. Charge le footer
+    // A. Charge le footer et ses animations
     fetch("footer.html")
         .then(response => response.text())
         .then(data => {
@@ -11,15 +19,17 @@ document.addEventListener("DOMContentLoaded", function() {
         })
         .catch(error => console.error("Erreur footer:", error));
 
-    // B. Lance le fond "Lava Lamp" réaliste
+    // B. Lance le fond Blob Interactif (Jelly Effect)
     initRealLavaBackground();
 });
 
 // --- FONCTIONS UTILITAIRES ---
+
 function initCookieBanner() {
     const banner = document.getElementById('cookie-banner');
     const btn = document.getElementById('accept-cookie');
     const btnRefuse = document.getElementById('refuse-cookie');
+
     if (localStorage.getItem('cookieAccepted') === 'true') {
         if(banner) banner.style.display = 'none';
         return;
@@ -43,27 +53,32 @@ function initLavaLampInteraction() {
     if (!container || !blob) return;
 
     let currentX = 0, currentY = 0, mouseX = 0, mouseY = 0, isHovering = false;
+
     container.addEventListener('mousemove', function(e) {
         isHovering = true;
         const rect = container.getBoundingClientRect();
         mouseX = e.clientX - rect.left;
         mouseY = e.clientY - rect.top;
     });
+
     container.addEventListener('mouseleave', function() { isHovering = false; });
+
     function animate() {
         if (isHovering) {
             currentX += (mouseX - currentX) * 0.08;
             currentY += (mouseY - currentY) * 0.08;
             blob.style.opacity = "1";
             blob.style.transform = `translate(${currentX}px, ${currentY}px) translate(-50%, -50%)`;
-        } else { blob.style.opacity = "0"; }
+        } else {
+            blob.style.opacity = "0";
+        }
         requestAnimationFrame(animate);
     }
     animate();
 }
 
 // -------------------------------------------------------
-// --- FOND : LAVE REALISTE (Fusion par filtre CSS) ---
+// --- FOND : VRAIE LAVE LIQUIDE (Metaballs via Canvas) ---
 // -------------------------------------------------------
 function initRealLavaBackground() {
     
@@ -78,7 +93,7 @@ function initRealLavaBackground() {
 
         init() {
             // Taille variée
-            this.radius = Math.random() * 60 + 40; 
+            this.radius = Math.random() * 80 + 50; 
             
             // Position de départ aléatoire
             this.x = Math.random() * this.canvas.width;
@@ -88,12 +103,9 @@ function initRealLavaBackground() {
             this.speedY = Math.random() * 0.5 + 0.2;
             
             // Légère dérive horizontale (wobble naturel)
-            this.speedX = (Math.random() - 0.5) * 0.2;
+            this.speedX = (Math.random() - 0.5) * 0.4;
             
             this.color = colors[Math.floor(Math.random() * colors.length)];
-            
-            // Facteur d'étirement (1 = rond, >1 = ovale vertical)
-            this.scaleY = 1; 
         }
 
         update(mouseX, mouseY) {
@@ -101,51 +113,46 @@ function initRealLavaBackground() {
             this.y -= this.speedY;
             this.x += this.speedX;
 
-            // 2. Interaction Souris DOUCE (Repousse légèrement)
+            // 2. Interaction Souris (Repousse le liquide)
             let dx = this.x - mouseX;
             let dy = this.y - mouseY;
             let dist = Math.sqrt(dx*dx + dy*dy);
             
-            // Si la souris est proche (< 250px), on déforme et pousse
-            if(dist < 250) {
-                let force = (250 - dist) / 250; // Force entre 0 et 1
-                
-                // Pousser doucement
-                this.x += (dx / dist) * force * 1.5; 
-                this.y += (dy / dist) * force * 1.5;
-                
-                // Déformation au contact : s'aplatit ou s'étire légèrement
-                // Plus on est proche, plus ça "s'écrase" un peu horizontalement (effet tension de surface)
-                this.scaleY = 1 + (force * 0.2); 
-            } else {
-                // Retour à la forme normale (étirement naturel dû à la vitesse)
-                // Plus ça va vite vers le haut, plus c'est étiré verticalement (effet goutte)
-                this.scaleY = 1 + (this.speedY * 0.1); 
+            // Si la souris est proche, on pousse la "matière"
+            if(dist < 300) {
+                let force = (300 - dist) / 300; 
+                // Pousser plus fort pour déformer le liquide
+                this.x += (dx / dist) * force * 3; 
+                this.y += (dy / dist) * force * 3;
             }
 
-            // 3. Reset si sort de l'écran
+            // 3. Reset si sort de l'écran (boucle infinie)
             if (this.y < -this.radius * 2) {
                 this.y = this.canvas.height + this.radius * 2;
                 this.x = Math.random() * this.canvas.width;
-                this.init(); // Reset des propriétés aléatoires pour varier
+                this.init(); // Reset des propriétés aléatoires
             }
-            if (this.x < -this.radius) this.x = this.canvas.width + this.radius;
-            if (this.x > this.canvas.width + this.radius) this.x = -this.radius;
+            if (this.x < -this.radius * 2) this.x = this.canvas.width + this.radius * 2;
+            if (this.x > this.canvas.width + this.radius * 2) this.x = -this.radius * 2;
         }
 
         draw(ctx) {
-            ctx.save(); // Sauvegarde le contexte avant transformation
-            ctx.translate(this.x, this.y);
-            ctx.scale(1, this.scaleY); // Applique l'étirement vertical
-            
             ctx.beginPath();
-            // On dessine un cercle en (0,0) car on a déjà translate le contexte
-            ctx.arc(0, 0, this.radius, 0, Math.PI * 2);
+            // L'astuce : On dessine un cercle avec un gradient radial
+            // Le centre est opaque, les bords sont transparents.
+            // Le filtre CSS #goo va "manger" la transparence pour créer la forme liquide.
+            
+            // let gradient = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.radius);
+            // gradient.addColorStop(0, this.color); // Couleur au centre
+            // gradient.addColorStop(1, 'rgba(255, 255, 255, 0)'); // Transparent aux bords
+            
+            // ctx.fillStyle = gradient;
+            
+            // Dessin simple pour commencer (le filtre CSS fait le reste)
+            ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
             ctx.fillStyle = this.color;
             ctx.fill();
             ctx.closePath();
-            
-            ctx.restore(); // Restaure le contexte pour la prochaine bulle
         }
     }
 
@@ -156,8 +163,8 @@ function initRealLavaBackground() {
     let ctx = canvas.getContext('2d');
 
     let bubbles = [];
-    // Plus de bulles ! (20)
-    const numBubbles = 20; 
+    // Nombre de bulles
+    const numBubbles = 12; 
     
     // Redimensionnement
     function resize() {
@@ -185,8 +192,8 @@ function initRealLavaBackground() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         
         // Lissage de la position souris
-        smoothMouse.x += (mouse.x - smoothMouse.x) * 0.05;
-        smoothMouse.y += (mouse.y - smoothMouse.y) * 0.05;
+        smoothMouse.x += (mouse.x - smoothMouse.x) * 0.08;
+        smoothMouse.y += (mouse.y - smoothMouse.y) * 0.08;
 
         bubbles.forEach(b => {
             b.update(smoothMouse.x, smoothMouse.y);
