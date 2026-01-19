@@ -4,10 +4,14 @@
     /* --- NOUVELLE PALETTE 70s --- */
     --theme-orange: #ff6b35;   /* Orange 70s vibrant */
     --theme-pink: #e73c7e;     /* Rose magenta chaud */
-    --theme-dark: #2c1a1d;     /* Marron très foncé (remplace le noir pur) */
-    --theme-light: #fffaf0;    /* Blanc cassé floral pour les cartes */
+    --theme-dark: #2c1a1d;     /* Marron très foncé */
+    --theme-light: #fffaf0;    /* Blanc cassé floral */
     
-    /* Dimensions & Ombres (Style Brutaliste conservé mais recoloré) */
+    /* --- COULEURS PASTELS POUR LA LAVE --- */
+    --lava-pink: #ffc2d1;      /* Rose clair (Bubblegum) */
+    --lava-orange: #ffe0b2;    /* Orange clair (Abricot) */
+
+    /* Dimensions & Ombres */
     --border-thick: 3px solid var(--theme-dark);
     --shadow-hard: 6px 6px 0px var(--theme-dark);
     --shadow-hover: 10px 10px 0px var(--theme-dark);
@@ -15,7 +19,7 @@
 
 /* --- BASE & BACKGROUND --- */
 body {
-    background-color: var(--theme-light); /* Couleur de repli */
+    background-color: var(--theme-light);
     color: var(--theme-dark);
     font-family: 'Space Grotesk', sans-serif;
     margin: 0;
@@ -25,12 +29,12 @@ body {
     
     /* IMAGE DE FOND HIPPIE */
     background-image: url('https://t3.ftcdn.net/jpg/04/85/58/18/360_F_485581800_uIPF1wn7Shu2xkBQa6jDWAV4TI7l86BX.jpg');
-    background-size: cover;      /* Couvre tout l'écran */
-    background-position: center; /* Centré */
-    background-attachment: fixed;/* Le fond reste fixe quand on scrolle (effet sympa) */
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
 }
 
-/* --- NAVIGATION (Pillule Flottante) --- */
+/* --- NAVIGATION --- */
 nav {
     background: var(--theme-dark);
     padding: 1rem 2rem;
@@ -65,27 +69,23 @@ nav a:hover {
     transform: rotate(-3deg) scale(1.1);
 }
 
-/* --- HEADER (Style Poster 70s) --- */
+/* --- HEADER --- */
 header {
-    /* Fond transparent pour voir l'image groovy derrière */
     background-color: transparent; 
-    padding: 10rem 2rem 6rem 2rem; /* Un peu plus d'espace en haut */
+    padding: 10rem 2rem 6rem 2rem;
     text-align: center;
-    /* Pas de bordure en bas pour fondre dans le décor */
     position: relative;
 }
 
 h1 {
     font-family: 'Shrikhand', cursive;
-    font-size: 7rem; /* Encore plus gros */
+    font-size: 7rem;
     margin: 0;
     color: var(--theme-orange);
     text-transform: uppercase;
     line-height: 0.9;
     position: relative;
     z-index: 1;
-    
-    /* Contour texte foncé pour lisibilité sur le fond chargé */
     -webkit-text-stroke: 3px var(--theme-dark);
     text-shadow: 8px 8px 0px var(--theme-dark);
 }
@@ -95,7 +95,7 @@ h1 {
     font-weight: 700;
     margin-top: 30px;
     color: var(--theme-light);
-    background: var(--theme-pink); /* Fond rose pour le sous-titre */
+    background: var(--theme-pink);
     display: inline-block;
     padding: 0.8rem 2rem;
     transform: rotate(-2deg);
@@ -119,12 +119,11 @@ header p:last-of-type {
     box-shadow: 4px 4px 0 var(--theme-dark);
 }
 
-/* --- CONTENEURS & TEXTES --- */
+/* --- CONTENEURS --- */
 .container {
     max-width: 1100px;
     margin: auto;
     padding: 6rem 2rem;
-    /* Fond blanc cassé léger pour rendre le contenu lisible sur l'image de fond */
     background-color: rgba(255, 250, 240, 0.9); 
     border: var(--border-thick);
     box-shadow: var(--shadow-hard);
@@ -138,8 +137,6 @@ header p:last-of-type {
     margin-bottom: 4rem;
     color: var(--theme-dark);
     text-transform: uppercase;
-    
-    /* Soulignement épais rose */
     text-decoration: underline;
     text-decoration-color: var(--theme-pink);
     text-decoration-thickness: 15px;
@@ -162,7 +159,6 @@ header p:last-of-type {
     position: relative;
 }
 
-/* Petit détail déco (rond orange) */
 .card::after {
     content: '';
     position: absolute;
@@ -178,21 +174,19 @@ header p:last-of-type {
 .card:hover {
     transform: translate(-5px, -5px);
     box-shadow: var(--shadow-hover);
-    background-color: var(--theme-pink); /* Devient rose au survol */
+    background-color: var(--theme-pink);
 }
-.card:hover h3, .card:hover p {
-    color: var(--theme-light); /* Texte devient clair au survol */
-}
+.card:hover h3, .card:hover p { color: var(--theme-light); }
 
 .card h3 {
     font-family: 'Shrikhand', cursive;
-    color: var(--theme-pink); /* Titres en rose */
+    color: var(--theme-pink);
     font-size: 2rem;
     margin-top: 0;
     margin-bottom: 1rem;
 }
 
-/* --- LISTES (Expériences) --- */
+/* --- LISTES --- */
 .list-item {
     background: var(--theme-light);
     padding: 2rem;
@@ -200,13 +194,13 @@ header p:last-of-type {
     border: var(--border-thick);
     box-shadow: var(--shadow-hard);
     position: relative;
-    border-left: 15px solid var(--theme-orange); /* Bordure orange */
+    border-left: 15px solid var(--theme-orange);
     transition: 0.3s;
 }
 
 .list-item:hover {
     transform: scale(1.02);
-    border-left-color: var(--theme-pink); /* Devient rose au survol */
+    border-left-color: var(--theme-pink);
 }
 
 .list-item h3 {
@@ -218,7 +212,7 @@ header p:last-of-type {
     color: var(--theme-dark);
 }
 
-/* --- BADGES (Tags) --- */
+/* --- BADGES --- */
 .badge {
     display: inline-block;
     background-color: var(--theme-dark);
@@ -233,7 +227,7 @@ header p:last-of-type {
     box-shadow: 3px 3px 0 var(--theme-orange);
 }
 
-/* --- FOOTER --- */
+/* --- FOOTER (Général) --- */
 footer {
     background-color: var(--theme-dark);
     color: var(--theme-light);
@@ -260,7 +254,7 @@ footer a:hover {
     bottom: 20px;
     left: 20px;
     right: 20px;
-    background-color: var(--theme-pink); /* Fond rose */
+    background-color: var(--theme-pink);
     border: var(--border-thick);
     padding: 1.5rem;
     box-shadow: var(--shadow-hard);
@@ -272,16 +266,8 @@ footer a:hover {
     animation: slideUp 0.5s ease-out;
 }
 
-.cookie-banner p {
-    color: var(--theme-light);
-    font-weight: bold;
-    font-size: 1.2rem;
-}
-
-.cookie-buttons {
-    display: flex;
-    gap: 15px;
-}
+.cookie-banner p { color: var(--theme-light); font-weight: bold; font-size: 1.2rem; }
+.cookie-buttons { display: flex; gap: 15px; }
 
 .cookie-btn {
     background-color: var(--theme-orange);
@@ -321,7 +307,6 @@ footer a:hover {
     border-color: var(--theme-dark);
 }
 
-/* Mobile */
 @media (max-width: 600px) {
     h1 { font-size: 4rem; -webkit-text-stroke: 2px var(--theme-dark); text-shadow: 4px 4px 0 var(--theme-dark);}
     .section-title { font-size: 2.5rem; }
@@ -330,26 +315,18 @@ footer a:hover {
     .container { padding: 4rem 1rem; }
 }
 
-/* --- CURSEURS PERSONNALISÉS (INCHANGÉS) --- */
+/* --- CURSEURS --- */
+body { cursor: url('data:image/svg+xml;utf8,<svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><path d="M2 2l8 24 4-10 10-4L2 2z" fill="%23ff6b35" stroke="%232c1a1d" stroke-width="2"/></svg>') 2 2, auto; }
+a, button, .card, .list-item, .cookie-btn, nav a { cursor: url('https://static.tildacdn.com/tild3863-3739-4533-b134-653536343439/Frame_1171275326.png') 16 0, pointer !important; }
 
-/* 1. Curseur par défaut (Flèche simple style rétro, recolorée en Orange) */
-body {
-    /* J'ai juste changé la couleur de remplissage (fill) en orange (%23ff6b35) pour matcher le thème */
-    cursor: url('data:image/svg+xml;utf8,<svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><path d="M2 2l8 24 4-10 10-4L2 2z" fill="%23ff6b35" stroke="%232c1a1d" stroke-width="2"/></svg>') 2 2, auto;
-}
-
-/* 2. Curseur au survol (Ton image "Main" spécifique) */
-a, button, .card, .list-item, .cookie-btn, nav a {
-    cursor: url('https://static.tildacdn.com/tild3863-3739-4533-b134-653536343439/Frame_1171275326.png') 16 0, pointer !important;
-}
-
-/* --- FOOTER LAVA LAMP (CORRIGÉ POUR TEXTE NET) --- */
+/* ---------------------------------------------------- */
+/* --- FOOTER LAVA LAMP (VERSION BLOB SOFT PASTEL) --- */
+/* ---------------------------------------------------- */
 
 .lamp-container {
     position: relative;
     width: 100%;
     min-height: 250px; 
-    /* On enlève le background et le filtre ici pour protéger le texte */
     overflow: hidden; 
     border-top: 4px solid var(--theme-dark);
     display: flex;
@@ -365,38 +342,75 @@ a, button, .card, .list-item, .cookie-btn, nav a {
     height: 100%;
     z-index: 1; 
     
-    /* C'est ICI qu'on met la magie pour que seul le fond soit liquide */
     background-color: var(--theme-light); 
-    filter: blur(8px) contrast(15);
+    
+    /* Le filtre magique pour l'effet liquide */
+    /* On augmente le flou pour plus de "mou" */
+    filter: blur(12px) contrast(15);
 }
 
-/* Les bulles */
+/* Les Bulles (Blobs) */
 .bubble {
-    background-color: var(--theme-pink);
-    border-radius: 50%;
+    /* 1. Couleurs Pastels */
+    background-color: var(--lava-pink); 
+    
+    /* 2. Forme de départ (Patatoïde) */
+    border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+    
     position: absolute;
-    bottom: -50px;
-    opacity: 0.8;
+    bottom: -80px;
+    opacity: 0.9;
 }
 
-/* Animation des bulles (Inchangée) */
-.b1 { width: 90px; height: 90px; left: 15%; animation: floatUp 7s ease-in-out infinite; }
-.b2 { width: 120px; height: 120px; left: 45%; animation: floatUp 9s ease-in-out infinite 1s; }
-.b3 { width: 70px; height: 70px; left: 75%; animation: floatUp 6s ease-in-out infinite 2s; }
-.b4 { width: 100px; height: 100px; left: 30%; animation: floatUp 11s ease-in-out infinite 0.5s; background-color: var(--theme-orange); }
-
-@keyframes floatUp {
-    0%   { bottom: -100px; transform: translateX(0); }
-    50%  { transform: translateX(30px) scale(1.1); }
-    100% { bottom: 120%; transform: translateX(-30px) scale(0.9); }
+/* Animation "Float Up & Morph" : Ça monte ET ça se déforme */
+@keyframes floatMorph {
+    0% { 
+        bottom: -100px; 
+        transform: translateX(0) rotate(0deg); 
+        border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+    }
+    33% {
+        border-radius: 70% 30% 50% 50% / 30% 30% 70% 70%;
+    }
+    66% {
+        border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+    }
+    100% { 
+        bottom: 120%; 
+        transform: translateX(-20px) rotate(20deg); 
+        border-radius: 50% 50% 20% 80% / 25% 80% 20% 75%;
+    }
 }
 
-/* Le contenu texte */
+/* Configuration des bulles individuelles */
+.b1 { 
+    width: 100px; height: 100px; 
+    left: 15%; 
+    animation: floatMorph 8s linear infinite; 
+}
+.b2 { 
+    width: 140px; height: 140px; 
+    left: 45%; 
+    animation: floatMorph 12s linear infinite 1s; 
+    background-color: var(--lava-orange); /* Une grosse orange */
+}
+.b3 { 
+    width: 80px; height: 80px; 
+    left: 70%; 
+    animation: floatMorph 7s linear infinite 2.5s; 
+}
+.b4 { 
+    width: 110px; height: 110px; 
+    left: 30%; 
+    animation: floatMorph 10s linear infinite 0.5s; 
+    background-color: var(--lava-orange); 
+}
+
+/* Le contenu texte (reste net au-dessus) */
 .footer-content {
     position: relative;
-    z-index: 10; /* Le texte flotte BIEN AU-DESSUS de la lave */
+    z-index: 10; 
     text-align: center;
-    /* Pas de filtre ici, donc le texte reste net ! */
 }
 
 .footer-content p {
