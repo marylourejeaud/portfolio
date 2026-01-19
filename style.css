@@ -332,6 +332,7 @@ footer a:hover {
     .cookie-banner { flex-direction: column; text-align: center; }
 }
 
+
 /* --- CURSEUR PERSONNALISÉ (IMAGE EXACTE) --- */
 
 /* 1. Curseur par défaut (On garde la flèche verte "Grink" pour le style) */
@@ -349,3 +350,4 @@ nav a {
     /* Utilisation de ton URL image externe */
     cursor: url('https://static.tildacdn.com/tild3863-3739-4533-b134-653536343439/Frame_1171275326.png') 16 0, pointer !important;
 }
+
