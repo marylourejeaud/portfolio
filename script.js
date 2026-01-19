@@ -1,12 +1,4 @@
-/* --- 1. CHARGEMENT AUTOMATIQUE DE PEP.JS --- */
-(function() {
-    var script = document.createElement('script');
-    script.src = "https://code.jquery.com/pep/0.4.3/pep.js";
-    script.async = true;
-    document.head.appendChild(script);
-})();
-
-/* --- 2. CODE PRINCIPAL --- */
+/* --- CODE PRINCIPAL --- */
 document.addEventListener("DOMContentLoaded", function() {
     
     // A. Charge le footer et ses animations
@@ -138,17 +130,8 @@ function initRealLavaBackground() {
 
         draw(ctx) {
             ctx.beginPath();
-            // L'astuce : On dessine un cercle avec un gradient radial
-            // Le centre est opaque, les bords sont transparents.
-            // Le filtre CSS #goo va "manger" la transparence pour créer la forme liquide.
-            
-            // let gradient = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.radius);
-            // gradient.addColorStop(0, this.color); // Couleur au centre
-            // gradient.addColorStop(1, 'rgba(255, 255, 255, 0)'); // Transparent aux bords
-            
-            // ctx.fillStyle = gradient;
-            
-            // Dessin simple pour commencer (le filtre CSS fait le reste)
+            // L'astuce : On dessine un cercle simple
+            // Le filtre CSS #goo va s'occuper de créer l'effet liquide
             ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
             ctx.fillStyle = this.color;
             ctx.fill();
