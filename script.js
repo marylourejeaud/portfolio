@@ -1,5 +1,15 @@
+/* --- 1. CHARGEMENT AUTOMATIQUE DE PEP.JS --- */
+(function() {
+    var script = document.createElement('script');
+    script.src = "https://code.jquery.com/pep/0.4.3/pep.js";
+    script.async = true;
+    document.head.appendChild(script);
+})();
+
+/* --- 2. CODE PRINCIPAL --- */
 document.addEventListener("DOMContentLoaded", function() {
-    // 1. Charge le footer
+    
+    // A. Charge le footer et ses animations
     fetch("footer.html")
         .then(response => response.text())
         .then(data => {
@@ -9,11 +19,12 @@ document.addEventListener("DOMContentLoaded", function() {
         })
         .catch(error => console.error("Erreur footer:", error));
 
-    // 2. Lance le fond Blob Interactif
+    // B. Lance le fond Blob Interactif (Jelly Effect)
     initBlobBackground();
 });
 
-// --- GESTION BANNIÈRE COOKIE ---
+// --- FONCTIONS UTILITAIRES ---
+
 function initCookieBanner() {
     const banner = document.getElementById('cookie-banner');
     const btn = document.getElementById('accept-cookie');
@@ -36,7 +47,6 @@ function initCookieBanner() {
     }
 }
 
-// --- GESTION LAVA LAMP FOOTER ---
 function initLavaLampInteraction() {
     const container = document.querySelector('.lamp-container');
     const blob = document.getElementById('cursor-blob');
@@ -67,13 +77,10 @@ function initLavaLampInteraction() {
     animate();
 }
 
-// --- GESTION FOND BLOB (Code fourni et adapté) ---
+// --- FOND BLOB (JELLY EFFECT) ---
 function initBlobBackground() {
-    // Classes définies pour l'effet
     class Blob {
-        constructor() {
-            this.points = [];
-        }
+        constructor() { this.points = []; }
         init() {
             for(let i = 0; i < this.numPoints; i++) {
                 let point = new Point(this.divisional * ( i + 1 ), this);
@@ -115,15 +122,11 @@ function initBlobBackground() {
             ctx.fillStyle = this.color;
             ctx.fill();
             
-            // On retire le contour noir pour faire plus doux
-            // ctx.strokeStyle = '#000000'; 
-            // ctx.stroke();
-            
             requestAnimationFrame(this.render.bind(this));
         }
         push(item) { if(item instanceof Point) this.points.push(item); }
         set color(value) { this._color = value; }
-        get color() { return this._color || '#ffdab9'; } // Couleur par défaut (Pêche)
+        get color() { return this._color || '#ffdab9'; }
         set canvas(value) {
             if(value instanceof HTMLElement && value.tagName.toLowerCase() === 'canvas') {
                 this._canvas = value;
@@ -139,8 +142,6 @@ function initBlobBackground() {
         get position() { return this._position || { x: 0.5, y: 0.5 }; }
         get divisional() { return Math.PI * 2 / this.numPoints; }
         get center() { return { x: this.canvas.width * this.position.x, y: this.canvas.height * this.position.y }; }
-        set running(value) { this._running = value === true; }
-        get running() { return this.running !== false; }
     }
 
     class Point {
@@ -172,10 +173,10 @@ function initBlobBackground() {
         get friction() { return this._friction || 0.0085; }
     }
 
-    // Initialisation
+    // Initialisation du Blob
     let blob = new Blob;
     let canvas = document.createElement('canvas');
-    canvas.id = 'blob-canvas'; // ID pour le CSS
+    canvas.id = 'blob-canvas'; 
     canvas.setAttribute('touch-action', 'none');
     document.body.appendChild(canvas);
 
@@ -189,14 +190,14 @@ function initBlobBackground() {
     let oldMousePoint = { x: 0, y: 0};
     let hover = false;
 
-    // Configuration du Blob
+    // Config couleurs et taille
     blob.canvas = canvas;
-    blob.color = '#ffc4d6'; // COULEUR ROSE (Ta variable --sunset-pink)
-    blob.radius = 250; // Taille du blob
+    blob.color = '#ffc4d6'; // Rose
+    blob.radius = 250; 
     blob.init();
     blob.render();
 
-    // Interaction Souris (Réparée)
+    // Interaction souris
     let mouseMove = function(e) {
         let pos = blob.center;
         let diff = { x: e.clientX - pos.x, y: e.clientY - pos.y };
@@ -209,7 +210,7 @@ function initBlobBackground() {
             let vector = { x: e.clientX - pos.x, y: e.clientY - pos.y };
             angle = Math.atan2(vector.y, vector.x);
             hover = true;
-            blob.color = '#ff9a8b'; // Change de couleur au survol (Ton Accent)
+            blob.color = '#ff9a8b'; // Orange/Corail au survol
         } else if(dist > blob.radius && hover === true){ 
             let vector = { x: e.clientX - pos.x, y: e.clientY - pos.y };
             angle = Math.atan2(vector.y, vector.x);
@@ -228,7 +229,6 @@ function initBlobBackground() {
                 }
             });
             
-            // CODE RÉPARÉ ICI
             if(nearestPoint) {
                 let strength = { x: oldMousePoint.x - e.clientX, y: oldMousePoint.y - e.clientY };
                 let strengthValue = Math.sqrt((strength.x * strength.x) + (strength.y * strength.y));
@@ -236,7 +236,6 @@ function initBlobBackground() {
                 nearestPoint.acceleration = strengthValue / 2;
             }
         }
-        
         oldMousePoint.x = e.clientX;
         oldMousePoint.y = e.clientY;
     }
