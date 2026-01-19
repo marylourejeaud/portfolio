@@ -1,42 +1,33 @@
-/* --- STYLE.CSS : THEME "HIPPIE GROOVE 70s" (Orange & Rose) --- */
+/* --- STYLE.CSS : THEME "SUNSET LIQUID" (Rose & Orange Clair) --- */
 
 :root {
-    /* --- NOUVELLE PALETTE 70s --- */
-    --theme-orange: #ff6b35;   /* Orange 70s vibrant */
-    --theme-pink: #e73c7e;     /* Rose magenta chaud */
-    --theme-dark: #2c1a1d;     /* Marron très foncé */
-    --theme-light: #fffaf0;    /* Blanc cassé floral */
+    /* --- PALETTE COUCHER DE SOLEIL --- */
+    --sunset-pink: #ffc4d6;      /* Rose pastel doux */
+    --sunset-orange: #ffdab9;    /* Pêche/Orange clair */
+    --sunset-accent: #ff9a8b;    /* Corail pour les interactions */
+    --text-color: #4a2c35;       /* Marron chaud pour le texte */
+    --bg-color: #fff5f7;         /* Fond très pâle (rose/blanc) */
     
-    /* --- COULEURS PASTELS POUR LA LAVE --- */
-    --lava-pink: #ffc2d1;      /* Rose clair (Bubblegum) */
-    --lava-orange: #ffe0b2;    /* Orange clair (Abricot) */
-
-    /* Dimensions & Ombres */
-    --border-thick: 3px solid var(--theme-dark);
-    --shadow-hard: 6px 6px 0px var(--theme-dark);
-    --shadow-hover: 10px 10px 0px var(--theme-dark);
+    /* --- DIMENSIONS --- */
+    --border-radius-ui: 20px;
 }
 
-/* --- BASE & BACKGROUND --- */
+/* --- BASE --- */
 body {
-    background-color: var(--theme-light);
-    color: var(--theme-dark);
+    background: linear-gradient(to bottom, #ffffff, var(--bg-color));
+    color: var(--text-color);
     font-family: 'Space Grotesk', sans-serif;
     margin: 0;
     padding: 0;
     overflow-x: hidden;
     line-height: 1.5;
-    
-    /* IMAGE DE FOND HIPPIE */
-    background-image: url('https://t3.ftcdn.net/jpg/04/85/58/18/360_F_485581800_uIPF1wn7Shu2xkBQa6jDWAV4TI7l86BX.jpg');
-    background-size: cover;
-    background-position: center;
-    background-attachment: fixed;
+    /* Suppression de l'image de fond */
 }
 
 /* --- NAVIGATION --- */
 nav {
-    background: var(--theme-dark);
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(10px); /* Effet verre dépoli */
     padding: 1rem 2rem;
     display: flex;
     justify-content: center;
@@ -46,292 +37,112 @@ nav {
     z-index: 1000;
     width: fit-content;
     margin: 0 auto;
-    border-radius: 100px;
-    box-shadow: 0px 10px 20px rgba(44, 26, 29, 0.3);
-    border: 2px solid var(--theme-orange);
+    border-radius: 50px;
+    border: 1px solid var(--sunset-pink);
+    box-shadow: 0 4px 15px rgba(255, 196, 214, 0.3);
 }
 
 nav a {
-    color: var(--theme-orange);
+    color: var(--text-color);
     text-decoration: none;
-    font-family: 'Shrikhand', cursive;
-    font-size: 1.3rem;
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: bold;
+    font-size: 1.1rem;
     text-transform: uppercase;
-    letter-spacing: 1px;
-    transition: all 0.2s ease;
+    transition: all 0.3s ease;
     padding: 0.5rem 1rem;
     border-radius: 50px;
 }
 
 nav a:hover {
-    background-color: var(--theme-orange);
-    color: var(--theme-dark);
-    transform: rotate(-3deg) scale(1.1);
+    background-color: var(--sunset-pink);
+    color: white;
 }
 
 /* --- HEADER --- */
 header {
-    background-color: transparent; 
-    padding: 10rem 2rem 6rem 2rem;
+    padding: 8rem 2rem 4rem 2rem;
     text-align: center;
-    position: relative;
 }
 
 h1 {
     font-family: 'Shrikhand', cursive;
-    font-size: 7rem;
+    font-size: 6rem;
     margin: 0;
-    color: var(--theme-orange);
-    text-transform: uppercase;
-    line-height: 0.9;
-    position: relative;
-    z-index: 1;
-    -webkit-text-stroke: 3px var(--theme-dark);
-    text-shadow: 8px 8px 0px var(--theme-dark);
+    /* Dégradé sur le texte */
+    background: linear-gradient(45deg, var(--sunset-orange), var(--sunset-accent));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    line-height: 1.1;
 }
 
 .subtitle {
-    font-size: 1.8rem;
-    font-weight: 700;
-    margin-top: 30px;
-    color: var(--theme-light);
-    background: var(--theme-pink);
+    font-size: 1.5rem;
+    margin-top: 20px;
+    color: var(--text-color);
+    background: white;
+    padding: 0.5rem 1.5rem;
+    border-radius: 50px;
     display: inline-block;
-    padding: 0.8rem 2rem;
-    transform: rotate(-2deg);
-    position: relative;
-    z-index: 1;
-    box-shadow: var(--shadow-hard);
-    border: var(--border-thick);
-}
-
-header p:last-of-type {
-    font-weight: bold;
-    font-size: 1.4rem;
-    margin-top: 2.5rem;
-    position: relative;
-    z-index: 1;
-    color: var(--theme-dark);
-    background-color: var(--theme-light);
-    display: inline-block;
-    padding: 0.5rem 1rem;
-    border: var(--border-thick);
-    box-shadow: 4px 4px 0 var(--theme-dark);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
 }
 
 /* --- CONTENEURS --- */
 .container {
-    max-width: 1100px;
+    max-width: 1000px;
     margin: auto;
-    padding: 6rem 2rem;
-    background-color: rgba(255, 250, 240, 0.9); 
-    border: var(--border-thick);
-    box-shadow: var(--shadow-hard);
-    margin-bottom: 4rem;
+    padding: 4rem 2rem;
 }
 
 .section-title {
     font-family: 'Shrikhand', cursive;
-    font-size: 4rem;
+    font-size: 3rem;
     text-align: center;
-    margin-bottom: 4rem;
-    color: var(--theme-dark);
-    text-transform: uppercase;
-    text-decoration: underline;
-    text-decoration-color: var(--theme-pink);
-    text-decoration-thickness: 15px;
-    text-underline-offset: -5px;
+    margin-bottom: 3rem;
+    color: var(--sunset-accent);
 }
 
-/* --- CARTES --- */
+/* --- CARTES & LISTES (Style Épuré) --- */
+.card, .list-item {
+    background: white;
+    padding: 2rem;
+    border-radius: var(--border-radius-ui);
+    box-shadow: 0 10px 30px rgba(255, 154, 139, 0.1); /* Ombre colorée douce */
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    margin-bottom: 2rem;
+}
+
 .grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    gap: 3rem;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
 }
 
-.card {
-    background: var(--theme-light);
-    padding: 2.5rem;
-    border: var(--border-thick);
-    box-shadow: var(--shadow-hard);
-    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    position: relative;
+.card:hover, .list-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(255, 154, 139, 0.2);
 }
 
-.card::after {
-    content: '';
-    position: absolute;
-    top: -10px;
-    right: -10px;
-    width: 40px;
-    height: 40px;
-    background: var(--theme-orange);
-    border: var(--border-thick);
-    border-radius: 50%;
-}
-
-.card:hover {
-    transform: translate(-5px, -5px);
-    box-shadow: var(--shadow-hover);
-    background-color: var(--theme-pink);
-}
-.card:hover h3, .card:hover p { color: var(--theme-light); }
-
-.card h3 {
+.card h3, .list-item h3 {
+    color: var(--sunset-accent);
     font-family: 'Shrikhand', cursive;
-    color: var(--theme-pink);
-    font-size: 2rem;
     margin-top: 0;
-    margin-bottom: 1rem;
 }
 
-/* --- LISTES --- */
-.list-item {
-    background: var(--theme-light);
-    padding: 2rem;
-    margin-bottom: 3rem;
-    border: var(--border-thick);
-    box-shadow: var(--shadow-hard);
-    position: relative;
-    border-left: 15px solid var(--theme-orange);
-    transition: 0.3s;
-}
-
-.list-item:hover {
-    transform: scale(1.02);
-    border-left-color: var(--theme-pink);
-}
-
-.list-item h3 {
-    margin: 0;
-    font-family: 'Space Grotesk', sans-serif;
-    font-weight: 700;
-    font-size: 1.8rem;
-    text-transform: uppercase;
-    color: var(--theme-dark);
-}
-
-/* --- BADGES --- */
-.badge {
-    display: inline-block;
-    background-color: var(--theme-dark);
-    color: var(--theme-orange);
-    padding: 0.5rem 1rem;
-    font-weight: bold;
-    font-family: 'Space Grotesk', monospace;
-    margin: 10px 5px 0 0;
-    border: 2px solid var(--theme-orange);
-    text-transform: uppercase;
-    font-size: 0.8rem;
-    box-shadow: 3px 3px 0 var(--theme-orange);
-}
-
-/* --- FOOTER (Général) --- */
-footer {
-    background-color: var(--theme-dark);
-    color: var(--theme-light);
-    padding-top: 3rem;
-    padding-bottom: 3rem;
-    border-top: 10px solid var(--theme-pink);
-    position: relative;
-    z-index: 10;
-}
-
-footer a {
-    color: var(--theme-orange) !important;
-    font-family: 'Shrikhand', cursive;
-    font-size: 1.8rem;
-}
-
-footer a:hover {
-    color: var(--theme-pink) !important;
-}
-
-/* --- BANNIÈRE COOKIE --- */
-.cookie-banner {
-    position: fixed;
-    bottom: 20px;
-    left: 20px;
-    right: 20px;
-    background-color: var(--theme-pink);
-    border: var(--border-thick);
-    padding: 1.5rem;
-    box-shadow: var(--shadow-hard);
-    z-index: 9999;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 20px;
-    animation: slideUp 0.5s ease-out;
-}
-
-.cookie-banner p { color: var(--theme-light); font-weight: bold; font-size: 1.2rem; }
-.cookie-buttons { display: flex; gap: 15px; }
-
-.cookie-btn {
-    background-color: var(--theme-orange);
-    color: var(--theme-dark);
-    border: 2px solid var(--theme-dark);
-    padding: 0.8rem 2rem;
-    font-family: 'Shrikhand', cursive;
-    font-size: 1rem;
-    cursor: pointer;
-    text-transform: uppercase;
-    box-shadow: 4px 4px 0px var(--theme-dark);
-    transition: all 0.2s;
-}
-
-.cookie-btn:hover {
-    transform: translate(-2px, -2px);
-    box-shadow: 6px 6px 0px var(--theme-dark);
-    background-color: var(--theme-light);
-}
-
-.cookie-btn-secondary {
-    background-color: transparent;
-    color: var(--theme-light);
-    border: 3px solid var(--theme-light);
-    padding: 0.8rem 1.5rem;
-    font-family: 'Space Grotesk', sans-serif;
-    font-weight: bold;
-    cursor: pointer;
-    text-transform: uppercase;
-    transition: all 0.2s;
-    box-shadow: 4px 4px 0px var(--theme-dark);
-}
-
-.cookie-btn-secondary:hover {
-    background-color: var(--theme-light);
-    color: var(--theme-pink);
-    border-color: var(--theme-dark);
-}
-
-@media (max-width: 600px) {
-    h1 { font-size: 4rem; -webkit-text-stroke: 2px var(--theme-dark); text-shadow: 4px 4px 0 var(--theme-dark);}
-    .section-title { font-size: 2.5rem; }
-    nav { width: 90%; gap: 0.8rem; font-size: 0.8rem; padding: 0.8rem 1rem;}
-    .cookie-banner { flex-direction: column; text-align: center; }
-    .container { padding: 4rem 1rem; }
-}
-
-/* --- CURSEURS --- */
-body { cursor: url('data:image/svg+xml;utf8,<svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><path d="M2 2l8 24 4-10 10-4L2 2z" fill="%23ff6b35" stroke="%232c1a1d" stroke-width="2"/></svg>') 2 2, auto; }
-a, button, .card, .list-item, .cookie-btn, nav a { cursor: url('https://static.tildacdn.com/tild3863-3739-4533-b134-653536343439/Frame_1171275326.png') 16 0, pointer !important; }
-
-/* ---------------------------------------------------- */
-/* --- FOOTER LAVA LAMP (VERSION BLOB SOFT PASTEL) --- */
-/* ---------------------------------------------------- */
+/* --- 🌟 LAVA LAMP / METABALLS (FOOTER) --- */
+/* C'est ici que la magie opère */
 
 .lamp-container {
     position: relative;
     width: 100%;
-    min-height: 250px; 
-    overflow: hidden; 
-    border-top: 4px solid var(--theme-dark);
+    height: 400px; /* Assez haut pour voir l'effet */
+    background-color: #ffffff; /* FOND BLANC OBLIGATOIRE pour le contraste */
+    overflow: hidden;
     display: flex;
     align-items: center;
     justify-content: center;
+    border-top: 1px solid var(--sunset-pink);
 }
 
 .lava-lamp {
@@ -340,88 +151,89 @@ a, button, .card, .list-item, .cookie-btn, nav a { cursor: url('https://static.t
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: 1; 
     
-    background-color: var(--theme-light); 
-    
-    /* Le filtre magique pour l'effet liquide */
-    /* On augmente le flou pour plus de "mou" */
-    filter: blur(12px) contrast(15);
+    /* LE COEUR DE L'EFFET GOOEY */
+    /* 1. On floute tout (blur) */
+    /* 2. On augmente le contraste violemment pour recréer des bords nets */
+    filter: blur(15px) contrast(30);
+    background-color: #fff; /* Assure que le fond reste blanc pour le filtre */
+    z-index: 1;
 }
 
-/* Les Bulles (Blobs) */
 .bubble {
-    /* 1. Couleurs Pastels */
-    background-color: var(--lava-pink); 
-    
-    /* 2. Forme de départ (Patatoïde) */
-    border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
-    
+    border-radius: 50%;
     position: absolute;
-    bottom: -80px;
-    opacity: 0.9;
+    /* Le mélange de rose et d'orange se fera naturellement */
+    background: var(--sunset-pink);
 }
 
-/* Animation "Float Up & Morph" : Ça monte ET ça se déforme */
-@keyframes floatMorph {
-    0% { 
-        bottom: -100px; 
-        transform: translateX(0) rotate(0deg); 
-        border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
-    }
-    33% {
-        border-radius: 70% 30% 50% 50% / 30% 30% 70% 70%;
-    }
-    66% {
-        border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
-    }
-    100% { 
-        bottom: 120%; 
-        transform: translateX(-20px) rotate(20deg); 
-        border-radius: 50% 50% 20% 80% / 25% 80% 20% 75%;
-    }
+/* --- BULLES AUTOMATIQUES --- */
+.b1 { width: 150px; height: 150px; left: 20%; background: var(--sunset-orange); animation: moveBlob 10s infinite alternate; }
+.b2 { width: 120px; height: 120px; left: 50%; background: var(--sunset-pink); animation: moveBlob 14s infinite alternate-reverse; }
+.b3 { width: 180px; height: 180px; left: 70%; background: var(--sunset-orange); animation: moveBlob 12s infinite alternate; }
+.b4 { width: 100px; height: 100px; left: 35%; background: var(--sunset-pink); animation: moveBlob 16s infinite alternate-reverse; }
+
+/* Animation douce de base */
+@keyframes moveBlob {
+    from { transform: translate(0, 0) scale(1); }
+    to { transform: translate(20px, -50px) scale(1.1); }
 }
 
-/* Configuration des bulles individuelles */
-.b1 { 
-    width: 100px; height: 100px; 
-    left: 15%; 
-    animation: floatMorph 8s linear infinite; 
-}
-.b2 { 
-    width: 140px; height: 140px; 
-    left: 45%; 
-    animation: floatMorph 12s linear infinite 1s; 
-    background-color: var(--lava-orange); /* Une grosse orange */
-}
-.b3 { 
-    width: 80px; height: 80px; 
-    left: 70%; 
-    animation: floatMorph 7s linear infinite 2.5s; 
-}
-.b4 { 
-    width: 110px; height: 110px; 
-    left: 30%; 
-    animation: floatMorph 10s linear infinite 0.5s; 
-    background-color: var(--lava-orange); 
+/* --- BULLE SOURIS (INTERACTIVE) --- */
+.cursor-blob {
+    width: 120px;
+    height: 120px;
+    background: var(--sunset-accent); /* Une couleur un peu plus forte pour l'interaction */
+    pointer-events: none; /* Ne bloque pas les clics */
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform: translate(-50%, -50%); /* Pour centrer sur la souris */
+    /* Pas d'animation CSS, c'est le JS qui gère */
+    transition: width 0.3s, height 0.3s; /* Transition douce si on change la taille */
 }
 
-/* Le contenu texte (reste net au-dessus) */
+/* --- CONTENU DU FOOTER (NET) --- */
 .footer-content {
     position: relative;
-    z-index: 10; 
+    z-index: 10; /* Au-dessus du flou */
     text-align: center;
+    pointer-events: none; /* Laisse passer la souris vers la lave */
 }
-
-.footer-content p {
+.footer-content a {
+    pointer-events: auto; /* Réactive les clics sur les liens */
+    color: var(--text-color);
     font-weight: bold;
+    text-decoration: none;
     font-size: 1.2rem;
-    color: var(--theme-dark);
 }
 
-.social-links a {
-    color: var(--theme-orange);
-    font-family: 'Shrikhand', cursive;
-    font-size: 1.5rem;
-    text-decoration: none;
+/* --- BANNIÈRE COOKIE --- */
+.cookie-banner {
+    position: fixed;
+    bottom: 20px; right: 20px;
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(5px);
+    border: 1px solid var(--sunset-pink);
+    padding: 1.5rem;
+    border-radius: 20px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+    z-index: 9999;
+    display: flex; gap: 15px; align-items: center;
+}
+.cookie-btn {
+    background: var(--sunset-orange); color: var(--text-color);
+    border: none; padding: 0.5rem 1.5rem; border-radius: 50px; cursor: pointer;
+    font-weight: bold; transition: 0.2s;
+}
+.cookie-btn:hover { transform: scale(1.05); background: var(--sunset-pink); }
+.cookie-btn-secondary {
+    background: transparent; border: 1px solid var(--text-color);
+    padding: 0.5rem 1rem; border-radius: 50px; cursor: pointer;
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+    h1 { font-size: 4rem; }
+    .lamp-container { height: 300px; }
 }
