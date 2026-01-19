@@ -342,3 +342,52 @@ body {
 a, button, .card, .list-item, .cookie-btn, nav a {
     cursor: url('https://static.tildacdn.com/tild3863-3739-4533-b134-653536343439/Frame_1171275326.png') 16 0, pointer !important;
 }
+
+/* --- EFFET GOOEY / LAMPE À LAVE --- */
+.lamp-container {
+    width: 100%;
+    height: 300px; /* Hauteur de la zone */
+    background: transparent;
+    position: relative;
+    overflow: hidden;
+    /* C'est ici que la magie opère : Flou + Contraste extrême */
+    filter: blur(10px) contrast(20);
+    background-color: var(--theme-light); /* Fond nécessaire pour le contraste */
+}
+
+.lava-lamp {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.bubble {
+    background-color: var(--theme-pink); /* Couleur des bulles */
+    border-radius: 50%;
+    position: absolute;
+    bottom: -50px; /* Elles partent d'en bas */
+}
+
+/* Animation des bulles qui montent */
+.b1 {
+    width: 80px; height: 80px;
+    left: 20%;
+    animation: floatUp 6s ease-in-out infinite;
+}
+.b2 {
+    width: 120px; height: 120px;
+    left: 50%;
+    animation: floatUp 8s ease-in-out infinite 1s; /* Délai de 1s */
+}
+.b3 {
+    width: 60px; height: 60px;
+    left: 70%;
+    animation: floatUp 5s ease-in-out infinite 2s; /* Délai de 2s */
+}
+
+@keyframes floatUp {
+    0%   { bottom: -100px; transform: translateX(0); }
+    50%  { transform: translateX(20px); } /* Petit mouvement latéral */
+    100% { bottom: 120%; transform: translateX(-20px); }
+}
+
