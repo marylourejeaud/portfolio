@@ -91,6 +91,9 @@ function initRealLavaBackground() {
             this.speedX = (Math.random() - 0.5) * 0.2;
             
             this.color = colors[Math.floor(Math.random() * colors.length)];
+            
+            // Facteur d'étirement (1 = rond, >1 = ovale vertical)
+            this.scaleY = 1; 
         }
 
         update(mouseX, mouseY) {
@@ -99,37 +102,50 @@ function initRealLavaBackground() {
             this.x += this.speedX;
 
             // 2. Interaction Souris DOUCE (Repousse légèrement)
-            // On calcule la distance avec la souris
             let dx = this.x - mouseX;
             let dy = this.y - mouseY;
             let dist = Math.sqrt(dx*dx + dy*dy);
             
-            // Si la souris est proche (< 200px), on pousse doucement
-            if(dist < 200) {
-                let force = (200 - dist) / 200; // Force entre 0 et 1
-                // On pousse la bulle dans la direction opposée
-                // Le multiplicateur 2 contrôle la "nervosité". 2 = doux.
-                this.x += (dx / dist) * force * 2; 
-                this.y += (dy / dist) * force * 2;
+            // Si la souris est proche (< 250px), on déforme et pousse
+            if(dist < 250) {
+                let force = (250 - dist) / 250; // Force entre 0 et 1
+                
+                // Pousser doucement
+                this.x += (dx / dist) * force * 1.5; 
+                this.y += (dy / dist) * force * 1.5;
+                
+                // Déformation au contact : s'aplatit ou s'étire légèrement
+                // Plus on est proche, plus ça "s'écrase" un peu horizontalement (effet tension de surface)
+                this.scaleY = 1 + (force * 0.2); 
+            } else {
+                // Retour à la forme normale (étirement naturel dû à la vitesse)
+                // Plus ça va vite vers le haut, plus c'est étiré verticalement (effet goutte)
+                this.scaleY = 1 + (this.speedY * 0.1); 
             }
 
             // 3. Reset si sort de l'écran
-            // Haut
-            if (this.y < -this.radius) {
-                this.y = this.canvas.height + this.radius;
+            if (this.y < -this.radius * 2) {
+                this.y = this.canvas.height + this.radius * 2;
                 this.x = Math.random() * this.canvas.width;
+                this.init(); // Reset des propriétés aléatoires pour varier
             }
-            // Côtés (pour éviter qu'elles disparaissent trop)
             if (this.x < -this.radius) this.x = this.canvas.width + this.radius;
             if (this.x > this.canvas.width + this.radius) this.x = -this.radius;
         }
 
         draw(ctx) {
+            ctx.save(); // Sauvegarde le contexte avant transformation
+            ctx.translate(this.x, this.y);
+            ctx.scale(1, this.scaleY); // Applique l'étirement vertical
+            
             ctx.beginPath();
-            ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+            // On dessine un cercle en (0,0) car on a déjà translate le contexte
+            ctx.arc(0, 0, this.radius, 0, Math.PI * 2);
             ctx.fillStyle = this.color;
             ctx.fill();
             ctx.closePath();
+            
+            ctx.restore(); // Restaure le contexte pour la prochaine bulle
         }
     }
 
@@ -140,8 +156,8 @@ function initRealLavaBackground() {
     let ctx = canvas.getContext('2d');
 
     let bubbles = [];
-    // Plus de bulles ! (15)
-    const numBubbles = 15; 
+    // Plus de bulles ! (20)
+    const numBubbles = 20; 
     
     // Redimensionnement
     function resize() {
