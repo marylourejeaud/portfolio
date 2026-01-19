@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", function() {
         })
         .catch(error => console.error("Erreur footer:", error));
 
-    // B. Lance le fond aux multiples Blobs doux
+    // B. Lance le fond aux multiples Blobs (Version "Zen & Petite")
     initSoftMultiBlobBackground();
 });
 
@@ -69,15 +69,15 @@ function initLavaLampInteraction() {
 }
 
 // -------------------------------------------------------
-// --- NOUVEAU FOND : MULTIPLES BLOBS DOUX ET PALES ---
+// --- NOUVEAU FOND : BLOBS PETITS, CALMES ET DISCRETS ---
 // -------------------------------------------------------
 function initSoftMultiBlobBackground() {
     
-    // Palette de couleurs pales style "Sunset/Hippie doux"
+    // Palette de couleurs pales
     const paleColors = [
         '#ffc4d6', // Rose
         '#ffdab9', // Pêche
-        '#fffaf0', // Crème floral (var(--theme-light))
+        '#fffaf0', // Crème floral
         '#e6e6fa', // Lavande pâle
         '#ffe4e1'  // Rose brumeux
     ];
@@ -100,8 +100,6 @@ function initSoftMultiBlobBackground() {
             let pointsArray = this.points;
             let points = this.numPoints;
             let center = this.center;
-            
-            // Note : On ne clear pas le canvas ici, c'est la boucle principale qui le fait.
             
             pointsArray[0].solveWith(pointsArray[points-1], pointsArray[1]);
 
@@ -127,10 +125,9 @@ function initSoftMultiBlobBackground() {
             ctx.quadraticCurveTo(p1.x, p1.y, xc, yc);
 
             ctx.fillStyle = this.color;
-            // Légère transparence pour que les blobs se mélangent
             ctx.globalAlpha = 0.8; 
             ctx.fill();
-            ctx.globalAlpha = 1.0; // Reset
+            ctx.globalAlpha = 1.0;
         }
 
         set canvas(value) {
@@ -140,10 +137,9 @@ function initSoftMultiBlobBackground() {
             }
         }
         get canvas() { return this._canvas; }
-        get numPoints() { return 32; } // Nombre de points fixe pour simplifier
+        get numPoints() { return 32; }
         get position() { return this._position; }
         get divisional() { return Math.PI * 2 / this.numPoints; }
-        // Le centre est maintenant absolu (pixels) et non relatif (%)
         get center() { return { x: this.position.x, y: this.position.y }; }
         get color() { return this._color; }
     }
@@ -153,8 +149,8 @@ function initSoftMultiBlobBackground() {
             this.parent = parent;
             this.azimuth = Math.PI - azimuth;
             this._components = { x: Math.cos(this.azimuth), y: Math.sin(this.azimuth) };
-            // Accélération initiale plus faible
-            this.acceleration = -0.1 + Math.random() * 0.2;
+            // Accélération initiale quasi nulle pour éviter le "tremblement" au démarrage
+            this.acceleration = 0; 
         }
         solveWith(leftPoint, rightPoint) {
             this.acceleration = (-0.3 * this.radialEffect + ( leftPoint.radialEffect - this.radialEffect ) + ( rightPoint.radialEffect - this.radialEffect )) * this.elasticity - this.speed * this.friction;
@@ -173,11 +169,11 @@ function initSoftMultiBlobBackground() {
         }
         get components() { return this._components; }
         
-        // --- REGLAGES PHYSIQUES POUR ADOUCIR ---
-        // Elasticité plus basse = moins "caoutchouc", plus mou
-        get elasticity() { return 0.0005; } 
-        // Friction plus haute = s'arrête de trembler plus vite
-        get friction() { return 0.012; } 
+        // --- RÉGLAGES PHYSIQUES "CALMES" ---
+        // Friction augmentée (0.02 -> 0.05) : Le blob absorbe l'énergie, il ne "bloblotte" pas.
+        get friction() { return 0.05; } 
+        // Elasticité très faible : Il revient à sa forme lentement, sans rebondir.
+        get elasticity() { return 0.001; } 
     }
 
     // --- Initialisation ---
@@ -188,9 +184,8 @@ function initSoftMultiBlobBackground() {
 
     let ctx = canvas.getContext('2d');
     let blobs = [];
-    // Variables pour le suivi de souris lissé (smooth)
-    let mouse = { x: window.innerWidth/2, y: window.innerHeight/2 }; // Position cible
-    let smoothedMouse = { x: window.innerWidth/2, y: window.innerHeight/2 }; // Position lissée actuelle
+    let mouse = { x: window.innerWidth/2, y: window.innerHeight/2 };
+    let smoothedMouse = { x: window.innerWidth/2, y: window.innerHeight/2 };
 
     let resize = function() {
         canvas.width = window.innerWidth;
@@ -199,15 +194,14 @@ function initSoftMultiBlobBackground() {
     window.addEventListener('resize', resize);
     resize();
 
-    // --- Création des multiples blobs ---
-    const numBlobs = 6; // Nombre de blobs en fond
+    // --- Création des blobs (PLUS PETITS) ---
+    const numBlobs = 6; 
     for (let i = 0; i < numBlobs; i++) {
-        // Taille aléatoire entre 200 et 500
-        let radius = Math.random() * 300 + 200; 
-        // Position aléatoire sur l'écran
+        // Taille réduite : entre 80px et 200px (au lieu de 200-500)
+        let radius = Math.random() * 120 + 80; 
+        
         let x = Math.random() * canvas.width;
         let y = Math.random() * canvas.height;
-        // Couleur aléatoire de la palette
         let color = paleColors[Math.floor(Math.random() * paleColors.length)];
         
         let b = new Blob(radius, color, x, y);
@@ -216,30 +210,26 @@ function initSoftMultiBlobBackground() {
         blobs.push(b);
     }
 
-    // --- Suivi de souris (Mise à jour de la cible) ---
     window.addEventListener('mousemove', function(e) {
         mouse.x = e.clientX;
         mouse.y = e.clientY;
     });
 
-    // --- Boucle d'animation principale ---
+    // --- Animation ---
     function animate() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-        // 1. Lissage du mouvement de la souris (LERP)
-        // Le facteur 0.05 détermine la douceur. Plus c'est bas, plus c'est lent.
+        // Lissage souris très lent (0.05) pour éviter les mouvements brusques
         smoothedMouse.x += (mouse.x - smoothedMouse.x) * 0.05;
         smoothedMouse.y += (mouse.y - smoothedMouse.y) * 0.05;
 
-        // 2. Mise à jour et rendu de chaque blob
         blobs.forEach(blob => {
-            // Calcul de l'interaction avec la souris LISSÉE
             let pos = blob.center;
             let diff = { x: smoothedMouse.x - pos.x, y: smoothedMouse.y - pos.y };
             let dist = Math.sqrt((diff.x * diff.x) + (diff.y * diff.y));
             let angle = Math.atan2(diff.y, diff.x);
 
-            // Zone d'influence plus large (radius * 1.5) mais force plus faible
+            // Interaction souris
             if(dist < blob.radius * 1.5) {
                 let nearestPoint = null;
                 let distanceFromPoint = 100;
@@ -251,18 +241,16 @@ function initSoftMultiBlobBackground() {
                 });
                 
                 if(nearestPoint) {
-                    // Force repoussante inversée et très adoucie
-                    let strength = dist / blob.radius; 
-                    // On inverse pour repousser doucement
-                    nearestPoint.acceleration = -(1 - strength) * 2; 
+                    let strength = dist / blob.radius;
+                    // FORCE RÉDUITE : Multiplicateur 0.5 (au lieu de 2)
+                    // C'est doux, ça ne déforme pas violemment le blob
+                    nearestPoint.acceleration = -(1 - strength) * 0.5; 
                 }
             }
-            // Rendu du blob
             blob.render();
         });
 
         requestAnimationFrame(animate);
     }
-    // Lancement de l'animation
     animate();
 }
