@@ -1,8 +1,8 @@
-/* --- STYLE.CSS : THEME "SUNSET LIQUID" (Rose & Orange Clair) --- */
+/* --- STYLE.CSS : THEME "SUNSET LIQUID" (Complet & Corrigé) --- */
 
 :root {
     /* --- PALETTE COUCHER DE SOLEIL --- */
-    --sunset-pink: #ffc4d6;      /* Rose pastel doux */
+    --sunset-pink: #ffc4d6;      /* Rose pastel doux (Bubblegum) */
     --sunset-orange: #ffdab9;    /* Pêche/Orange clair */
     --sunset-accent: #ff9a8b;    /* Corail pour les interactions */
     --text-color: #4a2c35;       /* Marron chaud pour le texte */
@@ -14,6 +14,7 @@
 
 /* --- BASE --- */
 body {
+    /* Fond dégradé subtil sans image pour laisser respirer le design */
     background: linear-gradient(to bottom, #ffffff, var(--bg-color));
     color: var(--text-color);
     font-family: 'Space Grotesk', sans-serif;
@@ -21,10 +22,9 @@ body {
     padding: 0;
     overflow-x: hidden;
     line-height: 1.5;
-    /* Suppression de l'image de fond */
 }
 
-/* --- NAVIGATION --- */
+/* --- NAVIGATION (Style "Glassmorphism") --- */
 nav {
     background: rgba(255, 255, 255, 0.8);
     backdrop-filter: blur(10px); /* Effet verre dépoli */
@@ -69,11 +69,13 @@ h1 {
     font-family: 'Shrikhand', cursive;
     font-size: 6rem;
     margin: 0;
-    /* Dégradé sur le texte */
+    /* Dégradé à l'intérieur du texte */
     background: linear-gradient(45deg, var(--sunset-orange), var(--sunset-accent));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     line-height: 1.1;
+    /* Petit drop shadow pour détacher le texte */
+    filter: drop-shadow(2px 2px 0px rgba(0,0,0,0.1));
 }
 
 .subtitle {
@@ -85,6 +87,7 @@ h1 {
     border-radius: 50px;
     display: inline-block;
     box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    border: 1px solid var(--sunset-orange);
 }
 
 /* --- CONTENEURS --- */
@@ -102,15 +105,17 @@ h1 {
     color: var(--sunset-accent);
 }
 
-/* --- CARTES & LISTES (Style Épuré) --- */
+/* --- CARTES & LISTES --- */
 .card, .list-item {
     background: white;
     padding: 2rem;
     border-radius: var(--border-radius-ui);
-    box-shadow: 0 10px 30px rgba(255, 154, 139, 0.1); /* Ombre colorée douce */
+    box-shadow: 0 10px 30px rgba(255, 154, 139, 0.1); 
     border: 1px solid rgba(255, 255, 255, 0.5);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     margin-bottom: 2rem;
+    position: relative;
+    overflow: hidden;
 }
 
 .grid {
@@ -122,22 +127,50 @@ h1 {
 .card:hover, .list-item:hover {
     transform: translateY(-5px);
     box-shadow: 0 15px 35px rgba(255, 154, 139, 0.2);
+    border-color: var(--sunset-pink);
 }
 
 .card h3, .list-item h3 {
     color: var(--sunset-accent);
     font-family: 'Shrikhand', cursive;
     margin-top: 0;
+    font-size: 1.8rem;
 }
 
-/* --- 🌟 LAVA LAMP / METABALLS (FOOTER) --- */
-/* C'est ici que la magie opère */
+/* Petits badges techniques */
+.badge {
+    display: inline-block;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    padding: 0.4rem 0.8rem;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: bold;
+    margin-right: 5px;
+    margin-top: 10px;
+    border: 1px solid var(--sunset-orange);
+}
+
+/* --- CURSEURS PERSONNALISÉS --- */
+/* 1. Curseur par défaut (Flèche SVG colorée) */
+body {
+    cursor: url('data:image/svg+xml;utf8,<svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><path d="M2 2l8 24 4-10 10-4L2 2z" fill="%23ff9a8b" stroke="%234a2c35" stroke-width="2"/></svg>') 2 2, auto;
+}
+
+/* 2. Curseur Interactif (Main Cartoon) */
+a, button, .card, .list-item, .cookie-btn, nav a {
+    cursor: url('https://static.tildacdn.com/tild3863-3739-4533-b134-653536343439/Frame_1171275326.png') 16 0, pointer !important;
+}
+
+/* ---------------------------------------------------- */
+/* --- 🌟 LAVA LAMP / METABALLS (FOOTER FIXED) --- */
+/* ---------------------------------------------------- */
 
 .lamp-container {
     position: relative;
     width: 100%;
-    height: 400px; /* Assez haut pour voir l'effet */
-    background-color: #ffffff; /* FOND BLANC OBLIGATOIRE pour le contraste */
+    height: 400px;
+    background-color: #ffffff; 
     overflow: hidden;
     display: flex;
     align-items: center;
@@ -152,88 +185,110 @@ h1 {
     width: 100%;
     height: 100%;
     
-    /* LE COEUR DE L'EFFET GOOEY */
-    /* 1. On floute tout (blur) */
-    /* 2. On augmente le contraste violemment pour recréer des bords nets */
-    filter: blur(15px) contrast(30);
-    background-color: #fff; /* Assure que le fond reste blanc pour le filtre */
+    /* C'EST ICI LA CORRECTION IMPORTANTE */
+    /* On utilise le filtre SVG #goo (défini dans footer.html) */
+    /* Cela permet aux couleurs pastels de rester visibles */
+    filter: url('#goo');
+    -webkit-filter: url('#goo');
+    
+    background-color: transparent; 
     z-index: 1;
 }
 
+/* Les Bulles */
 .bubble {
     border-radius: 50%;
     position: absolute;
-    /* Le mélange de rose et d'orange se fera naturellement */
+    /* Couleur de base */
     background: var(--sunset-pink);
+    opacity: 1;
 }
 
-/* --- BULLES AUTOMATIQUES --- */
+/* Animation des bulles d'ambiance */
 .b1 { width: 150px; height: 150px; left: 20%; background: var(--sunset-orange); animation: moveBlob 10s infinite alternate; }
 .b2 { width: 120px; height: 120px; left: 50%; background: var(--sunset-pink); animation: moveBlob 14s infinite alternate-reverse; }
 .b3 { width: 180px; height: 180px; left: 70%; background: var(--sunset-orange); animation: moveBlob 12s infinite alternate; }
 .b4 { width: 100px; height: 100px; left: 35%; background: var(--sunset-pink); animation: moveBlob 16s infinite alternate-reverse; }
 
-/* Animation douce de base */
 @keyframes moveBlob {
     from { transform: translate(0, 0) scale(1); }
     to { transform: translate(20px, -50px) scale(1.1); }
 }
 
-/* --- BULLE SOURIS (INTERACTIVE) --- */
+/* La bulle interactive (souris) */
 .cursor-blob {
     width: 120px;
     height: 120px;
-    background: var(--sunset-accent); /* Une couleur un peu plus forte pour l'interaction */
-    pointer-events: none; /* Ne bloque pas les clics */
+    background: var(--sunset-accent);
+    pointer-events: none;
     position: absolute;
-    top: 0;
-    left: 0;
-    transform: translate(-50%, -50%); /* Pour centrer sur la souris */
-    /* Pas d'animation CSS, c'est le JS qui gère */
-    transition: width 0.3s, height 0.3s; /* Transition douce si on change la taille */
+    top: 0; left: 0;
+    /* Centrage initial géré par JS, mais on prépare le transform */
+    transform: translate(-50%, -50%);
+    transition: width 0.3s, height 0.3s;
+    opacity: 0; /* Cachée tant que la souris n'est pas là */
 }
 
-/* --- CONTENU DU FOOTER (NET) --- */
+/* --- Contenu Footer (Net et au-dessus) --- */
 .footer-content {
     position: relative;
-    z-index: 10; /* Au-dessus du flou */
+    z-index: 10;
     text-align: center;
-    pointer-events: none; /* Laisse passer la souris vers la lave */
+    pointer-events: none; /* Laisse passer la souris */
 }
-.footer-content a {
-    pointer-events: auto; /* Réactive les clics sur les liens */
-    color: var(--text-color);
+
+.footer-content p {
     font-weight: bold;
-    text-decoration: none;
     font-size: 1.2rem;
+    color: var(--text-color);
+}
+
+.social-links a {
+    pointer-events: auto; /* Réactive le clic */
+    color: var(--sunset-accent);
+    font-family: 'Shrikhand', cursive;
+    font-size: 1.8rem;
+    text-decoration: none;
+    margin: 0 10px;
+}
+.social-links a:hover {
+    color: var(--sunset-orange);
 }
 
 /* --- BANNIÈRE COOKIE --- */
 .cookie-banner {
     position: fixed;
     bottom: 20px; right: 20px;
-    background: rgba(255, 255, 255, 0.9);
+    background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(5px);
-    border: 1px solid var(--sunset-pink);
+    border: 2px solid var(--sunset-pink);
     padding: 1.5rem;
     border-radius: 20px;
     box-shadow: 0 10px 20px rgba(0,0,0,0.05);
     z-index: 9999;
     display: flex; gap: 15px; align-items: center;
+    max-width: 400px;
 }
+.cookie-banner p { margin: 0; font-size: 0.95rem; }
+
 .cookie-btn {
     background: var(--sunset-orange); color: var(--text-color);
-    border: none; padding: 0.5rem 1.5rem; border-radius: 50px; cursor: pointer;
-    font-weight: bold; transition: 0.2s;
+    border: none; padding: 0.6rem 1.5rem; border-radius: 50px; cursor: pointer;
+    font-family: 'Shrikhand', cursive; transition: 0.2s;
+    font-size: 1rem;
 }
 .cookie-btn:hover { transform: scale(1.05); background: var(--sunset-pink); }
+
 .cookie-btn-secondary {
     background: transparent; border: 1px solid var(--text-color);
-    padding: 0.5rem 1rem; border-radius: 50px; cursor: pointer;
+    padding: 0.6rem 1rem; border-radius: 50px; cursor: pointer;
+    font-weight: bold; font-family: 'Space Grotesk', sans-serif;
 }
+.cookie-btn-secondary:hover { background: var(--bg-color); }
 
 /* Mobile */
 @media (max-width: 600px) {
-    h1 { font-size: 4rem; }
+    h1 { font-size: 3.5rem; }
     .lamp-container { height: 300px; }
+    .cookie-banner { flex-direction: column; text-align: center; left: 20px; width: auto; }
 }
