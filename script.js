@@ -85,7 +85,7 @@ function initRealLavaBackground() {
 
         init() {
             // Taille variée
-            this.radius = Math.random() * 80 + 50; 
+            this.radius = Math.random() * 60 + 40; 
             
             // Position de départ aléatoire
             this.x = Math.random() * this.canvas.width;
@@ -98,6 +98,12 @@ function initRealLavaBackground() {
             this.speedX = (Math.random() - 0.5) * 0.4;
             
             this.color = colors[Math.floor(Math.random() * colors.length)];
+
+            // --- NOUVEAU : Paramètres de déformation (Wobble) ---
+            // On crée un "satellite" interne qui tourne pour déformer le cercle
+            this.angle = Math.random() * Math.PI * 2;
+            this.angleSpeed = Math.random() * 0.05 + 0.02; // Vitesse de déformation
+            this.wobbleDistance = this.radius * 0.5; // Distance de déformation
         }
 
         update(mouseX, mouseY) {
@@ -105,7 +111,10 @@ function initRealLavaBackground() {
             this.y -= this.speedY;
             this.x += this.speedX;
 
-            // 2. Interaction Souris (Repousse le liquide)
+            // 2. Animation de la déformation interne
+            this.angle += this.angleSpeed;
+
+            // 3. Interaction Souris (Repousse le liquide)
             let dx = this.x - mouseX;
             let dy = this.y - mouseY;
             let dist = Math.sqrt(dx*dx + dy*dy);
@@ -118,21 +127,36 @@ function initRealLavaBackground() {
                 this.y += (dy / dist) * force * 3;
             }
 
-            // 3. Reset si sort de l'écran (boucle infinie)
-            if (this.y < -this.radius * 2) {
-                this.y = this.canvas.height + this.radius * 2;
+            // 4. Reset si sort de l'écran (boucle infinie)
+            // On marge large (radius * 3) pour éviter le pop
+            if (this.y < -this.radius * 3) {
+                this.y = this.canvas.height + this.radius * 3;
                 this.x = Math.random() * this.canvas.width;
                 this.init(); // Reset des propriétés aléatoires
             }
-            if (this.x < -this.radius * 2) this.x = this.canvas.width + this.radius * 2;
-            if (this.x > this.canvas.width + this.radius * 2) this.x = -this.radius * 2;
+            if (this.x < -this.radius * 3) this.x = this.canvas.width + this.radius * 3;
+            if (this.x > this.canvas.width + this.radius * 3) this.x = -this.radius * 3;
         }
 
         draw(ctx) {
             ctx.beginPath();
-            // L'astuce : On dessine un cercle simple
-            // Le filtre CSS #goo va s'occuper de créer l'effet liquide
+            
+            // L'ASTUCE METABALL :
+            // Au lieu de dessiner 1 cercle, on en dessine 2 ou 3 proches
+            // Le filtre CSS "Gooey" va les fusionner en une seule forme patatoïde
+            
+            // 1. Cercle principal
             ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+            
+            // 2. Cercle "satellite" qui tourne autour pour déformer la bulle
+            // C'est ça qui empêche la bulle d'être ronde !
+            let blobX = this.x + Math.cos(this.angle) * this.wobbleDistance;
+            let blobY = this.y + Math.sin(this.angle) * this.wobbleDistance;
+            
+            // On ajoute ce sous-cercle au chemin (il fusionnera avec le principal)
+            ctx.moveTo(blobX, blobY); 
+            ctx.arc(blobX, blobY, this.radius * 0.7, 0, Math.PI * 2);
+
             ctx.fillStyle = this.color;
             ctx.fill();
             ctx.closePath();
