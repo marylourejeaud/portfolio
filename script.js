@@ -1,4 +1,4 @@
-/* --- 2. CODE PRINCIPAL --- */
+/* --- CODE PRINCIPAL --- */
 document.addEventListener("DOMContentLoaded", function() {
     
     // A. Charge le footer et ses animations
@@ -11,12 +11,11 @@ document.addEventListener("DOMContentLoaded", function() {
         })
         .catch(error => console.error("Erreur footer:", error));
 
-    // B. Lance le fond Blob Interactif (Jelly Effect)
-    initBlobBackground();
+    // B. Lance le fond aux multiples Blobs doux
+    initSoftMultiBlobBackground();
 });
 
-// --- FONCTIONS UTILITAIRES ---
-
+// --- FONCTIONS UTILITAIRES (Cookies & Footer) ---
 function initCookieBanner() {
     const banner = document.getElementById('cookie-banner');
     const btn = document.getElementById('accept-cookie');
@@ -69,24 +68,40 @@ function initLavaLampInteraction() {
     animate();
 }
 
-// --- FOND BLOB (JELLY EFFECT) ---
-function initBlobBackground() {
+// -------------------------------------------------------
+// --- NOUVEAU FOND : MULTIPLES BLOBS DOUX ET PALES ---
+// -------------------------------------------------------
+function initSoftMultiBlobBackground() {
+    
+    // Palette de couleurs pales style "Sunset/Hippie doux"
+    const paleColors = [
+        '#ffc4d6', // Rose
+        '#ffdab9', // Pêche
+        '#fffaf0', // Crème floral (var(--theme-light))
+        '#e6e6fa', // Lavande pâle
+        '#ffe4e1'  // Rose brumeux
+    ];
+
     class Blob {
-        constructor() { this.points = []; }
+        constructor(radius, color, initialX, initialY) {
+            this.points = [];
+            this.radius = radius;
+            this._color = color;
+            this._position = { x: initialX, y: initialY };
+        }
         init() {
             for(let i = 0; i < this.numPoints; i++) {
                 let point = new Point(this.divisional * ( i + 1 ), this);
-                this.push(point);
+                this.points.push(point);
             }
         }
         render() {
-            let canvas = this.canvas;
             let ctx = this.ctx;
             let pointsArray = this.points;
             let points = this.numPoints;
             let center = this.center;
             
-            ctx.clearRect(0,0,canvas.width,canvas.height);
+            // Note : On ne clear pas le canvas ici, c'est la boucle principale qui le fait.
             
             pointsArray[0].solveWith(pointsArray[points-1], pointsArray[1]);
 
@@ -112,13 +127,12 @@ function initBlobBackground() {
             ctx.quadraticCurveTo(p1.x, p1.y, xc, yc);
 
             ctx.fillStyle = this.color;
+            // Légère transparence pour que les blobs se mélangent
+            ctx.globalAlpha = 0.8; 
             ctx.fill();
-            
-            requestAnimationFrame(this.render.bind(this));
+            ctx.globalAlpha = 1.0; // Reset
         }
-        push(item) { if(item instanceof Point) this.points.push(item); }
-        set color(value) { this._color = value; }
-        get color() { return this._color || '#ffdab9'; }
+
         set canvas(value) {
             if(value instanceof HTMLElement && value.tagName.toLowerCase() === 'canvas') {
                 this._canvas = value;
@@ -126,14 +140,12 @@ function initBlobBackground() {
             }
         }
         get canvas() { return this._canvas; }
-        set numPoints(value) { if(value > 2) this._points = value; }
-        get numPoints() { return this._points || 32; }
-        set radius(value) { if(value > 0) this._radius = value; }
-        get radius() { return this._radius || 150; }
-        set position(value) { if(typeof value == 'object' && value.x && value.y) this._position = value; }
-        get position() { return this._position || { x: 0.5, y: 0.5 }; }
+        get numPoints() { return 32; } // Nombre de points fixe pour simplifier
+        get position() { return this._position; }
         get divisional() { return Math.PI * 2 / this.numPoints; }
-        get center() { return { x: this.canvas.width * this.position.x, y: this.canvas.height * this.position.y }; }
+        // Le centre est maintenant absolu (pixels) et non relatif (%)
+        get center() { return { x: this.position.x, y: this.position.y }; }
+        get color() { return this._color; }
     }
 
     class Point {
@@ -141,7 +153,8 @@ function initBlobBackground() {
             this.parent = parent;
             this.azimuth = Math.PI - azimuth;
             this._components = { x: Math.cos(this.azimuth), y: Math.sin(this.azimuth) };
-            this.acceleration = -0.3 + Math.random() * 0.6;
+            // Accélération initiale plus faible
+            this.acceleration = -0.1 + Math.random() * 0.2;
         }
         solveWith(leftPoint, rightPoint) {
             this.acceleration = (-0.3 * this.radialEffect + ( leftPoint.radialEffect - this.radialEffect ) + ( rightPoint.radialEffect - this.radialEffect )) * this.elasticity - this.speed * this.friction;
@@ -159,18 +172,25 @@ function initBlobBackground() {
             }
         }
         get components() { return this._components; }
-        set elasticity(value) { if(typeof value === 'number') this._elasticity = value; }
-        get elasticity() { return this._elasticity || 0.001; }
-        set friction(value) { if(typeof value === 'number') this._friction = value; }
-        get friction() { return this._friction || 0.0085; }
+        
+        // --- REGLAGES PHYSIQUES POUR ADOUCIR ---
+        // Elasticité plus basse = moins "caoutchouc", plus mou
+        get elasticity() { return 0.0005; } 
+        // Friction plus haute = s'arrête de trembler plus vite
+        get friction() { return 0.012; } 
     }
 
-    // Initialisation du Blob
-    let blob = new Blob;
+    // --- Initialisation ---
     let canvas = document.createElement('canvas');
-    canvas.id = 'blob-canvas'; 
+    canvas.id = 'blob-canvas';
     canvas.setAttribute('touch-action', 'none');
     document.body.appendChild(canvas);
+
+    let ctx = canvas.getContext('2d');
+    let blobs = [];
+    // Variables pour le suivi de souris lissé (smooth)
+    let mouse = { x: window.innerWidth/2, y: window.innerHeight/2 }; // Position cible
+    let smoothedMouse = { x: window.innerWidth/2, y: window.innerHeight/2 }; // Position lissée actuelle
 
     let resize = function() {
         canvas.width = window.innerWidth;
@@ -179,59 +199,70 @@ function initBlobBackground() {
     window.addEventListener('resize', resize);
     resize();
 
-    let oldMousePoint = { x: 0, y: 0};
-    let hover = false;
-
-    // Config couleurs et taille
-    blob.canvas = canvas;
-    blob.color = '#ffc4d6'; // Rose
-    blob.radius = 250; 
-    blob.init();
-    blob.render();
-
-    // Interaction souris
-    let mouseMove = function(e) {
-        let pos = blob.center;
-        let diff = { x: e.clientX - pos.x, y: e.clientY - pos.y };
-        let dist = Math.sqrt((diff.x * diff.x) + (diff.y * diff.y));
-        let angle = null;
+    // --- Création des multiples blobs ---
+    const numBlobs = 6; // Nombre de blobs en fond
+    for (let i = 0; i < numBlobs; i++) {
+        // Taille aléatoire entre 200 et 500
+        let radius = Math.random() * 300 + 200; 
+        // Position aléatoire sur l'écran
+        let x = Math.random() * canvas.width;
+        let y = Math.random() * canvas.height;
+        // Couleur aléatoire de la palette
+        let color = paleColors[Math.floor(Math.random() * paleColors.length)];
         
-        blob.mousePos = { x: pos.x - e.clientX, y: pos.y - e.clientY };
-        
-        if(dist < blob.radius && hover === false) {
-            let vector = { x: e.clientX - pos.x, y: e.clientY - pos.y };
-            angle = Math.atan2(vector.y, vector.x);
-            hover = true;
-            blob.color = '#ff9a8b'; // Orange/Corail au survol
-        } else if(dist > blob.radius && hover === true){ 
-            let vector = { x: e.clientX - pos.x, y: e.clientY - pos.y };
-            angle = Math.atan2(vector.y, vector.x);
-            hover = false;
-            blob.color = '#ffc4d6'; // Retour au Rose
-        }
-        
-        if(typeof angle == 'number') {
-            let nearestPoint = null;
-            let distanceFromPoint = 100;
-            
-            blob.points.forEach((point)=> {
-                if(Math.abs(angle - point.azimuth) < distanceFromPoint) {
-                    nearestPoint = point;
-                    distanceFromPoint = Math.abs(angle - point.azimuth);
-                }
-            });
-            
-            if(nearestPoint) {
-                let strength = { x: oldMousePoint.x - e.clientX, y: oldMousePoint.y - e.clientY };
-                let strengthValue = Math.sqrt((strength.x * strength.x) + (strength.y * strength.y));
-                if (strengthValue > 10) strengthValue = 10;
-                nearestPoint.acceleration = strengthValue / 2;
-            }
-        }
-        oldMousePoint.x = e.clientX;
-        oldMousePoint.y = e.clientY;
+        let b = new Blob(radius, color, x, y);
+        b.canvas = canvas;
+        b.init();
+        blobs.push(b);
     }
-    
-    window.addEventListener('mousemove', mouseMove);
-}
 
+    // --- Suivi de souris (Mise à jour de la cible) ---
+    window.addEventListener('mousemove', function(e) {
+        mouse.x = e.clientX;
+        mouse.y = e.clientY;
+    });
+
+    // --- Boucle d'animation principale ---
+    function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // 1. Lissage du mouvement de la souris (LERP)
+        // Le facteur 0.05 détermine la douceur. Plus c'est bas, plus c'est lent.
+        smoothedMouse.x += (mouse.x - smoothedMouse.x) * 0.05;
+        smoothedMouse.y += (mouse.y - smoothedMouse.y) * 0.05;
+
+        // 2. Mise à jour et rendu de chaque blob
+        blobs.forEach(blob => {
+            // Calcul de l'interaction avec la souris LISSÉE
+            let pos = blob.center;
+            let diff = { x: smoothedMouse.x - pos.x, y: smoothedMouse.y - pos.y };
+            let dist = Math.sqrt((diff.x * diff.x) + (diff.y * diff.y));
+            let angle = Math.atan2(diff.y, diff.x);
+
+            // Zone d'influence plus large (radius * 1.5) mais force plus faible
+            if(dist < blob.radius * 1.5) {
+                let nearestPoint = null;
+                let distanceFromPoint = 100;
+                blob.points.forEach((point)=> {
+                    if(Math.abs(angle - point.azimuth) < distanceFromPoint) {
+                        nearestPoint = point;
+                        distanceFromPoint = Math.abs(angle - point.azimuth);
+                    }
+                });
+                
+                if(nearestPoint) {
+                    // Force repoussante inversée et très adoucie
+                    let strength = dist / blob.radius; 
+                    // On inverse pour repousser doucement
+                    nearestPoint.acceleration = -(1 - strength) * 2; 
+                }
+            }
+            // Rendu du blob
+            blob.render();
+        });
+
+        requestAnimationFrame(animate);
+    }
+    // Lancement de l'animation
+    animate();
+}
