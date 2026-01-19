@@ -162,133 +162,98 @@ a, button, .card, .list-item, .cookie-btn, nav a {
     cursor: url('https://static.tildacdn.com/tild3863-3739-4533-b134-653536343439/Frame_1171275326.png') 16 0, pointer !important;
 }
 
-/* ---------------------------------------------------- */
-/* --- 🌟 LAVA LAMP / METABALLS (FOOTER FIXED) --- */
-/* ---------------------------------------------------- */
-
+/* --- 🌟 LAVA LAMP / METABALLS (CORRIGÉ) --- */
 .lamp-container {
     position: relative;
     width: 100%;
-    height: 400px;
+    height: 350px; /* Un peu moins haut pour concentrer l'effet */
     background-color: #ffffff; 
     overflow: hidden;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-top: 1px solid var(--sunset-pink);
+    /* Bordure subtile en haut */
+    border-top: 1px solid rgba(255, 196, 214, 0.5);
 }
 
 .lava-lamp {
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    
-    /* C'EST ICI LA CORRECTION IMPORTANTE */
-    /* On utilise le filtre SVG #goo (défini dans footer.html) */
-    /* Cela permet aux couleurs pastels de rester visibles */
-    filter: url('#goo');
+    top: 0; left: 0; width: 100%; height: 100%;
+    /* FILTRE MAGIQUE SVG (Indispensable pour l'effet gooey pastel) */
+    filter: url('#goo'); 
     -webkit-filter: url('#goo');
-    
     background-color: transparent; 
     z-index: 1;
 }
 
-/* Les Bulles */
 .bubble {
     border-radius: 50%;
     position: absolute;
-    /* Couleur de base */
     background: var(--sunset-pink);
     opacity: 1;
 }
 
-/* Animation des bulles d'ambiance */
-.b1 { width: 150px; height: 150px; left: 20%; background: var(--sunset-orange); animation: moveBlob 10s infinite alternate; }
-.b2 { width: 120px; height: 120px; left: 50%; background: var(--sunset-pink); animation: moveBlob 14s infinite alternate-reverse; }
-.b3 { width: 180px; height: 180px; left: 70%; background: var(--sunset-orange); animation: moveBlob 12s infinite alternate; }
-.b4 { width: 100px; height: 100px; left: 35%; background: var(--sunset-pink); animation: moveBlob 16s infinite alternate-reverse; }
+/* Animations corrigées pour démarrer plus haut */
+.b1 { width: 140px; height: 140px; left: 20%; background: var(--sunset-orange); animation: moveBlob 8s infinite alternate; bottom: -20px; }
+.b2 { width: 100px; height: 100px; left: 50%; background: var(--sunset-pink); animation: moveBlob 10s infinite alternate-reverse; bottom: -10px; }
+.b3 { width: 160px; height: 160px; left: 75%; background: var(--sunset-orange); animation: moveBlob 12s infinite alternate; bottom: -30px; }
+.b4 { width: 90px;  height: 90px;  left: 35%; background: var(--sunset-pink); animation: moveBlob 9s infinite alternate-reverse; bottom: 0px; }
 
 @keyframes moveBlob {
     from { transform: translate(0, 0) scale(1); }
-    to { transform: translate(20px, -50px) scale(1.1); }
+    to { transform: translate(15px, -60px) scale(1.1); }
 }
 
-/* La bulle interactive (souris) */
+/* Bulle interactive (Souris) */
 .cursor-blob {
-    width: 120px;
-    height: 120px;
+    width: 130px; height: 130px;
     background: var(--sunset-accent);
     pointer-events: none;
     position: absolute;
     top: 0; left: 0;
-    /* Centrage initial géré par JS, mais on prépare le transform */
     transform: translate(-50%, -50%);
-    transition: width 0.3s, height 0.3s;
-    opacity: 0; /* Cachée tant que la souris n'est pas là */
+    transition: width 0.2s, height 0.2s; /* Juste la taille, pas la position */
+    opacity: 0; 
 }
 
-/* --- Contenu Footer (Net et au-dessus) --- */
-.footer-content {
-    position: relative;
-    z-index: 10;
-    text-align: center;
-    pointer-events: none; /* Laisse passer la souris */
-}
-
-.footer-content p {
-    font-weight: bold;
-    font-size: 1.2rem;
-    color: var(--text-color);
-}
-
-.social-links a {
-    pointer-events: auto; /* Réactive le clic */
-    color: var(--sunset-accent);
-    font-family: 'Shrikhand', cursive;
-    font-size: 1.8rem;
-    text-decoration: none;
-    margin: 0 10px;
-}
-.social-links a:hover {
-    color: var(--sunset-orange);
-}
-
-/* --- BANNIÈRE COOKIE --- */
+/* --- BANNIÈRE COOKIE (CENTRÉE) --- */
 .cookie-banner {
     position: fixed;
-    bottom: 20px; right: 20px;
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(5px);
+    bottom: 30px; 
+    left: 50%; /* On place le coin gauche au milieu */
+    transform: translateX(-50%); /* On recule de la moitié de sa largeur pour centrer */
+    
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(8px);
     border: 2px solid var(--sunset-pink);
-    padding: 1.5rem;
-    border-radius: 20px;
-    box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+    padding: 1rem 2rem;
+    border-radius: 50px; /* Très rond */
+    box-shadow: 0 10px 25px rgba(255, 154, 139, 0.25);
     z-index: 9999;
-    display: flex; gap: 15px; align-items: center;
-    max-width: 400px;
+    
+    display: flex; 
+    gap: 20px; 
+    align-items: center;
+    justify-content: space-between;
+    
+    width: 90%; /* Responsive : 90% sur mobile */
+    max-width: 500px; /* Pas trop large sur PC */
 }
-.cookie-banner p { margin: 0; font-size: 0.95rem; }
+
+.cookie-banner p { margin: 0; font-size: 0.95rem; color: var(--text-color); }
+
+.cookie-buttons { display: flex; gap: 10px; }
 
 .cookie-btn {
     background: var(--sunset-orange); color: var(--text-color);
-    border: none; padding: 0.6rem 1.5rem; border-radius: 50px; cursor: pointer;
-    font-family: 'Shrikhand', cursive; transition: 0.2s;
-    font-size: 1rem;
+    border: none; padding: 0.5rem 1.5rem; border-radius: 50px; cursor: pointer;
+    font-family: 'Shrikhand', cursive; font-size: 1rem; transition: 0.2s;
 }
 .cookie-btn:hover { transform: scale(1.05); background: var(--sunset-pink); }
 
 .cookie-btn-secondary {
-    background: transparent; border: 1px solid var(--text-color);
-    padding: 0.6rem 1rem; border-radius: 50px; cursor: pointer;
-    font-weight: bold; font-family: 'Space Grotesk', sans-serif;
+    background: transparent; border: 1px solid var(--text-color); color: var(--text-color);
+    padding: 0.5rem 1rem; border-radius: 50px; cursor: pointer;
+    font-weight: bold;
 }
 .cookie-btn-secondary:hover { background: var(--bg-color); }
-
-/* Mobile */
-@media (max-width: 600px) {
-    h1 { font-size: 3.5rem; }
-    .lamp-container { height: 300px; }
-    .cookie-banner { flex-direction: column; text-align: center; left: 20px; width: auto; }
-}
