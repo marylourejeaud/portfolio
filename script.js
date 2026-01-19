@@ -11,8 +11,8 @@ document.addEventListener("DOMContentLoaded", function() {
         })
         .catch(error => console.error("Erreur footer:", error));
 
-    // B. Lance le fond Blob Interactif (Jelly Effect)
-    initRealLavaBackground();
+    // B. Lance le fond Glowy Blob (Particules Gooey)
+    initGlowyBlobBackground();
 });
 
 // --- FONCTIONS UTILITAIRES ---
@@ -70,93 +70,72 @@ function initLavaLampInteraction() {
 }
 
 // -------------------------------------------------------
-// --- FOND : VRAIE LAVE LIQUIDE (Metaballs via Canvas) ---
+// --- FOND : GLOWY BLOBS (Particules Gooey) ---
 // -------------------------------------------------------
-function initRealLavaBackground() {
+function initGlowyBlobBackground() {
     
     // Palette pastel
     const colors = ['#ffc4d6', '#ffdab9', '#ffe4e1', '#e6e6fa'];
 
-    class Bubble {
+    class Particle {
         constructor(canvas) {
             this.canvas = canvas;
             this.init();
         }
 
         init() {
-            // Taille variée
-            this.radius = Math.random() * 60 + 40; 
+            // Taille aléatoire pour chaque particule
+            this.radius = Math.random() * 40 + 30;
             
-            // Position de départ aléatoire
+            // Position initiale aléatoire
             this.x = Math.random() * this.canvas.width;
             this.y = Math.random() * this.canvas.height;
             
-            // Vitesse de montée (lente et variable)
-            this.speedY = Math.random() * 0.5 + 0.2;
-            
-            // Légère dérive horizontale (wobble naturel)
-            this.speedX = (Math.random() - 0.5) * 0.4;
+            // Vitesse et direction aléatoires
+            this.vx = (Math.random() - 0.5) * 1.5; 
+            this.vy = (Math.random() - 0.5) * 1.5;
             
             this.color = colors[Math.floor(Math.random() * colors.length)];
-
-            // --- NOUVEAU : Paramètres de déformation (Wobble) ---
-            // On crée un "satellite" interne qui tourne pour déformer le cercle
-            this.angle = Math.random() * Math.PI * 2;
-            this.angleSpeed = Math.random() * 0.05 + 0.02; // Vitesse de déformation
-            this.wobbleDistance = this.radius * 0.5; // Distance de déformation
+            
+            // Cible pour mouvement erratique (comme dans l'exemple CSS)
+            this.targetX = Math.random() * this.canvas.width;
+            this.targetY = Math.random() * this.canvas.height;
+            this.changeTargetTimer = 0;
         }
 
         update(mouseX, mouseY) {
-            // 1. Mouvement naturel (montée)
-            this.y -= this.speedY;
-            this.x += this.speedX;
+            // Changement de direction aléatoire de temps en temps
+            this.changeTargetTimer++;
+            if (this.changeTargetTimer > 100 + Math.random() * 100) {
+                this.vx = (Math.random() - 0.5) * 2;
+                this.vy = (Math.random() - 0.5) * 2;
+                this.changeTargetTimer = 0;
+            }
 
-            // 2. Animation de la déformation interne
-            this.angle += this.angleSpeed;
+            // Mouvement de base
+            this.x += this.vx;
+            this.y += this.vy;
 
-            // 3. Interaction Souris (Repousse le liquide)
+            // Rebond sur les bords (pour garder les particules à l'écran)
+            if (this.x < 0 || this.x > this.canvas.width) this.vx *= -1;
+            if (this.y < 0 || this.y > this.canvas.height) this.vy *= -1;
+
+            // Interaction Souris : Attraction / Répulsion douce
             let dx = this.x - mouseX;
             let dy = this.y - mouseY;
             let dist = Math.sqrt(dx*dx + dy*dy);
             
-            // Si la souris est proche, on pousse la "matière"
-            if(dist < 300) {
-                let force = (300 - dist) / 300; 
-                // Pousser plus fort pour déformer le liquide
-                this.x += (dx / dist) * force * 3; 
+            // Si la souris est proche, les particules s'écartent un peu (comme si on touchait le liquide)
+            if(dist < 200) {
+                let force = (200 - dist) / 200;
+                this.x += (dx / dist) * force * 3;
                 this.y += (dy / dist) * force * 3;
             }
-
-            // 4. Reset si sort de l'écran (boucle infinie)
-            // On marge large (radius * 3) pour éviter le pop
-            if (this.y < -this.radius * 3) {
-                this.y = this.canvas.height + this.radius * 3;
-                this.x = Math.random() * this.canvas.width;
-                this.init(); // Reset des propriétés aléatoires
-            }
-            if (this.x < -this.radius * 3) this.x = this.canvas.width + this.radius * 3;
-            if (this.x > this.canvas.width + this.radius * 3) this.x = -this.radius * 3;
         }
 
         draw(ctx) {
             ctx.beginPath();
-            
-            // L'ASTUCE METABALL :
-            // Au lieu de dessiner 1 cercle, on en dessine 2 ou 3 proches
-            // Le filtre CSS "Gooey" va les fusionner en une seule forme patatoïde
-            
-            // 1. Cercle principal
             ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-            
-            // 2. Cercle "satellite" qui tourne autour pour déformer la bulle
-            // C'est ça qui empêche la bulle d'être ronde !
-            let blobX = this.x + Math.cos(this.angle) * this.wobbleDistance;
-            let blobY = this.y + Math.sin(this.angle) * this.wobbleDistance;
-            
-            // On ajoute ce sous-cercle au chemin (il fusionnera avec le principal)
-            ctx.moveTo(blobX, blobY); 
-            ctx.arc(blobX, blobY, this.radius * 0.7, 0, Math.PI * 2);
-
             ctx.fillStyle = this.color;
             ctx.fill();
             ctx.closePath();
@@ -165,13 +144,13 @@ function initRealLavaBackground() {
 
     // Setup Canvas
     let canvas = document.createElement('canvas');
-    canvas.id = 'blob-canvas'; // Le CSS appliquera le filtre #goo ici !
+    canvas.id = 'blob-canvas'; 
     document.body.appendChild(canvas);
     let ctx = canvas.getContext('2d');
 
-    let bubbles = [];
-    // Nombre de bulles
-    const numBubbles = 12; 
+    let particles = [];
+    // Nombre de particules (comme les divs dans l'exemple CSS)
+    const numParticles = 25; 
     
     // Redimensionnement
     function resize() {
@@ -181,9 +160,9 @@ function initRealLavaBackground() {
     window.addEventListener('resize', resize);
     resize();
 
-    // Création des bulles
-    for(let i=0; i<numBubbles; i++) {
-        bubbles.push(new Bubble(canvas));
+    // Création des particules
+    for(let i=0; i<numParticles; i++) {
+        particles.push(new Particle(canvas));
     }
 
     // Suivi souris lissé
@@ -199,12 +178,12 @@ function initRealLavaBackground() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         
         // Lissage de la position souris
-        smoothMouse.x += (mouse.x - smoothMouse.x) * 0.08;
-        smoothMouse.y += (mouse.y - smoothMouse.y) * 0.08;
+        smoothMouse.x += (mouse.x - smoothMouse.x) * 0.1;
+        smoothMouse.y += (mouse.y - smoothMouse.y) * 0.1;
 
-        bubbles.forEach(b => {
-            b.update(smoothMouse.x, smoothMouse.y);
-            b.draw(ctx);
+        particles.forEach(p => {
+            p.update(smoothMouse.x, smoothMouse.y);
+            p.draw(ctx);
         });
 
         requestAnimationFrame(animate);
