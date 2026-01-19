@@ -2,11 +2,11 @@
 
 :root {
     /* --- PALETTE COUCHER DE SOLEIL --- */
-    --sunset-pink: #ffc4d6;      /* Rose pastel doux (Bubblegum) */
+    --sunset-pink: #ffc4d6;      /* Rose pastel doux */
     --sunset-orange: #ffdab9;    /* Pêche/Orange clair */
     --sunset-accent: #ff9a8b;    /* Corail pour les interactions */
     --text-color: #4a2c35;       /* Marron chaud pour le texte */
-    --bg-color: #fff5f7;         /* Fond très pâle (rose/blanc) */
+    --bg-color: #fff5f7;         /* Fond très pâle */
     
     /* --- DIMENSIONS --- */
     --border-radius-ui: 20px;
@@ -14,7 +14,6 @@
 
 /* --- BASE --- */
 body {
-    /* Fond dégradé subtil sans image pour laisser respirer le design */
     background: linear-gradient(to bottom, #ffffff, var(--bg-color));
     color: var(--text-color);
     font-family: 'Space Grotesk', sans-serif;
@@ -24,10 +23,10 @@ body {
     line-height: 1.5;
 }
 
-/* --- NAVIGATION (Style "Glassmorphism") --- */
+/* --- NAVIGATION --- */
 nav {
     background: rgba(255, 255, 255, 0.8);
-    backdrop-filter: blur(10px); /* Effet verre dépoli */
+    backdrop-filter: blur(10px);
     padding: 1rem 2rem;
     display: flex;
     justify-content: center;
@@ -69,12 +68,10 @@ h1 {
     font-family: 'Shrikhand', cursive;
     font-size: 6rem;
     margin: 0;
-    /* Dégradé à l'intérieur du texte */
     background: linear-gradient(45deg, var(--sunset-orange), var(--sunset-accent));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     line-height: 1.1;
-    /* Petit drop shadow pour détacher le texte */
     filter: drop-shadow(2px 2px 0px rgba(0,0,0,0.1));
 }
 
@@ -137,7 +134,6 @@ h1 {
     font-size: 1.8rem;
 }
 
-/* Petits badges techniques */
 .badge {
     display: inline-block;
     background-color: var(--bg-color);
@@ -151,43 +147,32 @@ h1 {
     border: 1px solid var(--sunset-orange);
 }
 
-/* --- CURSEURS PERSONNALISÉS --- */
-/* 1. Curseur par défaut (Flèche SVG colorée) */
+/* --- CURSEURS --- */
 body {
     cursor: url('data:image/svg+xml;utf8,<svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><path d="M2 2l8 24 4-10 10-4L2 2z" fill="%23ff9a8b" stroke="%234a2c35" stroke-width="2"/></svg>') 2 2, auto;
 }
-
-/* 2. Curseur Interactif (Main Cartoon) */
 a, button, .card, .list-item, .cookie-btn, nav a {
     cursor: url('https://static.tildacdn.com/tild3863-3739-4533-b134-653536343439/Frame_1171275326.png') 16 0, pointer !important;
 }
 
-/* ---------------------------------------------------- */
-/* --- 🌟 LAVA LAMP / METABALLS (CORRIGÉ & VISIBLE) --- */
-/* ---------------------------------------------------- */
-
+/* --- LAVA LAMP FOOTER --- */
 .lamp-container {
     position: relative;
     width: 100%;
-    height: 350px; /* Hauteur ajustée */
-    background-color: #ffffff; /* Fond blanc important pour le contraste */
+    height: 350px;
+    background-color: #ffffff; 
     overflow: hidden;
     display: flex;
     align-items: center;
     justify-content: center;
-    /* Bordure subtile en haut */
     border-top: 1px solid rgba(255, 196, 214, 0.5);
 }
 
 .lava-lamp {
     position: absolute;
     top: 0; left: 0; width: 100%; height: 100%;
-    
-    /* FILTRE MAGIQUE SVG (Indispensable pour l'effet gooey pastel) */
-    /* Assure-toi que le <svg> avec l'id "goo" est bien dans footer.html */
     filter: url('#goo'); 
     -webkit-filter: url('#goo');
-    
     background-color: transparent; 
     z-index: 1;
 }
@@ -199,7 +184,6 @@ a, button, .card, .list-item, .cookie-btn, nav a {
     opacity: 1;
 }
 
-/* Animations corrigées pour que les bulles partent de plus haut et soient visibles */
 .b1 { width: 140px; height: 140px; left: 20%; background: var(--sunset-orange); animation: moveBlob 8s infinite alternate; bottom: -20px; }
 .b2 { width: 100px; height: 100px; left: 50%; background: var(--sunset-pink); animation: moveBlob 10s infinite alternate-reverse; bottom: -10px; }
 .b3 { width: 160px; height: 160px; left: 75%; background: var(--sunset-orange); animation: moveBlob 12s infinite alternate; bottom: -30px; }
@@ -210,7 +194,6 @@ a, button, .card, .list-item, .cookie-btn, nav a {
     to { transform: translate(15px, -60px) scale(1.1); }
 }
 
-/* Bulle interactive (Souris) */
 .cursor-blob {
     width: 130px; height: 130px;
     background: var(--sunset-accent);
@@ -218,93 +201,56 @@ a, button, .card, .list-item, .cookie-btn, nav a {
     position: absolute;
     top: 0; left: 0;
     transform: translate(-50%, -50%);
-    transition: width 0.2s, height 0.2s; /* Juste la taille, pas la position */
+    transition: width 0.2s, height 0.2s;
     opacity: 0; 
 }
 
-/* --- CONTENU DU FOOTER (NET) --- */
 .footer-content {
     position: relative;
-    z-index: 10; /* Au-dessus du flou */
+    z-index: 10;
     text-align: center;
-    pointer-events: none; /* Laisse passer la souris vers la lave */
+    pointer-events: none;
 }
+.footer-content p { font-weight: bold; font-size: 1.2rem; color: var(--text-color); }
+.social-links a { pointer-events: auto; color: var(--sunset-accent); font-family: 'Shrikhand', cursive; font-size: 1.8rem; text-decoration: none; margin: 0 10px; }
+.social-links a:hover { color: var(--sunset-orange); }
 
-.footer-content p {
-    font-weight: bold;
-    font-size: 1.2rem;
-    color: var(--text-color);
-}
-
-.social-links a {
-    pointer-events: auto; /* Réactive les clics sur les liens */
-    color: var(--sunset-accent);
-    font-family: 'Shrikhand', cursive;
-    font-size: 1.8rem;
-    text-decoration: none;
-    margin: 0 10px;
-}
-.social-links a:hover {
-    color: var(--sunset-orange);
-}
-
-/* --- BANNIÈRE COOKIE (CENTRÉE) --- */
 .cookie-banner {
-    position: fixed;
-    bottom: 30px; 
-    left: 50%; /* On place le coin gauche au milieu */
-    transform: translateX(-50%); /* On recule de la moitié de sa largeur pour centrer */
-    
-    background: rgba(255, 255, 255, 0.9);
-    backdrop-filter: blur(8px);
-    border: 2px solid var(--sunset-pink);
-    padding: 1rem 2rem;
-    border-radius: 50px; /* Très rond */
-    box-shadow: 0 10px 25px rgba(255, 154, 139, 0.25);
-    z-index: 9999;
-    
-    display: flex; 
-    gap: 20px; 
-    align-items: center;
-    justify-content: space-between;
-    
-    width: 90%; /* Responsive : 90% sur mobile */
-    max-width: 500px; /* Pas trop large sur PC */
+    position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+    background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(8px);
+    border: 2px solid var(--sunset-pink); padding: 1rem 2rem; border-radius: 50px;
+    box-shadow: 0 10px 25px rgba(255, 154, 139, 0.25); z-index: 9999;
+    display: flex; gap: 20px; align-items: center; justify-content: space-between;
+    width: 90%; max-width: 500px;
 }
-
 .cookie-banner p { margin: 0; font-size: 0.95rem; color: var(--text-color); }
-
 .cookie-buttons { display: flex; gap: 10px; }
-
-.cookie-btn {
-    background: var(--sunset-orange); color: var(--text-color);
-    border: none; padding: 0.5rem 1.5rem; border-radius: 50px; cursor: pointer;
-    font-family: 'Shrikhand', cursive; font-size: 1rem; transition: 0.2s;
-}
+.cookie-btn { background: var(--sunset-orange); color: var(--text-color); border: none; padding: 0.5rem 1.5rem; border-radius: 50px; cursor: pointer; font-family: 'Shrikhand', cursive; font-size: 1rem; transition: 0.2s; }
 .cookie-btn:hover { transform: scale(1.05); background: var(--sunset-pink); }
-
-.cookie-btn-secondary {
-    background: transparent; border: 1px solid var(--text-color); color: var(--text-color);
-    padding: 0.5rem 1rem; border-radius: 50px; cursor: pointer;
-    font-weight: bold;
-}
+.cookie-btn-secondary { background: transparent; border: 1px solid var(--text-color); color: var(--text-color); padding: 0.5rem 1rem; border-radius: 50px; cursor: pointer; font-weight: bold; }
 .cookie-btn-secondary:hover { background: var(--bg-color); }
 
-/* Mobile */
 @media (max-width: 600px) {
     h1 { font-size: 3.5rem; }
     .lamp-container { height: 300px; }
     .cookie-banner { flex-direction: column; text-align: center; left: 50%; width: 85%; }
 }
 
-/* --- FOND BLOB INTERACTIF --- */
+/* --- FOND BLOB INTERACTIF (LIQUIDE) --- */
 canvas#blob-canvas {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: -1; /* Derrière le contenu */
+    z-index: -1; 
     touch-action: none;
-    pointer-events: none; /* Laisse passer les clics au travers sauf si géré par JS */
+    pointer-events: none;
+    
+    /* LE SECRET DU FUSIONNEMENT : On applique le filtre Goo du footer sur tout le canvas */
+    filter: url('#goo');
+    -webkit-filter: url('#goo');
+    
+    /* Légère transparence pour un effet aquarelle */
+    opacity: 0.7;
 }
