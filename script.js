@@ -1,7 +1,7 @@
 /* --- CODE PRINCIPAL --- */
 document.addEventListener("DOMContentLoaded", function() {
     
-    // A. Charge le footer et ses animations
+    // A. Charge le footer
     fetch("footer.html")
         .then(response => response.text())
         .then(data => {
@@ -11,16 +11,15 @@ document.addEventListener("DOMContentLoaded", function() {
         })
         .catch(error => console.error("Erreur footer:", error));
 
-    // B. Lance le fond aux multiples Blobs (Version "Zen & Petite")
-    initSoftMultiBlobBackground();
+    // B. Lance le fond Blob "Lava Lamp" (Montée + Anti-collision)
+    initRisingBlobsBackground();
 });
 
-// --- FONCTIONS UTILITAIRES (Cookies & Footer) ---
+// --- FONCTIONS UTILITAIRES ---
 function initCookieBanner() {
     const banner = document.getElementById('cookie-banner');
     const btn = document.getElementById('accept-cookie');
     const btnRefuse = document.getElementById('refuse-cookie');
-
     if (localStorage.getItem('cookieAccepted') === 'true') {
         if(banner) banner.style.display = 'none';
         return;
@@ -44,50 +43,40 @@ function initLavaLampInteraction() {
     if (!container || !blob) return;
 
     let currentX = 0, currentY = 0, mouseX = 0, mouseY = 0, isHovering = false;
-
     container.addEventListener('mousemove', function(e) {
         isHovering = true;
         const rect = container.getBoundingClientRect();
         mouseX = e.clientX - rect.left;
         mouseY = e.clientY - rect.top;
     });
-
     container.addEventListener('mouseleave', function() { isHovering = false; });
-
     function animate() {
         if (isHovering) {
             currentX += (mouseX - currentX) * 0.08;
             currentY += (mouseY - currentY) * 0.08;
             blob.style.opacity = "1";
             blob.style.transform = `translate(${currentX}px, ${currentY}px) translate(-50%, -50%)`;
-        } else {
-            blob.style.opacity = "0";
-        }
+        } else { blob.style.opacity = "0"; }
         requestAnimationFrame(animate);
     }
     animate();
 }
 
 // -------------------------------------------------------
-// --- NOUVEAU FOND : BLOBS PETITS, CALMES ET DISCRETS ---
+// --- FOND : BLOBS QUI MONTENT & NE SE TOUCHENT PAS ---
 // -------------------------------------------------------
-function initSoftMultiBlobBackground() {
+function initRisingBlobsBackground() {
     
-    // Palette de couleurs pales
-    const paleColors = [
-        '#ffc4d6', // Rose
-        '#ffdab9', // Pêche
-        '#fffaf0', // Crème floral
-        '#e6e6fa', // Lavande pâle
-        '#ffe4e1'  // Rose brumeux
-    ];
+    const paleColors = ['#ffc4d6', '#ffdab9', '#fffaf0', '#e6e6fa', '#ffe4e1'];
 
     class Blob {
-        constructor(radius, color, initialX, initialY) {
+        constructor(radius, color, x, y, speedY) {
             this.points = [];
             this.radius = radius;
             this._color = color;
-            this._position = { x: initialX, y: initialY };
+            this._position = { x: x, y: y };
+            this.speedY = speedY; // Vitesse de montée
+            this.originalRadius = radius;
         }
         init() {
             for(let i = 0; i < this.numPoints; i++) {
@@ -102,7 +91,6 @@ function initSoftMultiBlobBackground() {
             let center = this.center;
             
             pointsArray[0].solveWith(pointsArray[points-1], pointsArray[1]);
-
             let p0 = pointsArray[points-1].position;
             let p1 = pointsArray[0].position;
             let _p2 = p1;
@@ -125,7 +113,7 @@ function initSoftMultiBlobBackground() {
             ctx.quadraticCurveTo(p1.x, p1.y, xc, yc);
 
             ctx.fillStyle = this.color;
-            ctx.globalAlpha = 0.8; 
+            ctx.globalAlpha = 0.75; // Un peu plus transparent pour la douceur
             ctx.fill();
             ctx.globalAlpha = 1.0;
         }
@@ -149,7 +137,6 @@ function initSoftMultiBlobBackground() {
             this.parent = parent;
             this.azimuth = Math.PI - azimuth;
             this._components = { x: Math.cos(this.azimuth), y: Math.sin(this.azimuth) };
-            // Accélération initiale quasi nulle pour éviter le "tremblement" au démarrage
             this.acceleration = 0; 
         }
         solveWith(leftPoint, rightPoint) {
@@ -168,11 +155,7 @@ function initSoftMultiBlobBackground() {
             }
         }
         get components() { return this._components; }
-        
-        // --- RÉGLAGES PHYSIQUES "CALMES" ---
-        // Friction augmentée (0.02 -> 0.05) : Le blob absorbe l'énergie, il ne "bloblotte" pas.
         get friction() { return 0.05; } 
-        // Elasticité très faible : Il revient à sa forme lentement, sans rebondir.
         get elasticity() { return 0.001; } 
     }
 
@@ -184,8 +167,9 @@ function initSoftMultiBlobBackground() {
 
     let ctx = canvas.getContext('2d');
     let blobs = [];
-    let mouse = { x: window.innerWidth/2, y: window.innerHeight/2 };
-    let smoothedMouse = { x: window.innerWidth/2, y: window.innerHeight/2 };
+    // Souris "fictive" pour le lissage
+    let smoothedMouse = { x: -500, y: -500 }; 
+    let mouse = { x: -500, y: -500 };
 
     let resize = function() {
         canvas.width = window.innerWidth;
@@ -194,17 +178,17 @@ function initSoftMultiBlobBackground() {
     window.addEventListener('resize', resize);
     resize();
 
-    // --- Création des blobs (PLUS PETITS) ---
-    const numBlobs = 6; 
+    // --- Création des blobs montants ---
+    const numBlobs = 5; // Nombre limité pour éviter l'encombrement
     for (let i = 0; i < numBlobs; i++) {
-        // Taille réduite : entre 80px et 200px (au lieu de 200-500)
-        let radius = Math.random() * 120 + 80; 
-        
+        let radius = Math.random() * 80 + 80; // Taille entre 80 et 160
         let x = Math.random() * canvas.width;
-        let y = Math.random() * canvas.height;
+        let y = Math.random() * canvas.height; // Départ aléatoire
+        // Vitesse de montée : entre 0.2 et 0.6 pixels par frame
+        let speedY = Math.random() * 0.4 + 0.2; 
         let color = paleColors[Math.floor(Math.random() * paleColors.length)];
         
-        let b = new Blob(radius, color, x, y);
+        let b = new Blob(radius, color, x, y, speedY);
         b.canvas = canvas;
         b.init();
         blobs.push(b);
@@ -215,21 +199,65 @@ function initSoftMultiBlobBackground() {
         mouse.y = e.clientY;
     });
 
-    // --- Animation ---
+    // --- Boucle d'animation principale ---
     function animate() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-        // Lissage souris très lent (0.05) pour éviter les mouvements brusques
+        // Lissage souris
         smoothedMouse.x += (mouse.x - smoothedMouse.x) * 0.05;
         smoothedMouse.y += (mouse.y - smoothedMouse.y) * 0.05;
 
+        // 1. Mise à jour des positions (Montée + Reset)
+        blobs.forEach(blob => {
+            // Fait monter le blob
+            blob._position.y -= blob.speedY;
+
+            // Reset en bas si le blob est sorti par le haut
+            // (On ajoute une marge de radius * 2 pour qu'il soit totalement sorti)
+            if (blob._position.y < -blob.radius * 2) {
+                blob._position.y = canvas.height + blob.radius * 2;
+                blob._position.x = Math.random() * canvas.width; // Nouvelle position X
+                // Optionnel : Changer la taille/couleur au respawn pour varier
+            }
+        });
+
+        // 2. Gestion des COLLISIONS (Anti-chevauchement)
+        for (let i = 0; i < blobs.length; i++) {
+            for (let j = i + 1; j < blobs.length; j++) {
+                let b1 = blobs[i];
+                let b2 = blobs[j];
+
+                let dx = b2._position.x - b1._position.x;
+                let dy = b2._position.y - b1._position.y;
+                let distance = Math.sqrt(dx * dx + dy * dy);
+                
+                // Distance minimale = somme des rayons + une petite marge (50px)
+                let minDistance = b1.radius + b2.radius + 50;
+
+                if (distance < minDistance) {
+                    // C'est trop proche ! On calcule l'angle de répulsion
+                    let angle = Math.atan2(dy, dx);
+                    // Force douce pour les écarter
+                    let force = 0.5; 
+                    
+                    // On pousse b1 vers l'arrière
+                    b1._position.x -= Math.cos(angle) * force;
+                    b1._position.y -= Math.sin(angle) * force;
+                    
+                    // On pousse b2 vers l'avant
+                    b2._position.x += Math.cos(angle) * force;
+                    b2._position.y += Math.sin(angle) * force;
+                }
+            }
+        }
+
+        // 3. Rendu final et interaction souris légère
         blobs.forEach(blob => {
             let pos = blob.center;
             let diff = { x: smoothedMouse.x - pos.x, y: smoothedMouse.y - pos.y };
             let dist = Math.sqrt((diff.x * diff.x) + (diff.y * diff.y));
             let angle = Math.atan2(diff.y, diff.x);
 
-            // Interaction souris
             if(dist < blob.radius * 1.5) {
                 let nearestPoint = null;
                 let distanceFromPoint = 100;
@@ -239,12 +267,10 @@ function initSoftMultiBlobBackground() {
                         distanceFromPoint = Math.abs(angle - point.azimuth);
                     }
                 });
-                
                 if(nearestPoint) {
                     let strength = dist / blob.radius;
-                    // FORCE RÉDUITE : Multiplicateur 0.5 (au lieu de 2)
-                    // C'est doux, ça ne déforme pas violemment le blob
-                    nearestPoint.acceleration = -(1 - strength) * 0.5; 
+                    // Interaction très légère
+                    nearestPoint.acceleration = -(1 - strength) * 0.4; 
                 }
             }
             blob.render();
