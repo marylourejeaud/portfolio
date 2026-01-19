@@ -162,12 +162,15 @@ a, button, .card, .list-item, .cookie-btn, nav a {
     cursor: url('https://static.tildacdn.com/tild3863-3739-4533-b134-653536343439/Frame_1171275326.png') 16 0, pointer !important;
 }
 
-/* --- 🌟 LAVA LAMP / METABALLS (CORRIGÉ) --- */
+/* ---------------------------------------------------- */
+/* --- 🌟 LAVA LAMP / METABALLS (CORRIGÉ & VISIBLE) --- */
+/* ---------------------------------------------------- */
+
 .lamp-container {
     position: relative;
     width: 100%;
-    height: 350px; /* Un peu moins haut pour concentrer l'effet */
-    background-color: #ffffff; 
+    height: 350px; /* Hauteur ajustée */
+    background-color: #ffffff; /* Fond blanc important pour le contraste */
     overflow: hidden;
     display: flex;
     align-items: center;
@@ -179,9 +182,12 @@ a, button, .card, .list-item, .cookie-btn, nav a {
 .lava-lamp {
     position: absolute;
     top: 0; left: 0; width: 100%; height: 100%;
+    
     /* FILTRE MAGIQUE SVG (Indispensable pour l'effet gooey pastel) */
+    /* Assure-toi que le <svg> avec l'id "goo" est bien dans footer.html */
     filter: url('#goo'); 
     -webkit-filter: url('#goo');
+    
     background-color: transparent; 
     z-index: 1;
 }
@@ -193,7 +199,7 @@ a, button, .card, .list-item, .cookie-btn, nav a {
     opacity: 1;
 }
 
-/* Animations corrigées pour démarrer plus haut */
+/* Animations corrigées pour que les bulles partent de plus haut et soient visibles */
 .b1 { width: 140px; height: 140px; left: 20%; background: var(--sunset-orange); animation: moveBlob 8s infinite alternate; bottom: -20px; }
 .b2 { width: 100px; height: 100px; left: 50%; background: var(--sunset-pink); animation: moveBlob 10s infinite alternate-reverse; bottom: -10px; }
 .b3 { width: 160px; height: 160px; left: 75%; background: var(--sunset-orange); animation: moveBlob 12s infinite alternate; bottom: -30px; }
@@ -214,6 +220,32 @@ a, button, .card, .list-item, .cookie-btn, nav a {
     transform: translate(-50%, -50%);
     transition: width 0.2s, height 0.2s; /* Juste la taille, pas la position */
     opacity: 0; 
+}
+
+/* --- CONTENU DU FOOTER (NET) --- */
+.footer-content {
+    position: relative;
+    z-index: 10; /* Au-dessus du flou */
+    text-align: center;
+    pointer-events: none; /* Laisse passer la souris vers la lave */
+}
+
+.footer-content p {
+    font-weight: bold;
+    font-size: 1.2rem;
+    color: var(--text-color);
+}
+
+.social-links a {
+    pointer-events: auto; /* Réactive les clics sur les liens */
+    color: var(--sunset-accent);
+    font-family: 'Shrikhand', cursive;
+    font-size: 1.8rem;
+    text-decoration: none;
+    margin: 0 10px;
+}
+.social-links a:hover {
+    color: var(--sunset-orange);
 }
 
 /* --- BANNIÈRE COOKIE (CENTRÉE) --- */
@@ -257,3 +289,10 @@ a, button, .card, .list-item, .cookie-btn, nav a {
     font-weight: bold;
 }
 .cookie-btn-secondary:hover { background: var(--bg-color); }
+
+/* Mobile */
+@media (max-width: 600px) {
+    h1 { font-size: 3.5rem; }
+    .lamp-container { height: 300px; }
+    .cookie-banner { flex-direction: column; text-align: center; left: 50%; width: 85%; }
+}
