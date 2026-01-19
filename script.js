@@ -1,11 +1,3 @@
-/* --- 1. CHARGEMENT AUTOMATIQUE DE PEP.JS --- */
-(function() {
-    var script = document.createElement('script');
-    script.src = "https://code.jquery.com/pep/0.4.3/pep.js";
-    script.async = true;
-    document.head.appendChild(script);
-})();
-
 /* --- 2. CODE PRINCIPAL --- */
 document.addEventListener("DOMContentLoaded", function() {
     
@@ -242,3 +234,4 @@ function initBlobBackground() {
     
     window.addEventListener('mousemove', mouseMove);
 }
+
