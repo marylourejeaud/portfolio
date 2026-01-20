@@ -10,16 +10,13 @@
     
     --border-radius-ui: 20px;
 
-    /* --- CURSEURS PERSONNALISÉS (Via fichiers PNG) --- */
+    /* --- CURSEURS PERSONNALISÉS --- */
+    /* IMPORTANT : Les images DOIVENT faire 32x32 pixels maximum */
     
     /* 1. La Baguette (Par défaut) */
-    /* '0 0' = Le clic se fait avec la pointe en haut à gauche */
-    /* Assure-toi que l'image s'appelle bien exactement comme ça (majuscules/minuscules comptent) */
     --cursor-wand: url('Image/Magical_wand.png') 0 0, auto;
 
     /* 2. L'Étincelle (Au clic) */
-    /* '16 16' = Le clic se fait au centre de l'image (si elle fait 32x32px) */
-    /* Si tu n'as pas renommé ton image sparkle, mets le bon nom ici */
     --cursor-sparkle: url('Image/Sparkle.png') 16 16, auto;
 }
 
