@@ -2,42 +2,27 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Études & Certifications - Marylou REJEAUD</title>
-<script src="https://code.jquery.com/pep/0.4.3/pep.js"></script>
-<script>
-(function (_config) {
-    var script = document.createElement("script");
-    script.src = "https://tag.aticdn.net/piano-analytics.js";
-    script.async = true;
-    script.dataset.config = JSON.stringify(_config);
-
-    script.onload = function() {
-        // 1. On envoie la page vue (récupère le titre automatiquement)
-        pa.sendEvent('page.display', {
-            'page': document.title,
-            'page_chapter1': 'Portfolio',
-        });
-
-        // 2. On écoute les clics sur le menu
-        document.querySelectorAll('nav a').forEach(function(link) {
-            link.addEventListener('click', function(e) {
-                pa.sendEvent('click.navigation', {
-                    'click_chapter1': 'Menu',
-                    'click_label': this.innerText
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Études & Compétences - Marylou REJEAUD</title>
+    
+    <script src="https://code.jquery.com/pep/0.4.3/pep.js"></script>
+    <script>
+    (function (_config) {
+        var script = document.createElement("script");
+        script.src = "https://tag.aticdn.net/piano-analytics.js";
+        script.async = true;
+        script.dataset.config = JSON.stringify(_config);
+        script.onload = function() {
+            pa.sendEvent('page.display', { 'page': document.title, 'page_chapter1': 'Portfolio' });
+            document.querySelectorAll('nav a').forEach(function(link) {
+                link.addEventListener('click', function(e) {
+                    pa.sendEvent('click.navigation', { 'click_chapter1': 'Menu', 'click_label': this.innerText });
                 });
             });
-        });
-        
-        console.log('Piano Analytics : Ready & Event sent for ' + document.title);
-    };
-
-    document.head.appendChild(script);
-})({
-    site: 648299,
-    collectDomain: "https://fjqqzhr.pa-cd.com",
-    consentDefaultMode: "exempt",
-});
-</script>
+        };
+        document.head.appendChild(script);
+    })({ site: 648299, collectDomain: "https://fjqqzhr.pa-cd.com", consentDefaultMode: "exempt" });
+    </script>
 
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Shrikhand&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
@@ -51,33 +36,44 @@
     </nav>
 
     <div class="container">
-        <h2 class="section-title">Formation Académique</h2>
+        <h2 class="section-title">Formations</h2>
         
         <div class="list-item">
-            <h3>Master Data et Intelligence Artificielle</h3>
-            <p><strong>SUP DE VINCI</strong> (2025 - 2027)</p>
+            [cite_start]<h3>Master Data et Intelligence Artificielle [cite: 26]</h3>
+            [cite_start]<p><strong>SUP DE VINCI - Bordeaux</strong> (Oct 2025 - Sept 2027) [cite: 40, 24]</p>
+            [cite_start]<p>Programme : ETL, data warehousing, mining, visualisation, machine learning[cite: 26].</p>
         </div>
 
         <div class="list-item">
-            <h3>Master Manager Transport Logistique (MTLCI)</h3>
-            <p><strong>KEDGE</strong> (2018 - 2020)</p>
+            [cite_start]<h3>Master Manager Transport Logistique (MTLCI) [cite: 27]</h3>
+            [cite_start]<p><strong>KEDGE - Monchy Saint Eloi</strong> (Oct 2018 - Sept 2020) [cite: 42, 25]</p>
         </div>
 
-        <h2 class="section-title">Certifications techniques</h2>
+        <h2 class="section-title">Compétences Techniques</h2>
+        <div class="card">
+             <ul>
+                 [cite_start]<li><strong>Python :</strong> Pandas, NumPy, Polars, Plotly Express, Streamlit[cite: 32].</li>
+                 [cite_start]<li><strong>Data Engineering :</strong> Talend (Talaxie), ETL, ingestion et transformation, Parquet, JSON, Data Warehousing[cite: 33].</li>
+                 [cite_start]<li><strong>SQL :</strong> modélisation et requêtes PostgreSQL[cite: 33].</li>
+                 [cite_start]<li><strong>Visualisation :</strong> KPIs, dashboards (Power BI, Streamlit)[cite: 34].</li>
+                 [cite_start]<li><strong>Outils :</strong> VS Code, Jupyter, pgAdmin, Excel/VBA[cite: 35].</li>
+             </ul>
+        </div>
+
+        <h2 class="section-title">Certifications</h2>
         <div class="grid">
             <div class="card">
-                <h3>Udemy - SQL Expert</h3>
-                <p>Maîtrise de la modélisation et des requêtes PostgreSQL.</p>
+                [cite_start]<h3>Udemy - SQL Expert [cite: 29]</h3>
+                [cite_start]<p>Mai 2025[cite: 44].</p>
             </div>
             <div class="card">
-                <h3>Udemy - Python Data Science</h3>
-                <p>Manipulation de données avec Pandas, NumPy et Polars.</p>
+                [cite_start]<h3>Udemy - Python Data Science [cite: 30]</h3>
+                [cite_start]<p>Juin 2025[cite: 43].</p>
             </div>
         </div>
     </div>
-        <div id="footer-placeholder"></div>
 
-<script src="script.js"></script>
+    <div id="footer-placeholder"></div>
+    <script src="script.js"></script>
 </body>
-
 </html>

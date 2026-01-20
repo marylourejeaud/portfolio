@@ -1,4 +1,4 @@
-/* --- CODE PRINCIPAL --- */
+/* --- SCRIPT.JS PRINCIPAL --- */
 document.addEventListener("DOMContentLoaded", function() {
     
     // A. Charge le footer et ses animations
@@ -8,6 +8,7 @@ document.addEventListener("DOMContentLoaded", function() {
             document.getElementById("footer-placeholder").innerHTML = data;
             initCookieBanner();
             initLavaLampInteraction(); 
+            initEasterEgg(); 
         })
         .catch(error => console.error("Erreur footer:", error));
 
@@ -15,8 +16,33 @@ document.addEventListener("DOMContentLoaded", function() {
     initGlowyBlobBackground();
 });
 
-// --- FONCTIONS UTILITAIRES ---
+// --- 1. GESTION DU CURSEUR MAGIQUE ---
+document.addEventListener('mousedown', () => {
+    document.body.classList.add('is-clicking');
+});
 
+document.addEventListener('mouseup', () => {
+    document.body.classList.remove('is-clicking');
+});
+
+// --- 2. EASTER EGG CARBONNADE ---
+function initEasterEgg() {
+    const pot = document.getElementById('secret-recipe');
+    if(pot) {
+        pot.addEventListener('click', () => {
+            [cite_start]alert("Le secret de ma Carbonnade Flamande[cite: 64]:\n\n1. Beaucoup de patience (comme pour le nettoyage de données).\n2. Une cuisson lente.\n3. Et surtout... le pain d'épices avec la moutarde !");
+            
+            // Effet visuel temporaire
+            document.body.style.transition = "background 1s";
+            document.body.style.background = "linear-gradient(to bottom, #fff5f7, #ffdab9)";
+            setTimeout(() => {
+                document.body.style.background = "";
+            }, 3000);
+        });
+    }
+}
+
+// --- 3. COOKIES ---
 function initCookieBanner() {
     const banner = document.getElementById('cookie-banner');
     const btn = document.getElementById('accept-cookie');
@@ -39,6 +65,7 @@ function initCookieBanner() {
     }
 }
 
+// --- 4. ANIMATION LAVA LAMP (FOOTER) ---
 function initLavaLampInteraction() {
     const container = document.querySelector('.lamp-container');
     const blob = document.getElementById('cursor-blob');
@@ -69,12 +96,8 @@ function initLavaLampInteraction() {
     animate();
 }
 
-// -------------------------------------------------------
-// --- FOND : GLOWY BLOBS (Particules Gooey) ---
-// -------------------------------------------------------
+// --- 5. FOND : GLOWY BLOBS (Particules Gooey) ---
 function initGlowyBlobBackground() {
-    
-    // Palette pastel
     const colors = ['#ffc4d6', '#ffdab9', '#ffe4e1', '#e6e6fa'];
 
     class Particle {
@@ -84,27 +107,16 @@ function initGlowyBlobBackground() {
         }
 
         init() {
-            // Taille aléatoire pour chaque particule
             this.radius = Math.random() * 40 + 30;
-            
-            // Position initiale aléatoire
             this.x = Math.random() * this.canvas.width;
             this.y = Math.random() * this.canvas.height;
-            
-            // Vitesse et direction aléatoires
             this.vx = (Math.random() - 0.5) * 1.5; 
             this.vy = (Math.random() - 0.5) * 1.5;
-            
             this.color = colors[Math.floor(Math.random() * colors.length)];
-            
-            // Cible pour mouvement erratique (comme dans l'exemple CSS)
-            this.targetX = Math.random() * this.canvas.width;
-            this.targetY = Math.random() * this.canvas.height;
             this.changeTargetTimer = 0;
         }
 
         update(mouseX, mouseY) {
-            // Changement de direction aléatoire de temps en temps
             this.changeTargetTimer++;
             if (this.changeTargetTimer > 100 + Math.random() * 100) {
                 this.vx = (Math.random() - 0.5) * 2;
@@ -112,20 +124,16 @@ function initGlowyBlobBackground() {
                 this.changeTargetTimer = 0;
             }
 
-            // Mouvement de base
             this.x += this.vx;
             this.y += this.vy;
 
-            // Rebond sur les bords (pour garder les particules à l'écran)
             if (this.x < 0 || this.x > this.canvas.width) this.vx *= -1;
             if (this.y < 0 || this.y > this.canvas.height) this.vy *= -1;
 
-            // Interaction Souris : Attraction / Répulsion douce
             let dx = this.x - mouseX;
             let dy = this.y - mouseY;
             let dist = Math.sqrt(dx*dx + dy*dy);
             
-            // Si la souris est proche, les particules s'écartent un peu (comme si on touchait le liquide)
             if(dist < 200) {
                 let force = (200 - dist) / 200;
                 this.x += (dx / dist) * force * 3;
@@ -142,17 +150,14 @@ function initGlowyBlobBackground() {
         }
     }
 
-    // Setup Canvas
     let canvas = document.createElement('canvas');
     canvas.id = 'blob-canvas'; 
     document.body.appendChild(canvas);
     let ctx = canvas.getContext('2d');
 
     let particles = [];
-    // Nombre de particules (comme les divs dans l'exemple CSS)
     const numParticles = 25; 
     
-    // Redimensionnement
     function resize() {
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
@@ -160,12 +165,10 @@ function initGlowyBlobBackground() {
     window.addEventListener('resize', resize);
     resize();
 
-    // Création des particules
     for(let i=0; i<numParticles; i++) {
         particles.push(new Particle(canvas));
     }
 
-    // Suivi souris lissé
     let mouse = { x: -1000, y: -1000 };
     let smoothMouse = { x: -1000, y: -1000 };
     window.addEventListener('mousemove', e => {
@@ -173,11 +176,8 @@ function initGlowyBlobBackground() {
         mouse.y = e.clientY;
     });
 
-    // Boucle d'animation
     function animate() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        
-        // Lissage de la position souris
         smoothMouse.x += (mouse.x - smoothMouse.x) * 0.1;
         smoothMouse.y += (mouse.y - smoothMouse.y) * 0.1;
 
@@ -185,7 +185,6 @@ function initGlowyBlobBackground() {
             p.update(smoothMouse.x, smoothMouse.y);
             p.draw(ctx);
         });
-
         requestAnimationFrame(animate);
     }
     animate();
