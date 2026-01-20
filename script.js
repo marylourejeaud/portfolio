@@ -1,16 +1,17 @@
 /* --- SCRIPT.JS PRINCIPAL --- */
+
 document.addEventListener("DOMContentLoaded", function() {
     
-    // 1. Initialise les fonctions du footer (qui est maintenant déjà là)
+    // 1. Initialise les fonctions du footer
     initCookieBanner();
     initLavaLampInteraction(); 
     initEasterEgg(); 
 
-    // 2. Lance le fond Glowy Blob (Particules Gooey)
+    // 2. LANCE LES BULLES DE FOND (C'est cette ligne qui manquait peut-être !)
     initGlowyBlobBackground();
 });
 
-// --- GESTION DU CURSEUR MAGIQUE ---
+/* --- GESTION DU CURSEUR MAGIQUE --- */
 document.addEventListener('mousedown', () => {
     document.body.classList.add('is-clicking');
 });
@@ -19,14 +20,14 @@ document.addEventListener('mouseup', () => {
     document.body.classList.remove('is-clicking');
 });
 
-// --- EASTER EGG CARBONNADE ---
+/* --- EASTER EGG CARBONNADE --- */
 function initEasterEgg() {
     const pot = document.getElementById('secret-recipe');
     if(pot) {
         pot.addEventListener('click', () => {
-            alert("Le secret de ma Carbonnade Flamande:\n\n1. Beaucoup de patience (comme pour le nettoyage de données).\n2. Une cuisson lente.\n3. Et surtout... le pain d'épices avec la moutarde !");
+            alert("Le secret de ma Carbonnade Flamande :\n\n1. Beaucoup de patience (comme pour le nettoyage de données).\n2. Une cuisson lente.\n3. Et surtout... le pain d'épices avec la moutarde !");
             
-            // Effet visuel temporaire
+            // Effet visuel temporaire sur le fond
             document.body.style.transition = "background 1s";
             document.body.style.background = "linear-gradient(to bottom, #fff5f7, #ffdab9)";
             setTimeout(() => {
@@ -36,7 +37,7 @@ function initEasterEgg() {
     }
 }
 
-// --- COOKIES ---
+/* --- COOKIES --- */
 function initCookieBanner() {
     const banner = document.getElementById('cookie-banner');
     const btn = document.getElementById('accept-cookie');
@@ -59,10 +60,12 @@ function initCookieBanner() {
     }
 }
 
-// --- ANIMATION LAVA LAMP (FOOTER) ---
+/* --- ANIMATION LAVA LAMP (FOOTER) --- */
 function initLavaLampInteraction() {
     const container = document.querySelector('.lamp-container');
     const blob = document.getElementById('cursor-blob');
+    
+    // Sécurité si le footer n'est pas chargé
     if (!container || !blob) return;
 
     let currentX = 0, currentY = 0, mouseX = 0, mouseY = 0, isHovering = false;
@@ -90,9 +93,8 @@ function initLavaLampInteraction() {
     animate();
 }
 
-// --- FOND : GLOWY BLOBS (Particules Gooey) ---
+/* --- FOND : GLOWY BLOBS (Les bulles qui manquaient) --- */
 function initGlowyBlobBackground() {
-    // Si tu veux changer les couleurs des bulles du fond, c'est ici :
     const colors = ['#ffc4d6', '#ffdab9', '#ffe4e1', '#e6e6fa'];
 
     class Particle {
@@ -143,6 +145,12 @@ function initGlowyBlobBackground() {
             ctx.fill();
             ctx.closePath();
         }
+    }
+
+    // Création du canvas s'il n'existe pas
+    let existingCanvas = document.getElementById('blob-canvas');
+    if (existingCanvas) {
+        existingCanvas.remove();
     }
 
     let canvas = document.createElement('canvas');
