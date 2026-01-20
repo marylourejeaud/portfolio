@@ -11,18 +11,12 @@
     --border-radius-ui: 20px;
 
     /* --- CURSEURS PERSONNALISÉS --- */
-    /* IMPORTANT : Les images DOIVENT faire 32x32 pixels maximum */
-    
-    /* 1. La Baguette (Par défaut) */
     --cursor-wand: url('Image/Magical_wand.png') 0 0, auto;
-
-    /* 2. L'Étincelle (Au clic) */
     --cursor-sparkle: url('Image/Sparkle.png') 16 16, auto;
 }
 
 /* --- BASE --- */
 body {
-    /* MODIFICATION ICI : On applique le fond seulement au body */
     background: linear-gradient(to bottom, #ffffff, var(--bg-color));
     color: var(--text-color);
     font-family: 'Space Grotesk', sans-serif;
@@ -30,16 +24,13 @@ body {
     padding: 0;
     overflow-x: hidden;
     line-height: 1.5;
-    min-height: 100vh; /* Assure que le fond va jusqu'en bas */
-    
-    /* Curseur magique */
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
     cursor: var(--cursor-wand);
 }
 
-/* Le html doit être transparent pour laisser voir le fond du body si besoin */
-html {
-    height: 100%;
-}
+html { height: 100%; }
 
 body.is-clicking { cursor: var(--cursor-sparkle) !important; }
 a, button, .card, .list-item, nav a, .project-card { cursor: inherit !important; }
@@ -95,7 +86,12 @@ h1 {
 }
 
 /* --- CONTENEURS & CARTES --- */
-.container { max-width: 1000px; margin: auto; padding: 4rem 2rem; }
+.container { 
+    max-width: 1000px; 
+    margin: auto; 
+    padding: 4rem 2rem; 
+    flex: 1; /* Pousse le footer vers le bas */
+}
 .section-title { font-family: 'Shrikhand', cursive; font-size: 3rem; text-align: center; margin-bottom: 3rem; color: var(--sunset-accent); }
 
 .card, .list-item {
@@ -176,33 +172,41 @@ h1 {
 .project-card.active .toggle-icon { transform: rotate(45deg); color: var(--sunset-pink); }
 .project-card.active .project-details { max-height: 800px; opacity: 1; border-top-color: var(--sunset-pink); }
 
-/* --- FOOTER & LAVA LAMP --- */
+/* --- FOOTER & LAVA LAMP (Restauré et Corrigé) --- */
+footer {
+    /* C'EST ICI QUE CA SE JOUE : On ajoute une marge géante au-dessus */
+    margin-top: 150px; 
+    position: relative;
+    z-index: 10;
+}
+
 .lamp-container {
     position: relative; 
     width: 100%; 
     height: 350px; 
-    
-    /* MODIFICATION ICI : On passe de #ffffff à transparent */
-    background-color: transparent; 
-    
+    background-color: transparent; /* TRANSPARENT pour enlever la barre blanche */
     overflow: hidden; 
     display: flex; 
     align-items: center; 
     justify-content: center;
-    
-    /* Optionnel : vous pouvez aussi retirer la bordure si vous voulez que ce soit invisible */
     border-top: none; 
 }
+
 .lava-lamp {
     position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    /* Le filtre magique pour l'effet liquide */
     filter: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='goo'%3E%3CfeGaussianBlur in='SourceGraphic' stdDeviation='10' result='blur' /%3E%3CfeColorMatrix in='blur' mode='matrix' values='1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 19 -9' result='goo' /%3E%3CfeComposite in='SourceGraphic' in2='goo' operator='atop'/%3E%3C/filter%3E%3C/svg%3E#goo");
     z-index: 1;
+    opacity: 0.7; /* Légèrement transparent pour se fondre */
 }
+
+/* Les Bulles du footer */
 .bubble { border-radius: 50%; position: absolute; background: var(--sunset-pink); opacity: 1; }
 .b1 { width: 140px; height: 140px; left: 20%; background: var(--sunset-orange); animation: moveBlob 8s infinite alternate; bottom: -20px; }
 .b2 { width: 100px; height: 100px; left: 50%; background: var(--sunset-pink); animation: moveBlob 10s infinite alternate-reverse; bottom: -10px; }
 .b3 { width: 160px; height: 160px; left: 75%; background: var(--sunset-orange); animation: moveBlob 12s infinite alternate; bottom: -30px; }
 .b4 { width: 90px; height: 90px; left: 35%; background: var(--sunset-pink); animation: moveBlob 9s infinite alternate-reverse; bottom: 0px; }
+
 @keyframes moveBlob { from { transform: translate(0, 0) scale(1); } to { transform: translate(15px, -60px) scale(1.1); } }
 
 .cursor-blob {
@@ -210,11 +214,19 @@ h1 {
     pointer-events: none; position: absolute; top: 0; left: 0;
     transform: translate(-50%, -50%); transition: width 0.2s, height 0.2s; opacity: 0; 
 }
-.footer-content { position: relative; z-index: 10; text-align: center; pointer-events: none; }
+
+.footer-content { 
+    position: relative; 
+    z-index: 10; 
+    text-align: center; 
+    pointer-events: none; 
+    margin-top: 50px; /* Un peu d'espace dans le footer lui-même */
+}
 .footer-content p { font-weight: bold; font-size: 1.2rem; color: var(--text-color); }
 .social-links a { pointer-events: auto; color: var(--sunset-accent); font-family: 'Shrikhand', cursive; font-size: 1.8rem; text-decoration: none; margin: 0 10px; }
 .social-links a:hover { color: var(--sunset-orange); }
 
+/* Cookie Banner */
 .cookie-banner {
     position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
     background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(8px);
@@ -229,6 +241,7 @@ h1 {
 .cookie-btn-secondary { background: transparent; border: 1px solid var(--text-color); color: var(--text-color); padding: 0.5rem 1rem; border-radius: 50px; cursor: pointer; font-weight: bold; }
 .cookie-btn-secondary:hover { background: var(--bg-color); }
 
+/* --- RESPONSIVE --- */
 @media (max-width: 768px) {
     h1 { font-size: 3.5rem; }
     .lamp-container { height: 300px; }
@@ -245,6 +258,7 @@ h1 {
     .project-details ul { padding: 20px 20px 20px 40px; }
 }
 
+/* Canvas du fond d'écran */
 canvas#blob-canvas {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; 
     touch-action: none; pointer-events: none;
