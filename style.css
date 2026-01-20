@@ -21,7 +21,8 @@
 }
 
 /* --- BASE --- */
-html, body {
+body {
+    /* MODIFICATION ICI : On applique le fond seulement au body */
     background: linear-gradient(to bottom, #ffffff, var(--bg-color));
     color: var(--text-color);
     font-family: 'Space Grotesk', sans-serif;
@@ -29,7 +30,15 @@ html, body {
     padding: 0;
     overflow-x: hidden;
     line-height: 1.5;
+    min-height: 100vh; /* Assure que le fond va jusqu'en bas */
+    
+    /* Curseur magique */
     cursor: var(--cursor-wand);
+}
+
+/* Le html doit être transparent pour laisser voir le fond du body si besoin */
+html {
+    height: 100%;
 }
 
 body.is-clicking { cursor: var(--cursor-sparkle) !important; }
