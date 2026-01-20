@@ -11,6 +11,7 @@
     --border-radius-ui: 20px;
 
     /* --- CURSEURS PERSONNALISÉS --- */
+    /* Assurez-vous que le dossier s'appelle bien "Image" sur GitHub */
     --cursor-wand: url('Image/Magical_wand.png') 0 0, auto;
     --cursor-sparkle: url('Image/Sparkle.png') 16 16, auto;
 }
@@ -18,6 +19,12 @@
 /* --- BASE --- */
 body {
     background: linear-gradient(to bottom, #ffffff, var(--bg-color));
+    
+    /* C'EST ICI LA SOLUTION DU RIDEAU : */
+    background-attachment: fixed; /* Le fond reste fixe quand on scrolle */
+    background-size: cover;       /* Le fond couvre tout l'écran */
+    background-repeat: no-repeat; /* Interdit au fond de se répéter */
+    
     color: var(--text-color);
     font-family: 'Space Grotesk', sans-serif;
     margin: 0;
@@ -90,7 +97,7 @@ h1 {
     max-width: 1000px; 
     margin: auto; 
     padding: 4rem 2rem; 
-    flex: 1; /* Pousse le footer vers le bas */
+    flex: 1; /* Pousse le footer vers le bas si la page est vide */
 }
 .section-title { font-family: 'Shrikhand', cursive; font-size: 3rem; text-align: center; margin-bottom: 3rem; color: var(--sunset-accent); }
 
@@ -172,9 +179,9 @@ h1 {
 .project-card.active .toggle-icon { transform: rotate(45deg); color: var(--sunset-pink); }
 .project-card.active .project-details { max-height: 800px; opacity: 1; border-top-color: var(--sunset-pink); }
 
-/* --- FOOTER & LAVA LAMP (Restauré et Corrigé) --- */
+/* --- FOOTER & LAVA LAMP --- */
 footer {
-    /* C'EST ICI QUE CA SE JOUE : On ajoute une marge géante au-dessus */
+    /* La marge pour décoller le pied de page du contenu */
     margin-top: 150px; 
     position: relative;
     z-index: 10;
@@ -184,7 +191,8 @@ footer {
     position: relative; 
     width: 100%; 
     height: 350px; 
-    background-color: transparent; /* TRANSPARENT pour enlever la barre blanche */
+    /* Fond transparent pour voir le dégradé rose derrière (plus de barre blanche) */
+    background-color: transparent; 
     overflow: hidden; 
     display: flex; 
     align-items: center; 
@@ -197,7 +205,7 @@ footer {
     /* Le filtre magique pour l'effet liquide */
     filter: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='goo'%3E%3CfeGaussianBlur in='SourceGraphic' stdDeviation='10' result='blur' /%3E%3CfeColorMatrix in='blur' mode='matrix' values='1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 19 -9' result='goo' /%3E%3CfeComposite in='SourceGraphic' in2='goo' operator='atop'/%3E%3C/filter%3E%3C/svg%3E#goo");
     z-index: 1;
-    opacity: 0.7; /* Légèrement transparent pour se fondre */
+    opacity: 0.7; 
 }
 
 /* Les Bulles du footer */
@@ -220,7 +228,7 @@ footer {
     z-index: 10; 
     text-align: center; 
     pointer-events: none; 
-    margin-top: 50px; /* Un peu d'espace dans le footer lui-même */
+    margin-top: 50px; 
 }
 .footer-content p { font-weight: bold; font-size: 1.2rem; color: var(--text-color); }
 .social-links a { pointer-events: auto; color: var(--sunset-accent); font-family: 'Shrikhand', cursive; font-size: 1.8rem; text-decoration: none; margin: 0 10px; }
