@@ -178,9 +178,20 @@ h1 {
 
 /* --- FOOTER & LAVA LAMP --- */
 .lamp-container {
-    position: relative; width: 100%; height: 350px; background-color: #ffffff; 
-    overflow: hidden; display: flex; align-items: center; justify-content: center;
-    border-top: 1px solid rgba(255, 196, 214, 0.5);
+    position: relative; 
+    width: 100%; 
+    height: 350px; 
+    
+    /* MODIFICATION ICI : On passe de #ffffff à transparent */
+    background-color: transparent; 
+    
+    overflow: hidden; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center;
+    
+    /* Optionnel : vous pouvez aussi retirer la bordure si vous voulez que ce soit invisible */
+    border-top: none; 
 }
 .lava-lamp {
     position: absolute; top: 0; left: 0; width: 100%; height: 100%;
