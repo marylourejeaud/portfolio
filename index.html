@@ -2,72 +2,87 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Marylou REJEAUD - Master Data & IA</title>
-<script src="https://code.jquery.com/pep/0.4.3/pep.js"></script>
-<script>
-(function (_config) {
-    var script = document.createElement("script");
-    script.src = "https://tag.aticdn.net/piano-analytics.js";
-    script.async = true;
-    script.dataset.config = JSON.stringify(_config);
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Curseur Magique Interactif</title>
+    <style>
+        /* --- CONFIGURATION CSS --- */
 
-    script.onload = function() {
-        // 1. On envoie la page vue (récupère le titre automatiquement)
-        pa.sendEvent('page.display', {
-            'page': document.title,
-            'page_chapter1': 'Portfolio',
-        });
+        :root {
+            /* 1. Image de la baguette magique (état par défaut)
+               - J'ai utilisé une image similaire redimensionnée en 32x32.
+               - Les chiffres "2 2" à la fin indiquent le "point chaud" (le bout de la baguette)
+                 à 2px du haut et 2px de la gauche.
+            */
+            --cursor-wand: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH5gkTFBc4YfPjYQAAAB1pVFh0Q29tbWVudAAAAAAAQ3JlYXRlZCB3aXRoIEdJTVBkLmUHAAACXUlEQVRYw+2XP2gTcRTHP3e/NLGpaRqlrSItzh0UHERRHOvkKDiI4iA4OoiDODqIgziI4iA4OoiDODqIgziI4iAIjoJzcRDEpXXQWpM2SY/7eY4/Gk2uyT/Xgq88yR3u3uf9/d7v9z4H/3lYwD9HhH4C3AauAw1gEagAHwF63X4FfAAeAJcAn4FjQAO4CiwAF4H7wA/gC9AFfgDXgXlgHvgI/ALeAbeBY0B7G6AE1IEW55zXdd1dIBXG+T6wC1wAuoAB1IA64AGJMA50gRbgAT5QjRk+BVwGdoF1fFwVcAtoR8w+B1wE2kAXqNPe1d1YnS3gEtCNWb4C3Ab2gR3gK+DHzE/gBtBkzNIFXMAHuoAGUOW/7E3gEtCLmN0FruGjG8A6sPef7G3gCtALGe0B14BOyEw3gHXgV+D9XQGuAF0f0aQ90A+Z6TrgY8Zq8H4/GrsAdHxE0x5wE6hFzHQD8/A+WwFqPrLJ+a5g9g2gEjHTDWAd3uc0cA1o+Igm7RnsC92Qma4DH+b9ZgV4bUfP+W5g9g2gEjHTDeAHvM8m4DV8NOm9Hl2wD/RDZroOrMP73AJeATWf993A7GtA2Wem68AHeJ/LgNfz3pB3Gdi/BJSjZroO+JixKnABH216L3kXgX3A76brwBrerzHq3QOqETP90KhrwGf4QCMK0A0M+x3f5t3A7GtAOWKmHxp1HViD9zmLAjR8RPsF2Bf8brouvN/vKEDLRzTpgX5/M10H1mFvQf9+RwG6PqJJe+DAX6brwAeYj6H2d6/4H/r7zC/kYJqD017iRAAAAABJRU5ErkJggg==') 2 2, auto;
 
-        // 2. On écoute les clics sur le menu
-        document.querySelectorAll('nav a').forEach(function(link) {
-            link.addEventListener('click', function(e) {
-                pa.sendEvent('click.navigation', {
-                    'click_chapter1': 'Menu',
-                    'click_label': this.innerText
-                });
-            });
-        });
-        
-        console.log('Piano Analytics : Ready & Event sent for ' + document.title);
-    };
+            /* 2. Image de l'étincelle rose (état cliqué)
+               - Image similaire redimensionnée en 32x32.
+               - Les chiffres "16 16" indiquent que le point chaud est au centre exact de l'image (16px, 16px).
+            */
+            --cursor-sparkle: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABE5G8aAAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAAAlQTFRF/wAAAP///wAAAAE52O8AAAAAd0Uk5T///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////CtyXvAAAAgklEQVQoz22Q2QqAMAxDLc79/y8XhiJCOx+GkKRNW40x5jUzo7WlS62U7F6u9M2mXhY25b4A2Uu9L8iJvS9I672PqJt9B+i3fQdY2vcVIG2l7ytA+6R/Q8S696/I9d6/Itt6/4xM7/0j8qz3v8g6928I7d7/IcQxZgYfHj48vAD4dCEl+8W5qgAAAABJRU5ErkJggg==') 16 16, auto;
+        }
 
-    document.head.appendChild(script);
-})({
-    site: 648299,
-    collectDomain: "https://fjqqzhr.pa-cd.com",
-    consentDefaultMode: "exempt",
-});
-</script>
+        body {
+            height: 100vh;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f0f2f5;
+            font-family: sans-serif;
 
-    <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Shrikhand&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
+            /* 1. Appliquer le curseur par défaut à toute la page */
+            cursor: var(--cursor-wand);
+        }
+
+        /* 2. Classe ajoutée par JS lors du clic.
+           Le !important assure que ce curseur prend le dessus sur tout le reste.
+        */
+        body.is-clicking {
+            cursor: var(--cursor-sparkle) !important;
+        }
+
+        /* Permet aux éléments interactifs (boutons, liens) d'hériter du curseur personnalisé
+           au lieu de revenir au curseur "main" standard.
+        */
+        a, button, input, .box {
+            cursor: inherit;
+        }
+
+        /* Style pour la démo */
+        .box {
+            background: white;
+            padding: 50px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        h1 { color: #333; }
+        p { color: #666; }
+    </style>
 </head>
 <body>
-    <nav>
-        <a href="index.html">Accueil</a>
-        <a href="projets.html">Projets</a>
-        <a href="experience.html">Expérience</a>
-        <a href="etudes.html">Études</a>
-    </nav>
 
-    <header>
-        <h1>Marylou REJEAUD</h1>
-        <p class="subtitle">Master 1 Data & Intelligence Artificielle</p>
-        <p> <strong>Sup de Vinci - Bordeaux</strong> </p>
-    </header>
-
-    <div class="container">
-        <div class="card">
-            <h2>Bienvenue !</h2>
-            <p>Après plusieurs années dans la logistique et le commerce international, j'ai choisi de me réorienter vers la data. Curieuse et rigoureuse, je cherche aujourd'hui à mettre mon sens de l'analyse au profit de projets concrets.</p>
-            <p> <strong>Anglais :</strong> Courant (1 an et demi d'expérience aux USA).</p>
-            <p> <strong>Le petit plus :</strong> Je cuisine la meilleure carbonnade flamande !</p>
-        </div>
+    <div class="box">
+        <h1>Cliquez n'importe où !</h1>
+        <p>Le curseur change de la baguette magique à l'étincelle.</p>
     </div>
-    <div id="footer-placeholder"></div>
 
-<script src="script.js"></script>
+    <script>
+        /* --- JAVASCRIPT POUR L'INTERACTION --- */
+
+        // On écoute l'événement "mousedown" (quand le bouton de la souris est enfoncé)
+        document.addEventListener('mousedown', () => {
+            // On ajoute la classe CSS qui contient le curseur "étincelle"
+            document.body.classList.add('is-clicking');
+        });
+
+        // On écoute l'événement "mouseup" (quand le bouton de la souris est relâché)
+        document.addEventListener('mouseup', () => {
+            // On retire la classe pour revenir au curseur par défaut
+            document.body.classList.remove('is-clicking');
+        });
+    </script>
+
 </body>
-
 </html>
-
