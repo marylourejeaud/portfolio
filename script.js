@@ -30,7 +30,7 @@ function initEasterEgg() {
     const pot = document.getElementById('secret-recipe');
     if(pot) {
         pot.addEventListener('click', () => {
-            [cite_start]alert("Le secret de ma Carbonnade Flamande[cite: 64]:\n\n1. Beaucoup de patience (comme pour le nettoyage de données).\n2. Une cuisson lente.\n3. Et surtout... le pain d'épices avec la moutarde !");
+            alert("Le secret de ma Carbonnade Flamande:\n\n1. Beaucoup de patience (comme pour le nettoyage de données).\n2. Une cuisson lente.\n3. Et surtout... le pain d'épices avec la moutarde !");
             
             // Effet visuel temporaire
             document.body.style.transition = "background 1s";
