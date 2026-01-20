@@ -12,13 +12,10 @@
     script.dataset.config = JSON.stringify(_config);
 
     script.onload = function() {
-        // 1. On envoie la page vue (récupère le titre automatiquement)
         pa.sendEvent('page.display', {
             'page': document.title,
             'page_chapter1': 'Portfolio',
         });
-
-        // 2. On écoute les clics sur le menu
         document.querySelectorAll('nav a').forEach(function(link) {
             link.addEventListener('click', function(e) {
                 pa.sendEvent('click.navigation', {
@@ -27,7 +24,6 @@
                 });
             });
         });
-        
         console.log('Piano Analytics : Ready & Event sent for ' + document.title);
     };
 
@@ -53,27 +49,53 @@
     <div class="container">
         <h2 class="section-title">Parcours Professionnel</h2>
 
-        <div class="list-item">
-            <h3>Groupe Vicard Tonnellerie - Napa, USA</h3>
-            <p><strong>V.I.E Responsable des opérations</strong> (Avr. 2024 - Sept. 2025)</p>
-            <ul>
-                <li>Analyses concurrentielles du marché américain.</li>
-                <li>Création de tableaux de bord de suivi logistique (Power BI / Excel).</li>
-            </ul>
-        </div>
+        <div class="timeline">
+            
+            <div class="timeline-item left">
+                <div class="content">
+                    <h3>Groupe Vicard Tonnellerie</h3>
+                    <div class="role-title">V.I.E - Responsable des opérations</div>
+                    <span class="date">Avr. 2024 - Sept. 2025</span>
+                    <p class="location">Napa, CA - États-Unis</p>
+                    <ul>
+                        <li>Analyse concurrentielle : étude de 35 tonnelleries concurrentes et analyse de l'évolution des importations de fûts sur les 5 dernières années (collecte, nettoyage, visualisation des données).</li>
+                        <li>Suivi opérationnel : création et automatisation de tableaux de bord (Excel / Power BI) et suivi d'indicateurs logistiques (retards, casses, inventaire).</li>
+                    </ul>
+                </div>
+            </div>
 
-        <div class="list-item">
-            <h3>Kuehne Nagel - Bordeaux, France</h3>
-            <p><strong>Commerciale export/import Vins & Spiritueux</strong> (Oct. 2019 - Mars 2024)</p>
-            <ul>
-                <li>Promotion des services de transport maritime et aérien VinLog.</li>
-                <li>Gestion de portefeuille et suivi des besoins clients.</li>
-            </ul>
+            <div class="timeline-item right">
+                <div class="content">
+                    <h3>Kuehne Nagel</h3>
+                    <div class="role-title">Commerciale export/import - Vins & Spiritueux</div>
+                    <span class="date">Oct. 2019 - Mars 2024</span>
+                    <p class="location">Bordeaux - France</p>
+                    <ul>
+                        <li>Analyse marché : suivi des tendances vins et spiritueux et identification d'opportunités commerciales via données CRM et indicateurs marché.</li>
+                        <li>Gestion de portefeuille de 20 clients : développement de clients existants et nouveaux, segmentation et suivi des performances.</li>
+                        <li>Pilotage commercial : construction de plans d'action alignés sur les objectifs, suivi du pipeline et reporting via CRM.</li>
+                        <li>Négociation & closing : préparation des offres, analyse tarifaire, réponse aux appels d'offres coordination avec les équipes opérationnelles.</li>
+                        <li>Relation client : visites, présentations et accompagnement pour proposer des solutions adaptées (transport maritime & aérien).</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="timeline-item left">
+                <div class="content">
+                    <h3>Bolloré Logistics</h3>
+                    <div class="role-title">Commerciale Junior - Pharmaceutique</div>
+                    <span class="date">Avr. 2019 - Juil. 2019</span>
+                    <p class="location">Hô Chi Minh, Vietnam</p>
+                    <ul>
+                        <li>Contribution au développement des agences pharmaceutiques de Bolloré au Vietnam, amélioration de la logistique locale, collaboration avec les parties prenantes et prospection de nouvelles infrastructures et clients.</li>
+                    </ul>
+                </div>
+            </div>
+
         </div>
     </div>
         <div id="footer-placeholder"></div>
 
 <script src="script.js"></script>
 </body>
-
 </html>
