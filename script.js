@@ -1,22 +1,16 @@
 /* --- SCRIPT.JS PRINCIPAL --- */
 document.addEventListener("DOMContentLoaded", function() {
     
-    // A. Charge le footer et ses animations
-    fetch("footer.html")
-        .then(response => response.text())
-        .then(data => {
-            document.getElementById("footer-placeholder").innerHTML = data;
-            initCookieBanner();
-            initLavaLampInteraction(); 
-            initEasterEgg(); 
-        })
-        .catch(error => console.error("Erreur footer:", error));
+    // 1. Initialise les fonctions du footer (qui est maintenant déjà là)
+    initCookieBanner();
+    initLavaLampInteraction(); 
+    initEasterEgg(); 
 
-    // B. Lance le fond Glowy Blob (Particules Gooey)
+    // 2. Lance le fond Glowy Blob (Particules Gooey)
     initGlowyBlobBackground();
 });
 
-// --- 1. GESTION DU CURSEUR MAGIQUE ---
+// --- GESTION DU CURSEUR MAGIQUE ---
 document.addEventListener('mousedown', () => {
     document.body.classList.add('is-clicking');
 });
@@ -25,7 +19,7 @@ document.addEventListener('mouseup', () => {
     document.body.classList.remove('is-clicking');
 });
 
-// --- 2. EASTER EGG CARBONNADE ---
+// --- EASTER EGG CARBONNADE ---
 function initEasterEgg() {
     const pot = document.getElementById('secret-recipe');
     if(pot) {
@@ -42,7 +36,7 @@ function initEasterEgg() {
     }
 }
 
-// --- 3. COOKIES ---
+// --- COOKIES ---
 function initCookieBanner() {
     const banner = document.getElementById('cookie-banner');
     const btn = document.getElementById('accept-cookie');
@@ -65,7 +59,7 @@ function initCookieBanner() {
     }
 }
 
-// --- 4. ANIMATION LAVA LAMP (FOOTER) ---
+// --- ANIMATION LAVA LAMP (FOOTER) ---
 function initLavaLampInteraction() {
     const container = document.querySelector('.lamp-container');
     const blob = document.getElementById('cursor-blob');
@@ -96,8 +90,9 @@ function initLavaLampInteraction() {
     animate();
 }
 
-// --- 5. FOND : GLOWY BLOBS (Particules Gooey) ---
+// --- FOND : GLOWY BLOBS (Particules Gooey) ---
 function initGlowyBlobBackground() {
+    // Si tu veux changer les couleurs des bulles du fond, c'est ici :
     const colors = ['#ffc4d6', '#ffdab9', '#ffe4e1', '#e6e6fa'];
 
     class Particle {

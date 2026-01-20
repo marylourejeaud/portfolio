@@ -48,11 +48,48 @@
             <p>Après plusieurs années dans la logistique et le commerce international, où mon intérêt pour la donnée s'est naturellement affirmé, je poursuis aujourd'hui un Master Data & IA pour mettre ma rigueur et mon appétence analytique au service de projets data concrets.</p>
             <p><strong>Recherche :</strong> Alternance ou stage alterné (dès maintenant).</p>
             <p><strong>Langues :</strong> Français (maternel), Anglais (courant - 1 an et demi d'expérience aux USA).</p>
-            <p><strong>Le petit plus :</strong> Je cuisine la meilleure carbonnade flamande ! </p>
+            <p><strong>Le petit plus :</strong> Je cuisine la meilleure carbonnade flamande !</p>
         </div>
     </div>
 
-    <div id="footer-placeholder"></div>
+    <footer>
+        <div class="lamp-container">
+            <div class="lava-lamp" id="lava-lamp">
+                <div class="bubble b1"></div>
+                <div class="bubble b2"></div>
+                <div class="bubble b3"></div>
+                <div class="bubble b4"></div>
+                <div class="bubble cursor-blob" id="cursor-blob"></div>
+            </div>
+    
+            <div class="footer-content">
+                <p>&copy; 2026 Marylou REJEAUD - Tous droits réservés.</p>
+                <div class="social-links">
+                    <a href="https://www.linkedin.com/in/marylou-rejeaud/" target="_blank">LinkedIn</a>
+                    <span id="secret-recipe" style="font-size: 1.5rem; cursor: pointer; margin-left:10px;" title="Secret du chef">🥘</span>
+                </div>
+            </div>
+        </div>
+    
+        <svg style="visibility: hidden; position: absolute;" width="0" height="0" xmlns="http://www.w3.org/2000/svg" version="1.1">
+            <defs>
+                <filter id="goo">
+                    <feGaussianBlur in="SourceGraphic" stdDeviation="10" result="blur" />    
+                    <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 19 -9" result="goo" />
+                    <feComposite in="SourceGraphic" in2="goo" operator="atop"/>
+                </filter>
+            </defs>
+        </svg>
+    
+        <div id="cookie-banner" class="cookie-banner">
+            <p><strong>Cookies & Data :</strong> J'utilise des cookies anonymes. On y va ?</p>
+            <div class="cookie-buttons">
+                <button id="refuse-cookie" class="cookie-btn-secondary">Non</button>
+                <button id="accept-cookie" class="cookie-btn">Oui, let's go</button>
+            </div>
+        </div>
+    </footer>
+
     <script src="script.js"></script>
 </body>
 </html>
