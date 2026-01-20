@@ -1,0 +1,192 @@
+/* --- CODE PRINCIPAL --- */
+document.addEventListener("DOMContentLoaded", function() {
+    
+    // A. Charge le footer et ses animations
+    fetch("footer.html")
+        .then(response => response.text())
+        .then(data => {
+            document.getElementById("footer-placeholder").innerHTML = data;
+            initCookieBanner();
+            initLavaLampInteraction(); 
+        })
+        .catch(error => console.error("Erreur footer:", error));
+
+    // B. Lance le fond Glowy Blob (Particules Gooey)
+    initGlowyBlobBackground();
+});
+
+// --- FONCTIONS UTILITAIRES ---
+
+function initCookieBanner() {
+    const banner = document.getElementById('cookie-banner');
+    const btn = document.getElementById('accept-cookie');
+    const btnRefuse = document.getElementById('refuse-cookie');
+
+    if (localStorage.getItem('cookieAccepted') === 'true') {
+        if(banner) banner.style.display = 'none';
+        return;
+    }
+    if(btn) {
+        btn.addEventListener('click', () => { 
+            if(banner) banner.style.display = 'none'; 
+            localStorage.setItem('cookieAccepted', 'true'); 
+        });
+    }
+    if(btnRefuse) {
+        btnRefuse.addEventListener('click', () => { 
+            if(banner) banner.style.display = 'none'; 
+        });
+    }
+}
+
+function initLavaLampInteraction() {
+    const container = document.querySelector('.lamp-container');
+    const blob = document.getElementById('cursor-blob');
+    if (!container || !blob) return;
+
+    let currentX = 0, currentY = 0, mouseX = 0, mouseY = 0, isHovering = false;
+
+    container.addEventListener('mousemove', function(e) {
+        isHovering = true;
+        const rect = container.getBoundingClientRect();
+        mouseX = e.clientX - rect.left;
+        mouseY = e.clientY - rect.top;
+    });
+
+    container.addEventListener('mouseleave', function() { isHovering = false; });
+
+    function animate() {
+        if (isHovering) {
+            currentX += (mouseX - currentX) * 0.08;
+            currentY += (mouseY - currentY) * 0.08;
+            blob.style.opacity = "1";
+            blob.style.transform = `translate(${currentX}px, ${currentY}px) translate(-50%, -50%)`;
+        } else {
+            blob.style.opacity = "0";
+        }
+        requestAnimationFrame(animate);
+    }
+    animate();
+}
+
+// -------------------------------------------------------
+// --- FOND : GLOWY BLOBS (Particules Gooey) ---
+// -------------------------------------------------------
+function initGlowyBlobBackground() {
+    
+    // Palette pastel
+    const colors = ['#ffc4d6', '#ffdab9', '#ffe4e1', '#e6e6fa'];
+
+    class Particle {
+        constructor(canvas) {
+            this.canvas = canvas;
+            this.init();
+        }
+
+        init() {
+            // Taille aléatoire pour chaque particule
+            this.radius = Math.random() * 40 + 30;
+            
+            // Position initiale aléatoire
+            this.x = Math.random() * this.canvas.width;
+            this.y = Math.random() * this.canvas.height;
+            
+            // Vitesse et direction aléatoires
+            this.vx = (Math.random() - 0.5) * 1.5; 
+            this.vy = (Math.random() - 0.5) * 1.5;
+            
+            this.color = colors[Math.floor(Math.random() * colors.length)];
+            
+            // Cible pour mouvement erratique (comme dans l'exemple CSS)
+            this.targetX = Math.random() * this.canvas.width;
+            this.targetY = Math.random() * this.canvas.height;
+            this.changeTargetTimer = 0;
+        }
+
+        update(mouseX, mouseY) {
+            // Changement de direction aléatoire de temps en temps
+            this.changeTargetTimer++;
+            if (this.changeTargetTimer > 100 + Math.random() * 100) {
+                this.vx = (Math.random() - 0.5) * 2;
+                this.vy = (Math.random() - 0.5) * 2;
+                this.changeTargetTimer = 0;
+            }
+
+            // Mouvement de base
+            this.x += this.vx;
+            this.y += this.vy;
+
+            // Rebond sur les bords (pour garder les particules à l'écran)
+            if (this.x < 0 || this.x > this.canvas.width) this.vx *= -1;
+            if (this.y < 0 || this.y > this.canvas.height) this.vy *= -1;
+
+            // Interaction Souris : Attraction / Répulsion douce
+            let dx = this.x - mouseX;
+            let dy = this.y - mouseY;
+            let dist = Math.sqrt(dx*dx + dy*dy);
+            
+            // Si la souris est proche, les particules s'écartent un peu (comme si on touchait le liquide)
+            if(dist < 200) {
+                let force = (200 - dist) / 200;
+                this.x += (dx / dist) * force * 3;
+                this.y += (dy / dist) * force * 3;
+            }
+        }
+
+        draw(ctx) {
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+            ctx.fillStyle = this.color;
+            ctx.fill();
+            ctx.closePath();
+        }
+    }
+
+    // Setup Canvas
+    let canvas = document.createElement('canvas');
+    canvas.id = 'blob-canvas'; 
+    document.body.appendChild(canvas);
+    let ctx = canvas.getContext('2d');
+
+    let particles = [];
+    // Nombre de particules (comme les divs dans l'exemple CSS)
+    const numParticles = 25; 
+    
+    // Redimensionnement
+    function resize() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resize);
+    resize();
+
+    // Création des particules
+    for(let i=0; i<numParticles; i++) {
+        particles.push(new Particle(canvas));
+    }
+
+    // Suivi souris lissé
+    let mouse = { x: -1000, y: -1000 };
+    let smoothMouse = { x: -1000, y: -1000 };
+    window.addEventListener('mousemove', e => {
+        mouse.x = e.clientX;
+        mouse.y = e.clientY;
+    });
+
+    // Boucle d'animation
+    function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        // Lissage de la position souris
+        smoothMouse.x += (mouse.x - smoothMouse.x) * 0.1;
+        smoothMouse.y += (mouse.y - smoothMouse.y) * 0.1;
+
+        particles.forEach(p => {
+            p.update(smoothMouse.x, smoothMouse.y);
+            p.draw(ctx);
+        });
+
+        requestAnimationFrame(animate);
+    }
+    animate();
+}
