@@ -9,6 +9,9 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // 2. LANCE LES BULLES DE FOND D'ÉCRAN
     initGlowyBlobBackground();
+
+    // 3. LANCE LE TAMAGOTCHI
+    initTamagotchi();
 });
 
 /* --- GESTION DU CURSEUR MAGIQUE --- */
@@ -170,4 +173,36 @@ function initGlowyBlobBackground() {
         requestAnimationFrame(animate);
     }
     animate();
+}
+
+/* --- LOGIQUE TAMAGOTCHI (LITTLE BUDDY) --- */
+function initTamagotchi() {
+    const petImage = document.getElementById('pet-image');
+    const poopImage = document.getElementById('poop-image'); 
+    
+    if (!petImage || !poopImage) return;
+
+    // 1. GESTION DU NETTOYAGE (CLIC)
+    poopImage.addEventListener('click', function() {
+        poopImage.style.display = 'none'; 
+        console.log("Bravo ! Caca nettoyé.");
+    });
+
+    // 2. LE CYCLE DE LA NATURE (toutes les 45 secondes)
+    setInterval(() => {
+        // Antoaneta commence à faire ses besoins
+        petImage.src = "Image/pooping.gif";
+        console.log("Antoaneta fait ses besoins...");
+
+        // ÉTAPE 1 : Apparition du cadeau à mi-chemin (2500ms = 2,5 secondes)
+        setTimeout(() => {
+             poopImage.style.display = 'block';
+        }, 1700);
+
+        // ÉTAPE 2 : Fin de l'effort (5000ms = 5 secondes)
+        setTimeout(() => {
+            petImage.src = "Image/neutral.gif";
+        }, 5000); 
+
+    }, 45000); 
 }
