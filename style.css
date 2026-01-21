@@ -17,27 +17,25 @@
 
 /* --- BASE ET FOND D'ÉCRAN (SOLUTION ANTI-RIDEAU) --- */
 
-/* 1. On applique le fond sur HTML pour qu'il soit perpétuel */
 html {
-    background: linear-gradient(to bottom, #ffffff, var(--bg-color));
-    height: 100%;
     margin: 0;
     padding: 0;
+    height: 100%;
 }
 
-/* 2. Le body devient transparent et gère la disposition */
 body {
-    background-color: transparent; /* Important : laisse voir le fond du html */
+    background: var(--bg-color); /* Fond rose constant sur tout le body */
     color: var(--text-color);
     font-family: 'Space Grotesk', sans-serif;
     margin: 0;
     padding: 0;
     overflow-x: hidden;
     line-height: 1.5;
-    min-height: 100vh; /* Assure que le contenu prend au moins toute la hauteur */
+    min-height: 100vh;
     display: flex;
-    flex-direction: column; /* Pour pousser le footer en bas */
+    flex-direction: column;
     cursor: var(--cursor-wand);
+    position: relative; /* Important pour le z-index du canvas */
 }
 
 body.is-clicking { cursor: var(--cursor-sparkle) !important; }
@@ -59,6 +57,7 @@ nav {
     border-radius: 50px;
     border: 1px solid var(--sunset-pink);
     box-shadow: 0 4px 15px rgba(255, 196, 214, 0.3);
+    relative: relative; /* Pour passer au-dessus du canvas */
 }
 
 nav a {
@@ -75,7 +74,12 @@ nav a {
 nav a:hover { background-color: var(--sunset-pink); color: white; }
 
 /* --- HEADER --- */
-header { padding: 8rem 2rem 4rem 2rem; text-align: center; }
+header { 
+    padding: 8rem 2rem 4rem 2rem; 
+    text-align: center; 
+    position: relative; 
+    z-index: 1; 
+}
 h1 {
     font-family: 'Shrikhand', cursive;
     font-size: 6rem;
@@ -99,6 +103,8 @@ h1 {
     margin: auto; 
     padding: 4rem 2rem; 
     flex: 1; /* Pousse le footer vers le bas */
+    position: relative;
+    z-index: 1;
 }
 .section-title { font-family: 'Shrikhand', cursive; font-size: 3rem; text-align: center; margin-bottom: 3rem; color: var(--sunset-accent); }
 
@@ -185,13 +191,15 @@ footer {
     margin-top: 150px; /* Marge pour décoller le footer */
     position: relative;
     z-index: 10;
+    background-color: white; /* Fond blanc pour le footer */
+    padding-top: 0; /* Assure que le fond blanc commence en haut du footer */
 }
 
 .lamp-container {
     position: relative; 
     width: 100%; 
     height: 350px; 
-    background-color: transparent; /* Fond transparent */
+    background-color: white; /* Fond blanc pour la lampe à lave */
     overflow: hidden; 
     display: flex; 
     align-items: center; 
@@ -208,12 +216,34 @@ footer {
 
 /* Les Bulles du footer */
 .bubble { border-radius: 50%; position: absolute; background: var(--sunset-pink); opacity: 1; }
-.b1 { width: 140px; height: 140px; left: 20%; background: var(--sunset-orange); animation: moveBlob 8s infinite alternate; bottom: -20px; }
-.b2 { width: 100px; height: 100px; left: 50%; background: var(--sunset-pink); animation: moveBlob 10s infinite alternate-reverse; bottom: -10px; }
-.b3 { width: 160px; height: 160px; left: 75%; background: var(--sunset-orange); animation: moveBlob 12s infinite alternate; bottom: -30px; }
-.b4 { width: 90px; height: 90px; left: 35%; background: var(--sunset-pink); animation: moveBlob 9s infinite alternate-reverse; bottom: 0px; }
+.b1 { width: 140px; height: 140px; left: 20%; background: var(--sunset-orange); animation: moveBlob1 8s ease-in-out infinite alternate; bottom: -20px; }
+.b2 { width: 100px; height: 100px; left: 50%; background: var(--sunset-pink); animation: moveBlob2 10s ease-in-out infinite alternate-reverse; bottom: -10px; }
+.b3 { width: 160px; height: 160px; left: 75%; background: var(--sunset-orange); animation: moveBlob3 12s ease-in-out infinite alternate; bottom: -30px; }
+.b4 { width: 90px; height: 90px; left: 35%; background: var(--sunset-pink); animation: moveBlob4 9s ease-in-out infinite alternate-reverse; bottom: 0px; }
 
-@keyframes moveBlob { from { transform: translate(0, 0) scale(1); } to { transform: translate(15px, -60px) scale(1.1); } }
+@keyframes moveBlob1 { 
+    0% { transform: translate(0, 0) scale(1); } 
+    50% { transform: translate(20px, -80px) scale(1.15); }
+    100% { transform: translate(-10px, -120px) scale(1.05); } 
+}
+
+@keyframes moveBlob2 { 
+    0% { transform: translate(0, 0) scale(1); } 
+    50% { transform: translate(-25px, -100px) scale(1.2); }
+    100% { transform: translate(15px, -90px) scale(1.1); } 
+}
+
+@keyframes moveBlob3 { 
+    0% { transform: translate(0, 0) scale(1); } 
+    50% { transform: translate(10px, -110px) scale(1.08); }
+    100% { transform: translate(-20px, -95px) scale(1.15); } 
+}
+
+@keyframes moveBlob4 { 
+    0% { transform: translate(0, 0) scale(1); } 
+    50% { transform: translate(-15px, -85px) scale(1.12); }
+    100% { transform: translate(25px, -105px) scale(1.05); } 
+}
 
 .cursor-blob {
     width: 130px; height: 130px; background: var(--sunset-accent);
@@ -247,6 +277,21 @@ footer {
 .cookie-btn-secondary { background: transparent; border: 1px solid var(--text-color); color: var(--text-color); padding: 0.5rem 1rem; border-radius: 50px; cursor: pointer; font-weight: bold; }
 .cookie-btn-secondary:hover { background: var(--bg-color); }
 
+/* --- CANVAS DU FOND D'ÉCRAN (EFFET LAMPE À LAVE) --- */
+canvas#blob-canvas {
+    position: fixed; 
+    top: 0; 
+    left: 0; 
+    width: 100vw; 
+    height: 100vh; 
+    z-index: 0; 
+    touch-action: none; 
+    pointer-events: none;
+    filter: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='goo-strong'%3E%3CfeGaussianBlur in='SourceGraphic' stdDeviation='15' result='blur' /%3E%3CfeColorMatrix in='blur' mode='matrix' values='1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 25 -9' result='goo' /%3E%3CfeComposite in='SourceGraphic' in2='goo' operator='atop'/%3E%3C/filter%3E%3C/svg%3E#goo-strong");
+    opacity: 0.9;
+    mix-blend-mode: multiply; /* Permet de bien mélanger avec le fond rose */
+}
+
 /* --- RESPONSIVE --- */
 @media (max-width: 768px) {
     h1 { font-size: 3.5rem; }
@@ -262,12 +307,4 @@ footer {
     .project-icon { margin-bottom: 10px; }
     .project-tags { padding: 0 20px 20px 20px; }
     .project-details ul { padding: 20px 20px 20px 40px; }
-}
-
-/* Canvas du fond d'écran */
-canvas#blob-canvas {
-    position: fixed; top: 0; left: 0; width: 100%; height: 100vh; z-index: -1; 
-    touch-action: none; pointer-events: none;
-    filter: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='goo-strong'%3E%3CfeGaussianBlur in='SourceGraphic' stdDeviation='15' result='blur' /%3E%3CfeColorMatrix in='blur' mode='matrix' values='1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 25 -9' result='goo' /%3E%3CfeComposite in='SourceGraphic' in2='goo' operator='atop'/%3E%3C/filter%3E%3C/svg%3E#goo-strong");
-    opacity: 0.8;
 }
