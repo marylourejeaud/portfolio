@@ -26,7 +26,7 @@ html {
 body {
     background: var(--bg-color); /* Fond rose constant sur tout le body */
     color: var(--text-color);
-    font-family: 'Space Grotesk', sans-serif;
+    font-family: 'Merriweather', sans-serif;
     margin: 0;
     padding: 0;
     overflow-x: hidden;
@@ -63,7 +63,7 @@ nav {
 nav a {
     color: var(--text-color);
     text-decoration: none;
-    font-family: 'Space Grotesk', sans-serif;
+    font-family: 'Merriweather', sans-serif;
     font-weight: bold;
     font-size: 1.1rem;
     text-transform: uppercase;
@@ -81,7 +81,7 @@ header {
     z-index: 1; 
 }
 h1 {
-    font-family: 'Shrikhand', cursive;
+    font-family: 'Alice', cursive;
     font-size: 6rem;
     margin: 0;
     background: linear-gradient(45deg, var(--sunset-orange), var(--sunset-accent));
@@ -106,7 +106,7 @@ h1 {
     position: relative;
     z-index: 1;
 }
-.section-title { font-family: 'Shrikhand', cursive; font-size: 3rem; text-align: center; margin-bottom: 3rem; color: var(--sunset-accent); }
+.section-title { font-family: 'Alice', cursive; font-size: 3rem; text-align: center; margin-bottom: 3rem; color: var(--sunset-accent); }
 
 .card, .list-item {
     background: white; padding: 2rem; border-radius: var(--border-radius-ui);
@@ -117,7 +117,7 @@ h1 {
 }
 .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
 .card:hover, .list-item:hover { transform: translateY(-5px); box-shadow: 0 15px 35px rgba(255, 154, 139, 0.2); border-color: var(--sunset-pink); }
-.card h3, .list-item h3 { color: var(--sunset-accent); font-family: 'Shrikhand', cursive; margin-top: 0; font-size: 1.8rem; }
+.card h3, .list-item h3 { color: var(--sunset-accent); font-family: 'Alice', serif; margin-top: 0; font-size: 1.8rem; }
 .card ul li { margin-bottom: 8px; }
 
 /* --- TIMELINE (PAGE EXPERIENCE) --- */
@@ -170,7 +170,7 @@ h1 {
 .project-header { display: flex; align-items: center; padding: 25px 30px; background: linear-gradient(to right, #ffffff, #fffdfd); }
 .project-icon { font-size: 2.5rem; margin-right: 20px; filter: drop-shadow(2px 2px 0px rgba(0,0,0,0.1)); }
 .project-title-group { flex-grow: 1; }
-.project-card h3 { margin: 0; font-size: 1.5rem; color: var(--text-color); font-family: 'Shrikhand', cursive; letter-spacing: 0.5px; }
+.project-card h3 { margin: 0; font-size: 1.5rem; color: var(--text-color); font-family: 'Alice', cursive; letter-spacing: 0.5px; }
 .project-subtitle { margin: 5px 0 0 0; font-size: 1rem; color: #666; font-weight: 500; }
 .toggle-icon { font-size: 2rem; color: var(--sunset-accent); font-weight: bold; transition: transform 0.3s ease; }
 
@@ -259,7 +259,7 @@ footer {
     margin-top: 50px; 
 }
 .footer-content p { font-weight: bold; font-size: 1.2rem; color: var(--text-color); }
-.social-links a { pointer-events: auto; color: var(--sunset-accent); font-family: 'Shrikhand', cursive; font-size: 1.8rem; text-decoration: none; margin: 0 10px; }
+.social-links a { pointer-events: auto; color: var(--sunset-accent); font-family: 'Alice', cursive; font-size: 1.8rem; text-decoration: none; margin: 0 10px; }
 .social-links a:hover { color: var(--sunset-orange); }
 
 /* Cookie Banner */
@@ -272,7 +272,7 @@ footer {
 }
 .cookie-banner p { margin: 0; font-size: 0.95rem; color: var(--text-color); }
 .cookie-buttons { display: flex; gap: 10px; }
-.cookie-btn { background: var(--sunset-orange); color: var(--text-color); border: none; padding: 0.5rem 1.5rem; border-radius: 50px; cursor: pointer; font-family: 'Shrikhand', cursive; font-size: 1rem; transition: 0.2s; }
+.cookie-btn { background: var(--sunset-orange); color: var(--text-color); border: none; padding: 0.5rem 1.5rem; border-radius: 50px; cursor: pointer; font-family: 'Alice', cursive; font-size: 1rem; transition: 0.2s; }
 .cookie-btn:hover { transform: scale(1.05); background: var(--sunset-pink); }
 .cookie-btn-secondary { background: transparent; border: 1px solid var(--text-color); color: var(--text-color); padding: 0.5rem 1rem; border-radius: 50px; cursor: pointer; font-weight: bold; }
 .cookie-btn-secondary:hover { background: var(--bg-color); }
@@ -307,4 +307,40 @@ canvas#blob-canvas {
     .project-icon { margin-bottom: 10px; }
     .project-tags { padding: 0 20px 20px 20px; }
     .project-details ul { padding: 20px 20px 20px 40px; }
+}
+/* ================= STYLE DU PORTRAIT ACCUEIL ================= */
+
+.profile-container {
+    margin: 2rem auto 1rem auto; /* Espace autour */
+    width: fit-content; /* Le conteneur s'adapte à la largeur de l'image */
+    text-align: center; /* Centre le contenu */
+}
+
+.profile-image {
+    /* --- TAILLE FORCÉE --- */
+    width: 500px;
+    height: 666px;
+    
+    /* IMPORTANT : Coupe l'image proprement pour remplir le rectangle sans l'écraser */
+    /*object-fit: cover; 
+
+    /* --- STYLE --- */
+    /* On utilise l'arrondi standard du site */
+    /*border-radius: var(--border-radius-ui); 
+    
+    border: 4px solid var(--sunset-accent);
+    box-shadow: 0 10px 30px rgba(255, 154, 139, 0.3);
+    
+    /* Centrage technique */
+    display: block;
+    margin: 0 auto;
+}
+
+/* --- ADAPTATION MOBILE (Indispensable pour une image de cette taille) --- */
+@media (max-width: 600px) {
+    .profile-image {
+        width: 100%;       /* Sur mobile, elle prend toute la largeur */
+        height: auto;      /* La hauteur se calcule toute seule */
+        max-width: 350px;  /* On limite pour ne pas qu'elle soit géante */
+    }
 }
