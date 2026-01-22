@@ -182,47 +182,44 @@ function initTamagotchi() {
     const eatingAppleAnim = document.getElementById('eating-apple'); 
     const btnFeed = document.getElementById('btn-feed');
     const btnBrush = document.getElementById('btn-brush');
+    const btnPlay = document.getElementById('btn-play'); // 1. NOUVEAU : Bouton Balle
     
-    if (!petImage || !poopImage || !btnFeed || !btnBrush) return;
+    // On vérifie que tous les boutons existent
+    if (!petImage || !poopImage || !btnFeed || !btnBrush || !btnPlay) return;
 
     // VARIABLES GLOBALES
     let feedCount = 0;       
-    let resetTimer = null;    // Pour l'indigestion
-    let actionTimeout = null; // Pour les animations (manger/brosser)
-    let idleTimer = null;     // NOUVEAU : Le chrono du sommeil
-    let sleepTimeout = null;  // NOUVEAU : La transition s'endormir -> dormir
+    let resetTimer = null;    
+    let actionTimeout = null; 
+    let idleTimer = null;     
+    let sleepTimeout = null;  
 
     // --- FONCTION : LANCER LE SOMMEIL ---
     function startIdleTimer() {
-        // On nettoie le timer précédent pour éviter les doublons
         if (idleTimer) clearTimeout(idleTimer);
 
-        // On lance le compte à rebours de 20 secondes
+        // On lance le compte à rebours de 15 secondes (défini dans ton code précédent)
         idleTimer = setTimeout(() => {
-            // Sécurité : Si elle est occupée (mange, vomit, brosse, caca), on attend
+            // Sécurité : On attend si elle est occupée
             if (petImage.src.includes("eating") || 
                 petImage.src.includes("vomiting") || 
                 petImage.src.includes("brushing") ||
+                petImage.src.includes("playing") || // Ajout : Pas de dodo en jouant
                 petImage.src.includes("pooping")) {
-                startIdleTimer(); // On relance le timer pour plus tard
+                startIdleTimer(); 
                 return;
             }
 
             console.log("Antoaneta s'endort...");
-            
-            // Étape 1 : Elle commence à s'endormir
             petImage.src = "Image/falling_asleep.gif";
 
-            // Étape 2 : Après 4 secondes, elle dort pour de bon
-            // (Si ton GIF falling_asleep dure plus ou moins longtemps, change 4000)
             sleepTimeout = setTimeout(() => {
-                // On vérifie qu'on ne l'a pas réveillée entre temps
                 if (petImage.src.includes("falling_asleep.gif")) {
                     petImage.src = "Image/sleeping.gif";
                 }
             }, 4000); 
 
-        }, 15000); // 20 secondes d'inactivité
+        }, 15000); 
     }
 
     // --- FONCTION : RÉVEIL (INTERACTION) ---
@@ -233,35 +230,41 @@ function initTamagotchi() {
     // On lance le timer dès le début
     startIdleTimer();
 
-// --- NOUVEAU : CLIQUER SUR ANTOANETA (RÉACTION "MAD" SI ELLE DORT) ---
+    // --- CLIQUER SUR ANTOANETA (RÉACTION "MAD" SI ELLE DORT) ---
     petImage.addEventListener('click', function() {
-        // On vérifie si elle est en train de dormir ou de s'endormir
         if (petImage.src.includes("sleeping") || petImage.src.includes("falling_asleep")) {
             console.log("Pas contente !");
-            
-            // 1. Elle se réveille de mauvaise humeur
             petImage.src = "Image/mad.gif";
-            
-            // 2. On relance le timer d'inactivité global (elle est réveillée)
             wakeUpInteraction();
-
-            // 3. IMPORTANT : Si elle était en transition "falling_asleep", 
-            // on annule le passage prévu vers "sleeping" pour ne pas couper sa colère.
+            
             if (sleepTimeout) clearTimeout(sleepTimeout);
-
-            // 4. On nettoie les autres timers d'action potentiels
             if (actionTimeout) clearTimeout(actionTimeout);
 
-            // 5. Retour à la normale après 3 secondes (durée de la colère)
             actionTimeout = setTimeout(() => {
                 petImage.src = "Image/neutral.gif";
-            }, 3000); // Tu peux changer 3000 si ton GIF mad est plus long ou court
+            }, 3000); 
         }
     });
 
-    // --- ACTION 1 : BROSSER ---
+    // --- 2. NOUVELLE ACTION : JOUER (BALLE) ---
+    btnPlay.addEventListener('click', function() {
+        wakeUpInteraction(); // Ça la réveille
+        console.log("On joue !");
+
+        petImage.src = "Image/playing.gif";
+        eatingAppleAnim.style.display = 'none'; // On cache la pomme si elle est là
+
+        if (actionTimeout) clearTimeout(actionTimeout);
+
+        // Retour au calme après 4 secondes
+        actionTimeout = setTimeout(() => {
+            petImage.src = "Image/neutral.gif";
+        }, 4000);
+    });
+
+    // --- ACTION : BROSSER ---
     btnBrush.addEventListener('click', function() {
-        wakeUpInteraction(); // Ça la réveille et reset le timer
+        wakeUpInteraction(); 
         console.log("Câlin !");
         
         petImage.src = "Image/brushing.gif";
@@ -277,15 +280,13 @@ function initTamagotchi() {
         }, 3000); 
     });
 
-    // --- ACTION 2 : NOURRIR ---
+    // --- ACTION : NOURRIR ---
     btnFeed.addEventListener('click', function() {
-        wakeUpInteraction(); // Ça la réveille et reset le timer
+        wakeUpInteraction(); 
         feedCount++;
 
         if (feedCount === 1) {
-            resetTimer = setTimeout(() => {
-                feedCount = 0;
-            }, 10000); 
+            resetTimer = setTimeout(() => { feedCount = 0; }, 10000); 
         }
 
         if (actionTimeout) clearTimeout(actionTimeout);
@@ -314,20 +315,21 @@ function initTamagotchi() {
         }
     });
 
-    // --- ACTION 3 : NETTOYER LE CACA ---
+    // --- ACTION : NETTOYER LE CACA ---
     poopImage.addEventListener('click', function() {
-                
+        // NOTE : On n'appelle PAS wakeUpInteraction() ici.
+        // Nettoyer ne la réveille pas et ne reset pas le timer de sommeil.
         poopImage.style.display = 'none'; 
         console.log("Propre !");
     });
 
     // --- CYCLE AUTOMATIQUE (CACA) ---
     setInterval(() => {
-        // Pas de caca si elle dort ou est occupée
         if (petImage.src.includes("eating") || 
             petImage.src.includes("vomiting") || 
             petImage.src.includes("loving") ||
             petImage.src.includes("brushing") ||
+            petImage.src.includes("playing") || 
             petImage.src.includes("falling_asleep") || 
             petImage.src.includes("sleeping")) return;
 
@@ -335,7 +337,6 @@ function initTamagotchi() {
         
         setTimeout(() => { poopImage.style.display = 'block'; }, 2500);
         setTimeout(() => { 
-            // Si elle ne dort pas, elle revient à neutral
             if (!petImage.src.includes("sleeping")) {
                 petImage.src = "Image/neutral.gif"; 
             }
