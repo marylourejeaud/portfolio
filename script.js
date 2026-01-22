@@ -178,31 +178,45 @@ function initGlowyBlobBackground() {
 /* --- LOGIQUE TAMAGOTCHI (LITTLE BUDDY) --- */
 function initTamagotchi() {
     const petImage = document.getElementById('pet-image');
-    const poopImage = document.getElementById('poop-image'); 
+    const poopImage = document.getElementById('poop-image');
+    const eatingAppleAnim = document.getElementById('eating-apple'); // L'animation
+    const btnFeed = document.getElementById('btn-feed');             // Le bouton
     
-    if (!petImage || !poopImage) return;
+    if (!petImage || !poopImage || !btnFeed) return;
 
-    // 1. GESTION DU NETTOYAGE (CLIC)
+    // --- ACTION : NOURRIR ---
+    btnFeed.addEventListener('click', function() {
+        // 1. Antoaneta se met à manger
+        petImage.src = "Image/eating.gif";
+        
+        // 2. L'animation de la pomme apparaît DEVANT
+        eatingAppleAnim.style.display = 'block';
+
+        console.log("Miam miam !");
+
+        // 3. Après 4 secondes (durée estimée du repas), retour à la normale
+        setTimeout(() => {
+            petImage.src = "Image/neutral.gif";
+            eatingAppleAnim.style.display = 'none'; // On cache la pomme
+        }, 4000); // Ajuste 4000 si ton GIF est plus long ou plus court
+    });
+
+    // --- ACTION : NETTOYER ---
     poopImage.addEventListener('click', function() {
         poopImage.style.display = 'none'; 
         console.log("Bravo ! Caca nettoyé.");
     });
 
-    // 2. LE CYCLE DE LA NATURE (toutes les 45 secondes)
+    // --- CYCLE DE VIE (Caca automatique) ---
     setInterval(() => {
-        // Antoaneta commence à faire ses besoins
+        // Si elle est déjà en train de manger, on ne l'interrompt pas pour le caca !
+        // (Petite sécurité pour éviter les bugs visuels)
+        if (petImage.src.includes("eating.gif")) return;
+
         petImage.src = "Image/pooping.gif";
-        console.log("Antoaneta fait ses besoins...");
+        console.log("Nature calls...");
 
-        // ÉTAPE 1 : Apparition du cadeau à mi-chemin (2500ms = 2,5 secondes)
-        setTimeout(() => {
-             poopImage.style.display = 'block';
-        }, 1700);
-
-        // ÉTAPE 2 : Fin de l'effort (5000ms = 5 secondes)
-        setTimeout(() => {
-            petImage.src = "Image/neutral.gif";
-        }, 5000); 
-
-    }, 45000); 
+        setTimeout(() => { poopImage.style.display = 'block'; }, 1700);
+        setTimeout(() => { petImage.src = "Image/neutral.gif"; }, 5000); 
+    }, 17000); 
 }
