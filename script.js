@@ -92,8 +92,8 @@ function initGlowyBlobBackground() {
             this.radius = Math.random() * 40 + 30;
             this.x = Math.random() * this.canvas.width;
             this.y = Math.random() * this.canvas.height;
-            this.vx = (Math.random() - 0.5) * 1.5; 
-            this.vy = (Math.random() - 0.5) * 1.5;
+            this.vx = (Math.random() - 0.5) * 0.75; 
+            this.vy = (Math.random() - 0.5) * 0.75;
             this.color = colors[Math.floor(Math.random() * colors.length)];
             this.changeTargetTimer = 0;
         }
@@ -101,8 +101,8 @@ function initGlowyBlobBackground() {
         update(mouseX, mouseY) {
             this.changeTargetTimer++;
             if (this.changeTargetTimer > 100 + Math.random() * 100) {
-                this.vx = (Math.random() - 0.5) * 2;
-                this.vy = (Math.random() - 0.5) * 2;
+                this.vx = (Math.random() - 0.5) * 1.0;
+                this.vy = (Math.random() - 0.5) * 1.0;
                 this.changeTargetTimer = 0;
             }
 
@@ -181,55 +181,115 @@ function initTamagotchi() {
     const poopImage = document.getElementById('poop-image');
     const eatingAppleAnim = document.getElementById('eating-apple'); 
     const btnFeed = document.getElementById('btn-feed');
-    const btnBrush = document.getElementById('btn-brush'); // NOUVEAU
+    const btnBrush = document.getElementById('btn-brush');
     
     if (!petImage || !poopImage || !btnFeed || !btnBrush) return;
 
-    // VARIABLES
+    // VARIABLES GLOBALES
     let feedCount = 0;       
-    let resetTimer = null;   
-    let actionTimeout = null; 
+    let resetTimer = null;    // Pour l'indigestion
+    let actionTimeout = null; // Pour les animations (manger/brosser)
+    let idleTimer = null;     // NOUVEAU : Le chrono du sommeil
+    let sleepTimeout = null;  // NOUVEAU : La transition s'endormir -> dormir
 
-    // --- ACTION 1 : BROSSER (CÂLIN) ---
-// --- ACTION 1 : BROSSER (Séquence : Brushing -> Loving -> Neutral) ---
-    btnBrush.addEventListener('click', function() {
-        console.log("Câlin !");
-        
-        // 1. On commence par l'action de brosser
-        petImage.src = "Image/brushing.gif";
+    // --- FONCTION : LANCER LE SOMMEIL ---
+    function startIdleTimer() {
+        // On nettoie le timer précédent pour éviter les doublons
+        if (idleTimer) clearTimeout(idleTimer);
 
-        // Si une animation de pomme était en cours, on la cache
-        eatingAppleAnim.style.display = 'none';
-        
-        // On nettoie les timers précédents
-        if (actionTimeout) clearTimeout(actionTimeout);
+        // On lance le compte à rebours de 20 secondes
+        idleTimer = setTimeout(() => {
+            // Sécurité : Si elle est occupée (mange, vomit, brosse, caca), on attend
+            if (petImage.src.includes("eating") || 
+                petImage.src.includes("vomiting") || 
+                petImage.src.includes("brushing") ||
+                petImage.src.includes("pooping")) {
+                startIdleTimer(); // On relance le timer pour plus tard
+                return;
+            }
 
-        // 2. Après 3 secondes de brossage, on passe à l'émotion (Loving)
-        actionTimeout = setTimeout(() => {
-            petImage.src = "Image/loving.gif";
+            console.log("Antoaneta s'endort...");
             
-            // 3. Après 3 secondes d'amour, retour à la normale
+            // Étape 1 : Elle commence à s'endormir
+            petImage.src = "Image/falling_asleep.gif";
+
+            // Étape 2 : Après 4 secondes, elle dort pour de bon
+            // (Si ton GIF falling_asleep dure plus ou moins longtemps, change 4000)
+            sleepTimeout = setTimeout(() => {
+                // On vérifie qu'on ne l'a pas réveillée entre temps
+                if (petImage.src.includes("falling_asleep.gif")) {
+                    petImage.src = "Image/sleeping.gif";
+                }
+            }, 4000); 
+
+        }, 15000); // 20 secondes d'inactivité
+    }
+
+    // --- FONCTION : RÉVEIL (INTERACTION) ---
+    function wakeUpInteraction() {
+        startIdleTimer(); // On remet le chrono à zéro car il y a eu une action
+    }
+
+    // On lance le timer dès le début
+    startIdleTimer();
+
+// --- NOUVEAU : CLIQUER SUR ANTOANETA (RÉACTION "MAD" SI ELLE DORT) ---
+    petImage.addEventListener('click', function() {
+        // On vérifie si elle est en train de dormir ou de s'endormir
+        if (petImage.src.includes("sleeping") || petImage.src.includes("falling_asleep")) {
+            console.log("Pas contente !");
+            
+            // 1. Elle se réveille de mauvaise humeur
+            petImage.src = "Image/mad.gif";
+            
+            // 2. On relance le timer d'inactivité global (elle est réveillée)
+            wakeUpInteraction();
+
+            // 3. IMPORTANT : Si elle était en transition "falling_asleep", 
+            // on annule le passage prévu vers "sleeping" pour ne pas couper sa colère.
+            if (sleepTimeout) clearTimeout(sleepTimeout);
+
+            // 4. On nettoie les autres timers d'action potentiels
+            if (actionTimeout) clearTimeout(actionTimeout);
+
+            // 5. Retour à la normale après 3 secondes (durée de la colère)
             actionTimeout = setTimeout(() => {
                 petImage.src = "Image/neutral.gif";
-            }, 3000); // Durée de l'amour
-
-        }, 3000); // Durée du brossage
+            }, 3000); // Tu peux changer 3000 si ton GIF mad est plus long ou court
+        }
     });
 
-    // --- ACTION 2 : NOURRIR (ET VOMIR) ---
+    // --- ACTION 1 : BROSSER ---
+    btnBrush.addEventListener('click', function() {
+        wakeUpInteraction(); // Ça la réveille et reset le timer
+        console.log("Câlin !");
+        
+        petImage.src = "Image/brushing.gif";
+        eatingAppleAnim.style.display = 'none';
+        
+        if (actionTimeout) clearTimeout(actionTimeout);
+
+        actionTimeout = setTimeout(() => {
+            petImage.src = "Image/loving.gif";
+            actionTimeout = setTimeout(() => {
+                petImage.src = "Image/neutral.gif";
+            }, 3000); 
+        }, 3000); 
+    });
+
+    // --- ACTION 2 : NOURRIR ---
     btnFeed.addEventListener('click', function() {
+        wakeUpInteraction(); // Ça la réveille et reset le timer
         feedCount++;
 
         if (feedCount === 1) {
             resetTimer = setTimeout(() => {
                 feedCount = 0;
-                console.log("Compteur d'appétit remis à zéro");
             }, 10000); 
         }
 
         if (actionTimeout) clearTimeout(actionTimeout);
 
-        // CAS : INDIGESTION (3 clics)
         if (feedCount >= 3) {
             console.log("Trop mangé !");
             eatingAppleAnim.style.display = 'none';
@@ -242,9 +302,9 @@ function initTamagotchi() {
             }, 4000);
 
         } else {
-            // CAS : REPAS NORMAL
             console.log("Miam !");
             petImage.src = "Image/eating.gif";
+            eatingAppleAnim.src = "Image/eating_apple.gif?t=" + new Date().getTime();
             eatingAppleAnim.style.display = 'block'; 
 
             actionTimeout = setTimeout(() => {
@@ -256,20 +316,29 @@ function initTamagotchi() {
 
     // --- ACTION 3 : NETTOYER LE CACA ---
     poopImage.addEventListener('click', function() {
+                
         poopImage.style.display = 'none'; 
         console.log("Propre !");
     });
 
-    // --- CYCLE AUTOMATIQUE ---
+    // --- CYCLE AUTOMATIQUE (CACA) ---
     setInterval(() => {
-        // Pas de caca si elle mange, vomit ou reçoit de l'amour
-        if (petImage.src.includes("eating.gif") || 
-            petImage.src.includes("vomiting.gif") || 
-            petImage.src.includes("loving.gif")) return;
+        // Pas de caca si elle dort ou est occupée
+        if (petImage.src.includes("eating") || 
+            petImage.src.includes("vomiting") || 
+            petImage.src.includes("loving") ||
+            petImage.src.includes("brushing") ||
+            petImage.src.includes("falling_asleep") || 
+            petImage.src.includes("sleeping")) return;
 
         petImage.src = "Image/pooping.gif";
         
         setTimeout(() => { poopImage.style.display = 'block'; }, 2500);
-        setTimeout(() => { petImage.src = "Image/neutral.gif"; }, 5000); 
-    }, 45000); 
+        setTimeout(() => { 
+            // Si elle ne dort pas, elle revient à neutral
+            if (!petImage.src.includes("sleeping")) {
+                petImage.src = "Image/neutral.gif"; 
+            }
+        }, 5000); 
+    }, 17000); 
 }
