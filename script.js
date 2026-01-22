@@ -179,44 +179,97 @@ function initGlowyBlobBackground() {
 function initTamagotchi() {
     const petImage = document.getElementById('pet-image');
     const poopImage = document.getElementById('poop-image');
-    const eatingAppleAnim = document.getElementById('eating-apple'); // L'animation
-    const btnFeed = document.getElementById('btn-feed');             // Le bouton
+    const eatingAppleAnim = document.getElementById('eating-apple'); 
+    const btnFeed = document.getElementById('btn-feed');
+    const btnBrush = document.getElementById('btn-brush'); // NOUVEAU
     
-    if (!petImage || !poopImage || !btnFeed) return;
+    if (!petImage || !poopImage || !btnFeed || !btnBrush) return;
 
-    // --- ACTION : NOURRIR ---
-    btnFeed.addEventListener('click', function() {
-        // 1. Antoaneta se met à manger
-        petImage.src = "Image/eating.gif";
+    // VARIABLES
+    let feedCount = 0;       
+    let resetTimer = null;   
+    let actionTimeout = null; 
+
+    // --- ACTION 1 : BROSSER (CÂLIN) ---
+// --- ACTION 1 : BROSSER (Séquence : Brushing -> Loving -> Neutral) ---
+    btnBrush.addEventListener('click', function() {
+        console.log("Câlin !");
         
-        // 2. L'animation de la pomme apparaît DEVANT
-        eatingAppleAnim.style.display = 'block';
+        // 1. On commence par l'action de brosser
+        petImage.src = "Image/brushing.gif";
 
-        console.log("Miam miam !");
+        // Si une animation de pomme était en cours, on la cache
+        eatingAppleAnim.style.display = 'none';
+        
+        // On nettoie les timers précédents
+        if (actionTimeout) clearTimeout(actionTimeout);
 
-        // 3. Après 4 secondes (durée estimée du repas), retour à la normale
-        setTimeout(() => {
-            petImage.src = "Image/neutral.gif";
-            eatingAppleAnim.style.display = 'none'; // On cache la pomme
-        }, 4000); // Ajuste 4000 si ton GIF est plus long ou plus court
+        // 2. Après 3 secondes de brossage, on passe à l'émotion (Loving)
+        actionTimeout = setTimeout(() => {
+            petImage.src = "Image/loving.gif";
+            
+            // 3. Après 3 secondes d'amour, retour à la normale
+            actionTimeout = setTimeout(() => {
+                petImage.src = "Image/neutral.gif";
+            }, 3000); // Durée de l'amour
+
+        }, 3000); // Durée du brossage
     });
 
-    // --- ACTION : NETTOYER ---
+    // --- ACTION 2 : NOURRIR (ET VOMIR) ---
+    btnFeed.addEventListener('click', function() {
+        feedCount++;
+
+        if (feedCount === 1) {
+            resetTimer = setTimeout(() => {
+                feedCount = 0;
+                console.log("Compteur d'appétit remis à zéro");
+            }, 10000); 
+        }
+
+        if (actionTimeout) clearTimeout(actionTimeout);
+
+        // CAS : INDIGESTION (3 clics)
+        if (feedCount >= 3) {
+            console.log("Trop mangé !");
+            eatingAppleAnim.style.display = 'none';
+            petImage.src = "Image/vomiting.gif";
+            feedCount = 0;
+            clearTimeout(resetTimer);
+
+            actionTimeout = setTimeout(() => {
+                petImage.src = "Image/neutral.gif";
+            }, 4000);
+
+        } else {
+            // CAS : REPAS NORMAL
+            console.log("Miam !");
+            petImage.src = "Image/eating.gif";
+            eatingAppleAnim.style.display = 'block'; 
+
+            actionTimeout = setTimeout(() => {
+                petImage.src = "Image/neutral.gif";
+                eatingAppleAnim.style.display = 'none';
+            }, 4000);
+        }
+    });
+
+    // --- ACTION 3 : NETTOYER LE CACA ---
     poopImage.addEventListener('click', function() {
         poopImage.style.display = 'none'; 
-        console.log("Bravo ! Caca nettoyé.");
+        console.log("Propre !");
     });
 
-    // --- CYCLE DE VIE (Caca automatique) ---
+    // --- CYCLE AUTOMATIQUE ---
     setInterval(() => {
-        // Si elle est déjà en train de manger, on ne l'interrompt pas pour le caca !
-        // (Petite sécurité pour éviter les bugs visuels)
-        if (petImage.src.includes("eating.gif")) return;
+        // Pas de caca si elle mange, vomit ou reçoit de l'amour
+        if (petImage.src.includes("eating.gif") || 
+            petImage.src.includes("vomiting.gif") || 
+            petImage.src.includes("loving.gif")) return;
 
         petImage.src = "Image/pooping.gif";
-        console.log("Nature calls...");
-
-        setTimeout(() => { poopImage.style.display = 'block'; }, 1700);
+        
+        setTimeout(() => { poopImage.style.display = 'block'; }, 2500);
         setTimeout(() => { petImage.src = "Image/neutral.gif"; }, 5000); 
-    }, 17000); 
+    }, 45000); 
 }

@@ -439,6 +439,8 @@ canvas#blob-canvas {
     display: flex;
     justify-content: center; /* Centre le bouton horizontalement */
     z-index: 30;        /* S'assure qu'il est cliquable et au-dessus de tout */
+
+    gap: 30px; /* Espace de 30px entre la pomme et la brosse */
 }
 /* Le bouton Pomme (Style strict) */
 .game-btn {
