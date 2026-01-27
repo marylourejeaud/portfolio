@@ -308,32 +308,74 @@ canvas#blob-canvas {
     .project-tags { padding: 0 20px 20px 20px; }
     .project-details ul { padding: 20px 20px 20px 40px; }
 }
-/* ================= STYLE DU PORTRAIT ACCUEIL ================= */
+/* ================= STYLE DU PORTRAIT ACCUEIL (BLOB ANIMÉ) ================= */
 
 .profile-container {
-    margin: 2rem auto 1rem auto; /* Espace autour */
-    width: fit-content; /* Le conteneur s'adapte à la largeur de l'image */
-    text-align: center; /* Centre le contenu */
+    margin: 2rem auto 1rem auto;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    overflow: visible; /* Important pour que l'effet hover ne soit pas coupé */
 }
 
-.profile-image {
-    /* --- TAILLE FORCÉE --- */
-    width: 500px;
-    height: 666px;
-    
-    /* IMPORTANT : Coupe l'image proprement pour remplir le rectangle sans l'écraser */
-    /*object-fit: cover; 
+/* Le conteneur SVG global */
+.blob-portrait {
+    width: 500px;  /* Taille de base */
+    height: 500px;
+    max-width: 90vw; /* Adaptation mobile */
+    max-height: 90vw;
+    overflow: visible;
+}
 
-    /* --- STYLE --- */
-    /* On utilise l'arrondi standard du site */
-    /*border-radius: var(--border-radius-ui); 
+/* L'image à l'intérieur du blob */
+.blob-image {
+    transition: transform 0.4s ease-out;
+    transform-origin: center;
+}
+
+
+/* Le texte qui tourne */
+.text-content {
+    font-family: 'Merriweather', sans-serif;
+    font-weight: 700;
+    font-size: 13px; /* J'ai réduit un tout petit peu (14px -> 13px) pour la sécurité */
+    letter-spacing: 3px; /* Espace les lettres pour remplir le cercle proprement */
+    text-transform: uppercase;
+    fill: var(--text-color);
+    transition: fill 0.5s ease;
     
-    border: 4px solid var(--sunset-accent);
-    box-shadow: 0 10px 30px rgba(255, 154, 139, 0.3);
-    
-    /* Centrage technique */
-    display: block;
-    margin: 0 auto;
+    /* L'ANIMATION ROTATIVE CSS */
+    transform-origin: center; /* On définit le centre de rotation */
+    animation: rotateText 20s linear infinite; /* Ça tourne ! */
+}
+
+/* La définition de l'animation */
+@keyframes rotateText {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+
+/* --- EFFETS AU SURVOL (HOVER) --- */
+
+/* Quand on passe sur le SVG, l'image grossit un peu */
+.blob-portrait:hover .blob-image {
+    transform: scale(1.1); /* Zoom léger */
+    /* Note: on ne peut pas facilement bouger le clipPath en CSS standard sans bugs, 
+       donc on zoom l'image à l'intérieur à la place, c'est plus fluide. */
+}
+
+/* Quand on passe sur le SVG, le texte change de couleur */
+.blob-portrait:hover .text-content {
+    fill: var(--sunset-accent); /* Le texte devient corail au survol */
+}
+
+/* --- ADAPTATION MOBILE --- */
+@media (max-width: 600px) {
+    .blob-portrait {
+        width: 350px;
+        height: 350px;
+    }
 }
 
 /* --- ADAPTATION MOBILE (Indispensable pour une image de cette taille) --- */

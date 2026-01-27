@@ -33,15 +33,30 @@
         <a href="projets.html">Projets</a>
         <a href="experience.html">Expérience</a>
         <a href="etudes.html">Études</a>
-        <a href="tamagotchi.html">Little Buddy</a> </nav>
-
+        <a href="tamagotchi.html">Little Buddy</a> 
     </nav>
 
     <div class="container">
         <h2 class="section-title">Parcours Professionnel</h2>
 
         <div class="timeline">
+            
             <div class="timeline-item left">
+                <div class="content">
+                    <h3>Piano Analytics</h3>
+                    <div class="role-title">Consultant Digital Analytics</div>
+                    <span class="date">Janv. 2025 - Aujourd'hui</span>
+                    <p class="location">Bordeaux - France</p>
+                    <ul>
+                        <li><strong>Pilotage de projets d'implémentation :</strong> Accompagnement des clients dans l'installation ou la migration de solutions Analytics (audit de l'existant, prise de besoin, définition et challenge des plans de marquage).</li>
+                        <li><strong>Expertise TMS (Tag Management System) :</strong> Configuration et gestion de balises via des outils comme Google Tag Manager ou Tealium pour centraliser les scripts tiers et optimiser la rapidité des sites web.</li>
+                        <li><strong>Analyse de données & Reporting :</strong> Création de tableaux de bord sur-mesure et réalisation d'analyses produits pour répondre aux objectifs business spécifiques des clients.</li>
+                        <li><strong>Interventions techniques :</strong> Support opérationnel sur la configuration de l'outil et l'intégration du code de tracking.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="timeline-item right">
                 <div class="content">
                     <h3>Groupe Vicard Tonnellerie</h3>
                     <div class="role-title">V.I.E - Responsable des opérations</div>
@@ -54,7 +69,7 @@
                 </div>
             </div>
 
-            <div class="timeline-item right">
+            <div class="timeline-item left">
                 <div class="content">
                     <h3>Kuehne Nagel</h3>
                     <div class="role-title">Commerciale export/import - Vins & Spiritueux</div>
@@ -70,7 +85,7 @@
                 </div>
             </div>
 
-            <div class="timeline-item left">
+            <div class="timeline-item right">
                 <div class="content">
                     <h3>Bolloré Logistics</h3>
                     <div class="role-title">Commerciale Junior - Pharmaceutique</div>
@@ -86,6 +101,43 @@
     </div>
 
     <div id="footer-placeholder"></div>
+    <footer>
+        <div class="lamp-container">
+            <div class="lava-lamp" id="lava-lamp">
+                <div class="bubble b1"></div>
+                <div class="bubble b2"></div>
+                <div class="bubble b3"></div>
+                <div class="bubble b4"></div>
+                <div class="bubble cursor-blob" id="cursor-blob"></div>
+            </div>
+    
+            <div class="footer-content">
+                <p>&copy; 2026 Marylou REJEAUD - Tous droits réservés.</p>
+                <div class="social-links">
+                    <a href="https://www.linkedin.com/in/marylou-rejeaud/" target="_blank">LinkedIn</a>
+                </div>
+            </div>
+        </div>
+    
+        <svg style="visibility: hidden; position: absolute;" width="0" height="0" xmlns="http://www.w3.org/2000/svg" version="1.1">
+            <defs>
+                <filter id="goo">
+                    <feGaussianBlur in="SourceGraphic" stdDeviation="10" result="blur" />    
+                    <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 19 -9" result="goo" />
+                    <feComposite in="SourceGraphic" in2="goo" operator="atop"/>
+                </filter>
+            </defs>
+        </svg>
+    
+        <div id="cookie-banner" class="cookie-banner">
+            <p><strong>Cookies & Data :</strong> J'utilise des cookies anonymes. On y va ?</p>
+            <div class="cookie-buttons">
+                <button id="refuse-cookie" class="cookie-btn-secondary">Non</button>
+                <button id="accept-cookie" class="cookie-btn">Oui, let's go</button>
+            </div>
+        </div>
+    </footer>
+
     <script src="script.js"></script>
 </body>
 </html>
