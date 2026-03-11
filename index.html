@@ -5,6 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Marylou REJEAUD - Data & IA</title>
     
+    <script>
+        window.pdl = window.pdl || {};
+        window.pdl.requireConsent = "v2";
+        window.pdl.consent = {
+            defaultPreset: {
+                PA: "essential",
+            },
+            products: ["PA"]
+        };
+    </script>
+
     <script src="https://code.jquery.com/pep/0.4.3/pep.js"></script>
     <script>
     (function (_config) {
@@ -19,10 +30,10 @@
                     pa.sendEvent('click.navigation', { 'click_chapter1': 'Menu', 'click_label': this.innerText });
                 });
             });
-            console.log('Piano Analytics : Ready');
+            console.log('Piano Analytics : Ready & PDL configured');
         };
         document.head.appendChild(script);
-    })({ site: 648299, collectDomain: "https://fjqqzhr.pa-cd.com", consentDefaultMode: "exempt" });
+    })({ site: 648299, collectDomain: "https://fjqqzhr.pa-cd.com" });
     </script>
 
     <link rel="stylesheet" href="style.css">
