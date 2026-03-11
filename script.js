@@ -26,36 +26,41 @@ document.addEventListener('mouseup', () => {
 /* --- COOKIES (PIANO ANALYTICS PDL v2) --- */
 function initCookieBanner() {
     const banner = document.getElementById('cookie-banner');
-    const btnOptIn = document.getElementById('btn-optin');
-    const btnOptOut = document.getElementById('btn-optout');
-    const btnExempt = document.getElementById('btn-exempt');
+    
+    // On cible tes boutons avec tes ID exacts
+    const btnAccept = document.getElementById('accept-cookie'); 
+    const btnRefuse = document.getElementById('refuse-cookie');
+    // On ajoute un bouton exempt au cas où tu as mis les 3
+    const btnExempt = document.getElementById('btn-exempt'); 
 
-    // On vérifie si l'utilisateur a déjà fait un choix précédemment
+    // Vérifie si le choix a déjà été fait
     if (localStorage.getItem('cookieChoiceMade') === 'true') {
         if(banner) banner.style.display = 'none';
         return;
     }
 
-    // Fonction commune pour gérer le clic, mettre à jour Piano et cacher la bannière
+    // Fonction qui met à jour le mode dans Piano Analytics
     function handleConsent(mode) {
-        // Mise à jour de Piano Analytics via PDL
         if (window.pdl && window.pdl.consent) {
             window.pdl.consent.set({ PA: mode });
             console.log("Piano Analytics : Consentement mis à jour -> " + mode);
         }
         
-        // Cacher la bannière et mémoriser le choix dans le navigateur
         if(banner) banner.style.display = 'none';
         localStorage.setItem('cookieChoiceMade', 'true');
     }
 
-    // Association des boutons aux modes correspondants
-    if(btnOptIn) {
-        btnOptIn.addEventListener('click', () => handleConsent('opt-in'));
+    // On associe "Oui, let's go" à l'Opt-in
+    if(btnAccept) {
+        btnAccept.addEventListener('click', () => handleConsent('opt-in'));
     }
-    if(btnOptOut) {
-        btnOptOut.addEventListener('click', () => handleConsent('opt-out'));
+    
+    // On associe "Non" à l'Opt-out
+    if(btnRefuse) {
+        btnRefuse.addEventListener('click', () => handleConsent('opt-out'));
     }
+    
+    // Pour le bouton Essentiel (si tu l'as ajouté)
     if(btnExempt) {
         btnExempt.addEventListener('click', () => handleConsent('essential'));
     }
@@ -358,3 +363,4 @@ function initTamagotchi() {
         }, 5000); 
     }, 17000); 
 }
+
