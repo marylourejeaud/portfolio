@@ -23,26 +23,41 @@ document.addEventListener('mouseup', () => {
     document.body.classList.remove('is-clicking');
 });
 
-/* --- COOKIES --- */
+/* --- COOKIES (PIANO ANALYTICS PDL v2) --- */
 function initCookieBanner() {
     const banner = document.getElementById('cookie-banner');
-    const btn = document.getElementById('accept-cookie');
-    const btnRefuse = document.getElementById('refuse-cookie');
+    const btnOptIn = document.getElementById('btn-optin');
+    const btnOptOut = document.getElementById('btn-optout');
+    const btnExempt = document.getElementById('btn-exempt');
 
-    if (localStorage.getItem('cookieAccepted') === 'true') {
+    // On vérifie si l'utilisateur a déjà fait un choix précédemment
+    if (localStorage.getItem('cookieChoiceMade') === 'true') {
         if(banner) banner.style.display = 'none';
         return;
     }
-    if(btn) {
-        btn.addEventListener('click', () => { 
-            if(banner) banner.style.display = 'none'; 
-            localStorage.setItem('cookieAccepted', 'true'); 
-        });
+
+    // Fonction commune pour gérer le clic, mettre à jour Piano et cacher la bannière
+    function handleConsent(mode) {
+        // Mise à jour de Piano Analytics via PDL
+        if (window.pdl && window.pdl.consent) {
+            window.pdl.consent.set({ PA: mode });
+            console.log("Piano Analytics : Consentement mis à jour -> " + mode);
+        }
+        
+        // Cacher la bannière et mémoriser le choix dans le navigateur
+        if(banner) banner.style.display = 'none';
+        localStorage.setItem('cookieChoiceMade', 'true');
     }
-    if(btnRefuse) {
-        btnRefuse.addEventListener('click', () => { 
-            if(banner) banner.style.display = 'none'; 
-        });
+
+    // Association des boutons aux modes correspondants
+    if(btnOptIn) {
+        btnOptIn.addEventListener('click', () => handleConsent('opt-in'));
+    }
+    if(btnOptOut) {
+        btnOptOut.addEventListener('click', () => handleConsent('opt-out'));
+    }
+    if(btnExempt) {
+        btnExempt.addEventListener('click', () => handleConsent('essential'));
     }
 }
 
