@@ -3,7 +3,6 @@
 document.addEventListener("DOMContentLoaded", function() {
     
     // 1. Initialise les fonctions du footer
-    initCookieBanner();
     initLavaLampInteraction(); // C'est ça qui fait bouger les bulles du footer
     // initEasterEgg(); // Retiré car tu ne voulais plus l'emoji
 
@@ -22,49 +21,6 @@ document.addEventListener('mousedown', () => {
 document.addEventListener('mouseup', () => {
     document.body.classList.remove('is-clicking');
 });
-
-/* --- COOKIES (PIANO ANALYTICS PDL v2) --- */
-function initCookieBanner() {
-    const banner = document.getElementById('cookie-banner');
-    
-    // On cible tes boutons avec tes ID exacts
-    const btnAccept = document.getElementById('accept-cookie'); 
-    const btnRefuse = document.getElementById('refuse-cookie');
-    // On ajoute un bouton exempt au cas où tu as mis les 3
-    const btnExempt = document.getElementById('btn-exempt'); 
-
-    // Vérifie si le choix a déjà été fait
-    if (localStorage.getItem('cookieChoiceMade') === 'true') {
-        if(banner) banner.style.display = 'none';
-        return;
-    }
-
-    // Fonction qui met à jour le mode dans Piano Analytics
-    function handleConsent(mode) {
-        if (window.pdl && window.pdl.consent) {
-            window.pdl.consent.set({ PA: mode });
-            console.log("Piano Analytics : Consentement mis à jour -> " + mode);
-        }
-        
-        if(banner) banner.style.display = 'none';
-        localStorage.setItem('cookieChoiceMade', 'true');
-    }
-
-    // On associe "Oui, let's go" à l'Opt-in
-    if(btnAccept) {
-        btnAccept.addEventListener('click', () => handleConsent('opt-in'));
-    }
-    
-    // On associe "Non" à l'Opt-out
-    if(btnRefuse) {
-        btnRefuse.addEventListener('click', () => handleConsent('opt-out'));
-    }
-    
-    // Pour le bouton Essentiel (si tu l'as ajouté)
-    if(btnExempt) {
-        btnExempt.addEventListener('click', () => handleConsent('essential'));
-    }
-}
 
 /* --- ANIMATION LAVA LAMP (FOOTER) --- */
 function initLavaLampInteraction() {
