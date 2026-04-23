@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Marylou REJEAUD - Data & IA</title>
+    <title>Marylou REJEAUD</title>
     
     <script>
         window.pdl = window.pdl || {};
@@ -84,108 +84,6 @@
                 <p><strong>Le petit plus :</strong> Je cuisine la meilleure carbonnade flamande !</p>
             </div>
         </div>
-
-    <div style="border: 1px solid #ddd; padding: 20px; max-width: 450px; margin: 40px auto; border-radius: 8px; font-family: sans-serif;">
-    
-    <h3 style="margin-top: 0;">Test E-commerce - Laptop</h3>
-    
-    <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px;">
-        <p><strong>Laptop AX174</strong><br>
-        Marque: Laptop | Prix: 1399.90€</p>
-        
-        <button onclick="triggerProductDisplay()">1. Affichage Produit (product.display)</button>
-        <button onclick="triggerProductPageDisplay()">2. Fiche Produit (product.page_display)</button>
-        <button onclick="triggerAddToCart()">3. Ajouter au panier (+ cart.creation)</button>
-    </div>
-
-    <hr style="border: 1px solid #eee; margin: 20px 0;">
-
-    <h3 style="margin-top: 0;">Gestion du Panier</h3>
-    <div style="display: flex; flex-direction: column; gap: 10px;">
-        <button onclick="triggerRemoveFromCart()">4. Retirer du panier (product.remove_from_cart)</button>
-        <button onclick="triggerPayment()">5. Payer (cart.payment)</button>
-    </div>
-
-</div>
-
-<script>
-    // 1. Événement d'affichage produit
-    function triggerProductDisplay() {
-        pa.sendEvent('product.display', {
-            'product_id' : 'LPTAX174', // mandatory
-            'product' : 'Laptop AX174',
-            'product_brand' : 'Laptop',
-            'product_price' : 1399.9
-        });
-        console.log("Événement envoyé : product.display");
-    }
-
-    // 2. Événement d'affichage de fiche produit
-    function triggerProductPageDisplay() {
-        pa.sendEvent('product.page_display', {
-            'product_id' : 'LPTAX174', // mandatory
-            'product' : 'Laptop AX174',
-            'product_brand' : 'Laptop',
-            'product_price' : 1399.9
-        });
-        console.log("Événement envoyé : product.page_display");
-    }
-
-    // 3. Événement d'ajout au panier + création du panier
-    function triggerAddToCart() {
-        pa.sendEvents([
-            {
-                'name': 'product.add_to_cart',
-                'data': {
-                    'cart_id': 'LAPW221C',
-                    'product_id': 'LPTAX174', // mandatory
-                    'product': 'Laptop AX174',
-                    'product_brand': 'Laptop',
-                    'product_price': 1399.9,
-                    'product_quantity': 1
-                }
-            },
-            {
-                'name': 'cart.creation',
-                'data': {
-                    'cart_id': 'LAPW221C', // mandatory
-                    'cart_turnovertaxincluded': 1399.9,
-                    'cart_quantity': 1,
-                    'cart_nbdistinctproduct': 1
-                }
-            }
-        ]);
-        console.log("Événements envoyés : product.add_to_cart & cart.creation");
-    }
-
-    // 4. Événement de retrait du panier
-    function triggerRemoveFromCart() {
-        pa.sendEvent('product.remove_from_cart', {
-            'cart_id' : 'LAPW221C',
-            'product_id' : 'LPTAX174', // mandatory
-            'product' : 'Laptop AX174',
-            'product_brand' : 'Laptop',
-            'product_price' : 1399.9,
-            'product_quantity' : 1
-        });
-        console.log("Événement envoyé : product.remove_from_cart");
-    }
-
-    // 5. Événement de paiement
-    function triggerPayment() {
-        pa.sendEvent('cart.payment', {
-            'cart_id' : 'LAPW221C',
-            'cart_turnovertaxincluded' : 1399.9,
-            'cart_quantity' : 1,
-            'cart_nbdistinctproduct' : 1,
-            'shipping_delivery' : 'Express',
-            'shipping_costtaxincluded' : 11.99,
-            'shipping_costtaxfree' : 10.99,
-            'payment_mode' : 'Credit card'
-        });
-        console.log("Événement envoyé : cart.payment");
-    }
-</script>
 
     </main>
     
